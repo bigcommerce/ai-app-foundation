@@ -1,28 +1,68 @@
-# Create T3 App
+# Product Description Generator App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is
+[single-click app](https://developer.bigcommerce.com/api-docs/apps/guide/types)
+which presents BigCommerce merchants with the ability to generate product
+descriptions.
 
-## What's next? How do I make an app with this?
+## Install
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+1. [Use Node 18+ and PNPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#checking-your-version-of-npm-and-node-js)
+2. Install npm packages
+   - `pnpm install`
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Usage
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+To run the app locally, follow these instructions:
 
-## Learn More
+1. [Add and start ngrok.](https://ngrok.com/download) _Note: use port 3000 to
+   match Next's server._
+   - `ngrok http 3000`
+2. [Register a draft app.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#register-the-app)
+   - Enter app callbacks as
+     `https://{ngrok_id}.ngrok.app/api/{install||load||uninstall}`.
+   - Get `ngrok_id` from the terminal that's running `ngrok http 3000`.
+   - e.g. auth callback: `https://12345.ngrok.app/api/install`
+3. Copy `.env.example` to `.env`.
+4. [Replace BC_CLIENT_ID and BC_CLIENT_SECRET in .env](https://devtools.bigcommerce.com/my/apps)
+   (from `View Client ID` in the dev portal).
+5. Update `BC_OAUTH_REDIRECT` in `.env` with the Ngrok `install` callback URL.
+6. Enter `DATABASE_URL` in `.env`
+   - In order to create a CDVM database and create the initial database tables
+     defined in `prisma/schema.prisma`:
+   - Ensure you have an active db cluster
+   - Run `mysql -h cdvm -P 3306 -u root -p --protocol tcp` using a MySQL CLI
+     Client
+     ([`mysql-client` on Homebrew](https://formulae.brew.sh/formula/mysql-client))
+   - Create a development database: `CREATE DATABASE desc_generator_app_dev`
+   - Replace the `DATABASE` portion of the `DATABASE_URL` in your `.env` file
+     with the database's name you created above (e.g., `desc_generator_app_dev`)
+   - In the `catalyst-cp-app` repository root directory, run
+     `npx prisma db push` to push the tables defined in `prisma/schema.prisma`
+     to the newly created database
+   - _**Note:** These steps will be taken care of in production by using
+     [Prisma Migrate](https://www.prisma.io/docs/guides/deployment/deploy-database-changes-with-prisma-migrate)_
+7. Start your dev environment in a **separate** terminal from `ngrok`. If
+   `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
+   - `npm run dev`
+8. [Install the app and launch.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#install-the-app)
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Environment Variables
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Both the `lib/env.server.ts` and `lib/env.client.ts` files validate and strongly
+type environment variables at run time for use throughout your application. When
+you add a new server environment variable in your `.env` or `.env.local` file,
+add the variable in the `serverSchema` object in `lib/env.server.ts`; when you
+add a new client environment variable to your `.env` or `.env.local` file, add
+the variable in the `clientSchema` object in `lib/env.client.ts`.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Prisma Studio
 
-## How do I deploy this?
+As long as you have a valid `DATABASE_URL` in your `.env` file, you can run
+`npx prisma studio` in your terminal to open up
+[Prisma Studio](https://www.prisma.io/studio), a graphical web interface to
+interact with and explore your app's data.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Contributing
+
+Please feel free to ask questions or raise issues in GitHub Issues/Discussions.
