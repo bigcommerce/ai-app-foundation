@@ -1,4 +1,4 @@
-# Product Description Generator App
+# Control Panel AI app
 
 This is
 [single-click app](https://developer.bigcommerce.com/api-docs/apps/guide/types)
@@ -34,9 +34,9 @@ To run the app locally, follow these instructions:
    - Run `mysql -h cdvm -P 3306 -u root -p --protocol tcp` using a MySQL CLI
      Client
      ([`mysql-client` on Homebrew](https://formulae.brew.sh/formula/mysql-client))
-   - Create a development database: `CREATE DATABASE desc_generator_app_dev`
+   - Create a development database: `CREATE DATABASE bc_ai_app_dev`
    - Replace the `DATABASE` portion of the `DATABASE_URL` in your `.env` file
-     with the database's name you created above (e.g., `desc_generator_app_dev`)
+     with the database's name you created above (e.g., `bc_ai_app_dev`)
    - In the `catalyst-cp-app` repository root directory, run
      `npx prisma db push` to push the tables defined in `prisma/schema.prisma`
      to the newly created database

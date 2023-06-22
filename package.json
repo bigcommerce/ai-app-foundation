@@ -1,7 +1,8 @@
 {
-  "name": "product-description-generator-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "control-panel-ai-app",
+  "version": "0.0.1",
+  "author": "BigCommerce",
+  "description": "BigCommerce Single-click App for enabling AI capabilities in CP",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
