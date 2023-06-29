@@ -1,19 +1,33 @@
 import { Checkbox, Collapse, Counter, Flex, FormGroup, Input, Select } from "@bigcommerce/big-design";
 import { useState, type SetStateAction, type ChangeEvent } from "react";
+import { type PromptAttributes } from "./DescriptionGenerator";
 
-export default function PromptForm({ onChange }: { onChange(prompt: string): void }) {
+export default function PromptForm({ onChange }: { onChange(promptAttributes: PromptAttributes): void }) {
     const [prompt, setPrompt] = useState('template');
+
+    // template
     const [style, setStyle] = useState('story');
     const [wordLimit, setWordLimitVal] = useState(250);
     const [withSeo, setWithSeo] = useState(true);
-    const [includeProductInfo, setIncludeProductInfo] = useState(true);
     const [brandVoice, setBrandVoice] = useState('');
     const [attributes, setAttributes] = useState('');
+    const [includeProductInfo, setIncludeProductInfo] = useState(true);
 
-    const handleWordLimitChange = (limit: number) => setWordLimitVal(limit);
+    // custom
+    const [customPrompt, setCustomPrompt] = useState('');
+
     const handlePromptChange = (prompt: SetStateAction<string>) => setPrompt(prompt);
+
+    const handleWordLimitChange = (limit: number) => {
+        setWordLimitVal(limit);
+        // onChange('wordLimit', limit);
+    };
     const handleStyleChange = (style: SetStateAction<string>) => setStyle(style);
     const handleIncludeProductInfoChange = (event: ChangeEvent<HTMLInputElement>) => setIncludeProductInfo(event.target.checked);
+
+    if (prompt === 'custom') {
+
+    }
 
     return (
         <Flex flexDirection="column" alignItems="flex-start">

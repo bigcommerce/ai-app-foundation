@@ -27,21 +27,10 @@ To run the app locally, follow these instructions:
 4. [Replace BC_CLIENT_ID and BC_CLIENT_SECRET in .env](https://devtools.bigcommerce.com/my/apps)
    (from `View Client ID` in the dev portal).
 5. Update `BC_OAUTH_REDIRECT` in `.env` with the Ngrok `install` callback URL.
-6. Enter `DATABASE_URL` in `.env`
-   - In order to create a CDVM database and create the initial database tables
-     defined in `prisma/schema.prisma`:
-   - Ensure you have an active db cluster
-   - Run `mysql -h cdvm -P 3306 -u root -p --protocol tcp` using a MySQL CLI
-     Client
-     ([`mysql-client` on Homebrew](https://formulae.brew.sh/formula/mysql-client))
-   - Create a development database: `CREATE DATABASE bc_ai_app_dev`
-   - Replace the `DATABASE` portion of the `DATABASE_URL` in your `.env` file
-     with the database's name you created above (e.g., `bc_ai_app_dev`)
-   - In the `catalyst-cp-app` repository root directory, run
-     `npx prisma db push` to push the tables defined in `prisma/schema.prisma`
-     to the newly created database
-   - _**Note:** These steps will be taken care of in production by using
-     [Prisma Migrate](https://www.prisma.io/docs/guides/deployment/deploy-database-changes-with-prisma-migrate)_
+6. Specify DB_TYPE in .env
+    firebase or mysql
+    If using Firebase, enter your firebase config keys. See Firebase quickstart
+    If using MySQL, enter your mysql database config keys (host, database, user/pass and optionally port). If not using the heroku deploy button above, you will now want to run npm run db:setup to perform the initial database setup. Note: if using Heroku with ClearDB, the DB should create the necessary Config Var, i.e. CLEARDB_DATABASE_URL.
 7. Start your dev environment in a **separate** terminal from `ngrok`. If
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
    - `npm run dev`
@@ -55,13 +44,6 @@ you add a new server environment variable in your `.env` or `.env.local` file,
 add the variable in the `serverSchema` object in `lib/env.server.ts`; when you
 add a new client environment variable to your `.env` or `.env.local` file, add
 the variable in the `clientSchema` object in `lib/env.client.ts`.
-
-### Prisma Studio
-
-As long as you have a valid `DATABASE_URL` in your `.env` file, you can run
-`npx prisma studio` in your terminal to open up
-[Prisma Studio](https://www.prisma.io/studio), a graphical web interface to
-interact with and explore your app's data.
 
 ## Contributing
 

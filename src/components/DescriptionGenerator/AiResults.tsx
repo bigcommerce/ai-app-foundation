@@ -1,22 +1,32 @@
 import { Flex, Pagination, Textarea, Text } from "@bigcommerce/big-design";
 import { useState, type SetStateAction, type ChangeEvent } from "react";
+import { type Result } from "./DescriptionGenerator";
 
-export default function AiResults({ results, promptAttributes, onChange }: { results: string[], promptAttributes: string, onChange(index: number, description: string): void }) {
-    const [value, setValue] = useState(results.at(-1) || '');
+interface AiResultsProps {
+    results: Result[];
+    promptAttributes: string;
+    onChange(index: number, result: Result): void;
+}
+
+export default function AiResults({ results, promptAttributes, onChange }: AiResultsProps) {
+    const [value, setValue] = useState(results.at(-1)?.description || '');
     const [page, setPage] = useState(results.length);
 
     const handlePageChange = (newResultPage: SetStateAction<number>) => {
         const page = Number(newResultPage);
-        const val = results.at(page - 1) || '';
+        const val = results.at(page - 1);
 
-        setValue(val);
         setPage(page);
-        onChange(page, val);
+
+        if (val) {
+            setValue(val.description);
+            onChange(page, val);
+        }
     };
 
     const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setValue(event.target.value);
-        onChange(page, event.target.value);
+        onChange(page, { description: event.target.value, promptAttributes });
     };
 
     return (
