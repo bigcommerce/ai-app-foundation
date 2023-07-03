@@ -1,33 +1,23 @@
-import { Flex, Pagination, Textarea, Text } from "@bigcommerce/big-design";
-import { useState, type SetStateAction, type ChangeEvent } from "react";
-import { type Result } from "./DescriptionGenerator";
+import { Flex, Pagination, Textarea, Text, Small, Button } from "@bigcommerce/big-design";
+import { type SetStateAction, type ChangeEvent, useState } from "react";
+import { type Result } from "./types";
 
 interface AiResultsProps {
     results: Result[];
-    promptAttributes: string;
-    onChange(index: number, result: Result): void;
+    onChange(index: number, description: string): void;
 }
 
-export default function AiResults({ results, promptAttributes, onChange }: AiResultsProps) {
-    const [value, setValue] = useState(results.at(-1)?.description || '');
+export default function AiResults({ results, onChange }: AiResultsProps) {
     const [page, setPage] = useState(results.length);
 
-    const handlePageChange = (newResultPage: SetStateAction<number>) => {
-        const page = Number(newResultPage);
-        const val = results.at(page - 1);
+    const currentResult = results.at(page - 1);
 
-        setPage(page);
+    if (!currentResult) {
+        return null;
+    }
 
-        if (val) {
-            setValue(val.description);
-            onChange(page, val);
-        }
-    };
-
-    const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(event.target.value);
-        onChange(page, { description: event.target.value, promptAttributes });
-    };
+    const handlePageChange = (newPage: SetStateAction<number>) => setPage(Number(newPage));
+    const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => onChange(page - 1, event.target.value);
 
     return (
         <Flex marginLeft="xxLarge" flexDirection="column">
@@ -37,13 +27,15 @@ export default function AiResults({ results, promptAttributes, onChange }: AiRes
                     currentPage={page}
                     itemsPerPage={1}
                     itemsPerPageOptions={[page]}
-                    onItemsPerPageChange={() => ({})}
+                    onItemsPerPageChange={() => null}
                     onPageChange={handlePageChange}
                     totalItems={results.length}
                 />
             </Flex>
-            <Textarea onChange={handleValueChange} value={value} />
-            <Text marginTop="medium" color="secondary60">{promptAttributes}</Text>
+            <Small marginTop="medium">{currentResult.promptAttributes}</Small>
+            <Textarea onChange={handleValueChange} value={currentResult.description} />
+            {/* <Button mobileWidth="auto" variant="secondary" onClick={() => void generateDescription()}>Try Again</Button> */}
+            <Button marginTop="medium" variant="secondary">Try Again</Button>
         </Flex>
     );
 }
