@@ -9,6 +9,8 @@ export interface TemplatePromptAttributes {
     optimizedForSeo: boolean;
     brandVoice: string;
     additionalAttributes: string;
+    keywords: string;
+    instructions: string;
     includeProductAttributes: boolean;
 }
 

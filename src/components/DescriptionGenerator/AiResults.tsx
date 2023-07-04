@@ -5,9 +5,10 @@ import { type Result } from "./types";
 interface AiResultsProps {
     results: Result[];
     onChange(index: number, description: string): void;
+    generateDescription(): Promise<void>;
 }
 
-export default function AiResults({ results, onChange }: AiResultsProps) {
+export default function AiResults({ results, onChange, generateDescription }: AiResultsProps) {
     const [page, setPage] = useState(results.length);
 
     const currentResult = results.at(page - 1);
@@ -34,8 +35,9 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
             </Flex>
             <Small marginTop="medium">{currentResult.promptAttributes}</Small>
             <Textarea onChange={handleValueChange} value={currentResult.description} />
-            {/* <Button mobileWidth="auto" variant="secondary" onClick={() => void generateDescription()}>Try Again</Button> */}
-            <Button marginTop="medium" variant="secondary">Try Again</Button>
+            <Flex paddingTop="medium">
+                <Button variant="secondary" onClick={() => void generateDescription()}>Try Again</Button>
+            </Flex>
         </Flex>
     );
 }
