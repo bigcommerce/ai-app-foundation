@@ -12,7 +12,9 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
   includeProductAttributes: true,
   optimizedForSeo: true,
   brandVoice: '',
-  additionalAttributes: ''
+  additionalAttributes: '',
+  keywords: '',
+  instructions: '',
 };
 
 function ProductAppExtensionContent({ productId = 1 }) {

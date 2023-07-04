@@ -1,4 +1,4 @@
-import { Button, Flex, FlexItem } from "@bigcommerce/big-design";
+import { Flex, FlexItem } from "@bigcommerce/big-design";
 import Loader from "../Loader";
 import AiResults from "./AiResults";
 import { PromptForm } from "./PromptForm";
@@ -9,8 +9,8 @@ interface DescriptionGeneratorProps {
     isLoading: boolean;
     results: Result[];
     setPromptAttributes(attributes: PromptAttributes): void;
-    onDescriptionChange: (index: number, description: string) => void;
-    generateDescription: () => Promise<void>;
+    onDescriptionChange(index: number, description: string): void;
+    generateDescription(): Promise<void>;
 }
 
 export function DescriptionGenerator({ isLoading, results, setPromptAttributes, onDescriptionChange, generateDescription }: DescriptionGeneratorProps) {
@@ -26,7 +26,7 @@ export function DescriptionGenerator({ isLoading, results, setPromptAttributes, 
             {isLoading && <Loader />}
             {!isLoading &&
                 <FlexItem flexGrow={1}>
-                    <AiResults onChange={onDescriptionChange} results={results} />
+                    <AiResults onChange={onDescriptionChange} generateDescription={generateDescription} results={results} />
                 </FlexItem>
             }
         </Flex>
