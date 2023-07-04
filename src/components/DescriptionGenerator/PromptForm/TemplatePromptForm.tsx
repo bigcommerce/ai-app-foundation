@@ -1,7 +1,20 @@
 import { type TemplatePromptAttributes } from '../types';
-import { useState } from 'react';
-import { Checkbox, Collapse, Counter, FormGroup, Input, Select } from '@bigcommerce/big-design';
+import React, { useState } from 'react';
+import {
+    Checkbox,
+    Collapse,
+    Counter,
+    FormGroup,
+    Text,
+    Input,
+    Select,
+    CheckboxLabel,
+    FormControlLabel,
+    Tooltip,
+    Flex
+} from '@bigcommerce/big-design';
 import { type PromptFormProps } from '~/components/DescriptionGenerator/PromptForm/types';
+import { BaselineHelpIcon } from '@bigcommerce/big-design-icons';
 
 type InputFieldValue = string | number | boolean | undefined;
 
@@ -21,8 +34,27 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
     includeProductAttributes: true,
     optimizedForSeo: true,
     brandVoice: '',
-    additionalAttributes: ''
+    additionalAttributes: '',
+    keywords: '',
+    instructions: '',
   };
+
+interface InputLabelProps {
+    text: string;
+    tooltip: string;
+    bold: boolean;
+}
+
+export const InputLabel = ({ text, tooltip, bold }: InputLabelProps) => (
+    <Flex flexDirection="row" marginBottom="xxSmall" alignItems="center">
+        <Text as="span" bold={bold} marginBottom="none" marginRight="xxSmall">
+            {text}
+        </Text>
+        <Tooltip placement="right" trigger={<BaselineHelpIcon color="secondary50" size="large" />}>
+            {tooltip}
+        </Tooltip>
+    </Flex>
+);
 
 export function TemplatePromptForm({ onChange }: PromptFormProps) {
     const [formAttributes, setFormAttributes] = useState(DEFAULT_PROMPT_ATTRIBUTES);
@@ -75,14 +107,30 @@ export function TemplatePromptForm({ onChange }: PromptFormProps) {
                 <FormGroup>
                     <Checkbox
                         checked={formAttributes.includeProductAttributes}
-                        label="Include product information"
+                        label={
+                            <CheckboxLabel>
+                                <InputLabel
+                                    bold={false}
+                                    text="Include product information"
+                                    tooltip="If checked, the description will feature information from the product page for this product. This includes: product name, product type, brand, dimensions and weight, categories and condition."
+                                />
+                            </CheckboxLabel>
+                        }
                         onChange={() => handleInputChange(!formAttributes.includeProductAttributes, 'includeProductAttributes')}
                     />
                 </FormGroup>
                 <FormGroup>
                     <Input
                         value={formAttributes.brandVoice}
-                        label="Brand voice"
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Brand voice"
+                                    tooltip="Enter the words that best describe the personality of your brand. For example, “upbeat and confident” or “friendly and conversational.”"
+                                />
+                            </FormControlLabel>
+                        }
                         placeholder="Upbeat, positive, and fun"
                         onChange={(event) => handleInputChange(event.target.value, 'brandVoice')}
                     />
@@ -90,9 +138,48 @@ export function TemplatePromptForm({ onChange }: PromptFormProps) {
                 <FormGroup>
                     <Input
                         value={formAttributes.additionalAttributes}
-                        label="Attributes"
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Attributes"
+                                    tooltip="Enter any words or phrases that help describe or differentiate this product in addition to what is already mentioned on the product information page. You should enter attributes as key-value pairs. For example, “color: red” or “material: recycled cotton”."
+                                />
+                            </FormControlLabel>
+                        }
                         placeholder="Organic, recycled cotton"
                         onChange={(event) => handleInputChange(event.target.value, 'additionalAttributes')}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.keywords}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Keywords"
+                                    tooltip="Enter any words or phrases that you want to make sure are included in the description."
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'keywords')}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.instructions}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Instructions"
+                                    tooltip="Enter any additional instructions, e.g. “do not use word X“ or “no capital letters“"
+                                    // TODO: Change tooltip copy once the design is ready
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'instructions')}
                     />
                 </FormGroup>
             </Collapse>

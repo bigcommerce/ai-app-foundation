@@ -6,7 +6,6 @@ export default function Home() {
     <Panel header="Control Panel AI App">
       <Flex flexDirection="column">
         <Link href="/productAppExtension/1">App extension option</Link>
-        <Link href="/modal-option">Modal option</Link>
       </Flex>
     </Panel>
   );
