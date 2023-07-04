@@ -5,14 +5,16 @@ interface KeyToLabelMap {
   }
 
 const KEY_TO_LABEL_MAP: KeyToLabelMap = {
-    style: 'Style',
-    includeProductAttributes: 'Include product attributes',
-    wordCount: 'Words',
-    optimizedForSeo: 'Optimized for SEO',
-    brandVoice: 'Brand voice',
-    additionalAttributes: 'Attributes',
-    customPrompt: 'Instructions',
-}
+        style: 'Style',
+        includeProductAttributes: 'Include product attributes',
+        wordCount: 'Words',
+        optimizedForSeo: 'Optimized for SEO',
+        brandVoice: 'Brand voice',
+        additionalAttributes: 'Attributes',
+        customPrompt: 'Instructions',
+        keywords: 'Keywords',
+        instructions: 'Instructions',
+    }
 
 export const serializePromptAttributes = (promptAttributes: PromptAttributes): string => {
     let result = '';
