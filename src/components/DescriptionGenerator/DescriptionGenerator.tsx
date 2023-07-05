@@ -11,7 +11,7 @@ interface DescriptionGeneratorProps {
     results: Result[];
     setPromptAttributes(attributes: PromptAttributes): void;
     onDescriptionChange(index: number, description: string): void;
-    generateDescription(): Promise<void>;
+    generateDescription(): void;
 }
 
 const StyledWrapper = styled(Flex)`
