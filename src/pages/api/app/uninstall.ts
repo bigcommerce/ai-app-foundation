@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import { getBCVerify, removeDataStore } from 'lib/auth';
 import { type QueryParams } from 'types';
