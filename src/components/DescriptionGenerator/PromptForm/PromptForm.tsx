@@ -1,36 +1,32 @@
-import { Flex, FormGroup, Select } from "@bigcommerce/big-design";
-import { useState } from "react";
+import { Box, Button, Flex } from "@bigcommerce/big-design";
+import React, { useState } from "react";
 import { TemplatePromptForm } from './TemplatePromptForm';
 import { type PromptFormProps } from './types';
 import { CustomPromptForm } from './CustomPromptForm';
+import { StyledButton } from '~/components/DescriptionGenerator/PromptForm/styled';
 
 type PromptOptions = 'template' | 'custom';
 
-export const PROMPT_OPTIONS = [
-    { value: 'template', content: 'Use template' },
-    { value: 'custom', content: 'Custom' },
-];
-
-export function PromptForm({ onChange }: PromptFormProps) {
+export function PromptForm({ onChange, generateDescription }: PromptFormProps) {
     const [prompt, setPrompt] = useState<PromptOptions>('template');
 
-    const handlePromptChange = (prompt: PromptOptions) => setPrompt(prompt);
-
     return (
-        <Flex flexDirection="column" alignItems="flex-start">
-            <FormGroup>
-                <Select
-                    label="Prompt"
-                    maxHeight={300}
-                    onOptionChange={handlePromptChange}
-                    options={PROMPT_OPTIONS}
-                    placement="bottom-start"
-                    required
-                    value={prompt}
-                />
-            </FormGroup>
+        <>
+            <Box display="inline-flex" marginBottom="medium">
+                <StyledButton isActive={prompt === 'template'} onClick={() => setPrompt('template')}>
+                    Structured prompt
+                </StyledButton>
+                <StyledButton isActive={prompt === 'custom'} onClick={() => setPrompt('custom')}>
+                    Custom prompt
+                </StyledButton>
+            </Box>
             {prompt === 'template' && <TemplatePromptForm onChange={onChange} />}
             {prompt === 'custom' && <CustomPromptForm onChange={onChange} />}
-        </Flex>
+            <Flex paddingTop="medium">
+                <Button variant="secondary" marginTop="medium" onClick={() => void generateDescription()}>
+                    Write more
+                </Button>
+            </Flex>
+        </>
     );
 }
