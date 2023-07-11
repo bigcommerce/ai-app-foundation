@@ -6,15 +6,8 @@ import { ThemeProvider } from 'styled-components';
 import Head from "next/head";
 import SessionProvider from '../../context/session';
 
-import { Source_Sans_3 } from 'next/font/google';
-
-const sourceSans = Source_Sans_3({
-  subsets: ['latin'],
-  weight: ['300', '400', '600', '700', '800'],
-});
-
 const MyApp: AppType = ({ Component, pageProps }) =>
-  <html className={sourceSans.className}>
+  <>
     <Head>
       <title>Control Panel AI App</title>
       <link rel="icon" href="/magic.svg" />
@@ -31,7 +24,7 @@ const MyApp: AppType = ({ Component, pageProps }) =>
         </SessionProvider>
       </Box>
     </ThemeProvider>
-  </html>
+  </>
   ;
 
 export default api.withTRPC(MyApp);
