@@ -37,8 +37,7 @@ export function CustomPromptForm({ onChange }: BasePromptFormProps) {
                             <InputLabel
                                 bold={true}
                                 text="Instructions"
-                                tooltip="Enter your custom instructions for AI to generate the description"
-                                // TODO: Change tooltip copy once the design is ready
+                                tooltip="Here are some tips to get a better quality product description. Imagine that you’re talking to a person. Provide as much context as possible. Ask the AI to assume a profession relevant to what you're selling, like interior designer or chef, for example. You can also try asking the AI to write as a famous person with a distinct voice, like Shakespeare or Hemingway."
                             />
                         </FormControlLabel>
                     }
