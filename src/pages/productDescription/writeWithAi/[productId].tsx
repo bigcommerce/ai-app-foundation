@@ -6,6 +6,7 @@ import { useProductInfo } from 'lib/hooks';
 import { type PromptAttributes, type Result, DescriptionGenerator, type TemplatePromptAttributes } from '~/components/DescriptionGenerator';
 import { useLocalStorage } from '~/hooks';
 import { serializePromptAttributes } from '~/utils/utils';
+import Loader from '~/components/Loader';
 
 const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
@@ -31,11 +32,13 @@ const ProductAppExtensionContent = () => {
 
   const storageKey = `${STORAGE_KEY}:${productId}`;
 
+  const [initialiLoading, setInitialLoading] = useState(false);
   const [promptAttributes, setPromptAttributes] = useState<PromptAttributes>(DEFAULT_PROMPT_ATTRIBUTES);
   const [results, setResults] = useLocalStorage<Result[]>(storageKey, []);
 
   useEffect(() => {
-    void generateDescription(DEFAULT_PROMPT_ATTRIBUTES);
+    setInitialLoading(true);
+    void generateDescription(DEFAULT_PROMPT_ATTRIBUTES).finally(() => setInitialLoading(false));
   }, [generateDescription]);
 
   const handleDescriptionChange = (index: number, description: string) => {
@@ -74,13 +77,17 @@ const ProductAppExtensionContent = () => {
   }
 
   return (
-    <DescriptionGenerator
-      isLoading={isLoading || isPrompting}
-      results={results}
-      setPromptAttributes={setPromptAttributes}
-      onDescriptionChange={handleDescriptionChange}
-      generateDescription={handleDescriptionGeneration}
-    />
+    <>
+      {initialiLoading && <Loader />}
+      {!initialiLoading &&
+        <DescriptionGenerator
+          isLoading={isLoading || isPrompting}
+          results={results}
+          setPromptAttributes={setPromptAttributes}
+          onDescriptionChange={handleDescriptionChange}
+          generateDescription={handleDescriptionGeneration}
+        />}
+    </>
   );
 }
 
