@@ -5,7 +5,7 @@
   "description": "BigCommerce Single-click App for enabling AI capabilities in CP",
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "lint": "next lint",
     "start": "next start"
   },
@@ -13,19 +13,24 @@
     "@bigcommerce/big-design": "^0.36.2",
     "@bigcommerce/big-design-icons": "^0.23.2",
     "@bigcommerce/big-design-theme": "^0.19.2",
-    "@next/font": "^13.4.9",
+    "@google-cloud/aiplatform": "^2.16.0",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@tanstack/react-query": "^4.29.7",
     "@trpc/client": "^10.26.0",
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/styled-components": "^5.1.26",
+    "firebase": "^9.23.0",
+    "jsonwebtoken": "^9.0.0",
     "next": "^13.4.2",
+    "node-bigcommerce": "github:bigcommerce/node-bigcommerce",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "5",
     "superjson": "1.12.2",
+    "swr": "^2.2.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -38,5 +43,8 @@
     "eslint": "^8.40.0",
     "eslint-config-next": "^13.4.2",
     "typescript": "^5.0.4"
-  }
+  },
+  "eslintIgnore": [
+    "lib"
+  ]
 }

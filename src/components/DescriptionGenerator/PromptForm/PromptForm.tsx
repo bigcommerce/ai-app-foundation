@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from "@bigcommerce/big-design";
+import { Box, Button, Flex, FlexItem } from "@bigcommerce/big-design";
 import React, { useState } from "react";
 import { TemplatePromptForm } from './TemplatePromptForm';
 import { type PromptFormProps } from './types';
@@ -22,11 +22,11 @@ export function PromptForm({ onChange, generateDescription }: PromptFormProps) {
             </Box>
             {prompt === 'template' && <TemplatePromptForm onChange={onChange} />}
             {prompt === 'custom' && <CustomPromptForm onChange={onChange} />}
-            <Flex paddingTop="medium">
-                <Button variant="secondary" marginTop="medium" onClick={() => void generateDescription()}>
+            <FlexItem paddingTop="medium">
+                <Button mobileWidth="auto" variant="secondary" marginTop="medium" onClick={() => void generateDescription()}>
                     Write more
                 </Button>
-            </Flex>
+            </FlexItem>
         </>
     );
 }
