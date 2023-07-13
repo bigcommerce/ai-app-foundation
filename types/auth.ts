@@ -9,6 +9,7 @@ export interface SessionProps {
     context: string;
     owner?: User;
     scope?: string;
+    url?: string;
     store_hash?: string;
     sub?: string;
     timestamp?: number;
@@ -19,10 +20,6 @@ export interface SessionContextProps {
     accessToken: string;
     storeHash: string;
     user: User;
-}
-
-export interface QueryParams {
-    [key: string]: string | string[];
 }
 
 export interface ApiConfig {

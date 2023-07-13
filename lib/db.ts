@@ -1,15 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
-import { type SessionProps, type UserData } from '../types';
+import { SessionProps, UserData } from 'types';
 
-// Firebase config and initialization
-// Prod applications might use config file
 const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = process.env;
 const firebaseConfig = {
     apiKey: FIRE_API_KEY,
     authDomain: FIRE_DOMAIN,
     projectId: FIRE_PROJECT_ID,
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -17,7 +16,7 @@ const db = getFirestore(app);
 
 // Use setUser for storing global user data (persists between installs)
 export async function setUser({ user }: SessionProps) {
-    if (!user) return null;
+    if (!user) return Promise.resolve();
 
     const { email, id, username } = user;
     const ref = doc(db, 'users', String(id));
@@ -100,16 +99,24 @@ export async function hasStoreUser(storeHash: string, userId: string) {
     return userDoc.exists();
 }
 
-export async function getStoreToken(storeHash: string) {
+export async function getStoreToken(storeHash: string): Promise<string | null> {
     if (!storeHash) return null;
     const storeDoc = await getDoc(doc(db, 'store', storeHash));
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return storeDoc.data()?.accessToken ?? null;
+    return storeDoc.data()?.accessToken;
 }
 
 export async function deleteStore({ store_hash: storeHash }: SessionProps) {
-    const ref = doc(db, 'store', storeHash || '');
+    if (storeHash) {
+        const ref = doc(db, 'store', storeHash);
 
-    await deleteDoc(ref);
+        await deleteDoc(ref);
+    }
+}
+
+export async function hasAppExtensionsScope(storeHash: string): Promise<boolean> {
+    const storeDoc = await getDoc(doc(db, 'store', storeHash));
+    const scopes = storeDoc.data()?.scope ?? '';
+
+    return scopes.includes('store_app_extensions_manage');
 }

@@ -5,10 +5,10 @@ const sourceSans = Source_Sans_3({
   weight: ['300', '400', '600', '700', '800'],
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={sourceSans.className}>
-      <body>{children}</body>
-    </html>
-  )
-}
+const Layout = ({ children }: { children: React.ReactNode }) =>(
+  <html lang="en" className={sourceSans.className}>
+    <body>{children}</body>
+  </html>
+);
+
+export default Layout;
