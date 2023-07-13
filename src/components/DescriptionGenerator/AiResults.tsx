@@ -6,7 +6,6 @@ import styled from 'styled-components';
 interface AiResultsProps {
     results: Result[];
     onChange(index: number, description: string): void;
-    generateDescription(): void;
 }
 
 const StyledTextarea = styled(Flex)`
@@ -53,10 +52,6 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
                 <Textarea onChange={handleValueChange} value={currentResult.description} />
             </StyledTextarea>
             <Small marginTop="medium">{currentResult.promptAttributes}</Small>
-            <Textarea onChange={handleValueChange} value={currentResult.description} />
-            <Flex paddingTop="medium">
-                <Button variant="secondary" onClick={generateDescription}>Try Again</Button>
-            </Flex>
         </Flex>
     );
 }

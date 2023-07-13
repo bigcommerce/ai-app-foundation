@@ -35,7 +35,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "scripts/bcSdk.ts"
   ],
   "exclude": [
     "node_modules",

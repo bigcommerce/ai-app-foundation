@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { type NextApiRequest } from 'next';
 import * as BigCommerce from 'node-bigcommerce';
-import { type ApiConfig, type QueryParams, type SessionContextProps, type SessionProps } from '../types';
+import { type ApiConfig, type SessionContextProps, type SessionProps } from '../types';
 import { env } from '~/env.mjs';
 import * as db from './db';
 
@@ -44,18 +44,18 @@ export function bigcommerceClient(accessToken: string, storeHash: string, apiVer
 }
 
 // Authorizes app on install
-export function getBCAuth(query: any) {
+export function getBCAuth(query: any): Promise<SessionProps> {
     return bigcommerce.authorize(query);
 }
 // Verifies app on load/ uninstall
-export function getBCVerify({ signed_payload_jwt }: QueryParams) {
-    return bigcommerceSigned.verifyJWT(signed_payload_jwt);
+export function getBCVerify(signedPayloadJwt: string): Promise<SessionProps> {
+    return bigcommerceSigned.verifyJWT(signedPayloadJwt);
 }
 
-export function setSession(session: SessionProps) {
-    void db.setUser(session);
-    void db.setStore(session);
-    void db.setStoreUser(session);
+export async function setSession(session: SessionProps) {
+    await db.setUser(session);
+    await db.setStore(session);
+    await db.setStoreUser(session);
 }
 
 export async function getSession({ query: { context = '' } }: NextApiRequest) {

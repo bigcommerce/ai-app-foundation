@@ -1,4 +1,4 @@
-name: Product Description Generator App CI (Lint, Build, Test)
+name: Product Description Generator App CI (Lint, Build)
 
 on:
   push:
@@ -32,6 +32,3 @@ jobs:
 
     - name: Run Build
       run: pnpm build
-
-    # - name: Run Tests
-    #   run: pnpm test
