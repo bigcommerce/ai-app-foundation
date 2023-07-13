@@ -1,9 +1,8 @@
-import { Flex, FlexItem } from "@bigcommerce/big-design";
+import { Button, Flex, FlexItem } from "@bigcommerce/big-design";
 import Loader from "../Loader";
 import AiResults from "./AiResults";
 import { PromptForm } from "./PromptForm";
 import { type PromptAttributes, type Result } from './types';
-import { useEffect } from "react";
 import styled from 'styled-components';
 
 interface DescriptionGeneratorProps {
@@ -23,23 +22,21 @@ const StyledHr = styled(Flex)`
   margin-right: -${({ theme }) => theme.spacing.xxxLarge};
 `
 
-export function DescriptionGenerator({ isLoading, results, setPromptAttributes, onDescriptionChange, generateDescription }: DescriptionGeneratorProps) {
-    useEffect(() => {
-        void generateDescription();
-    }, []);
-
-    return (
-        <StyledWrapper flexDirection="column">
-            <FlexItem>
-                <PromptForm generateDescription={generateDescription} onChange={(prompt) => setPromptAttributes(prompt)} />
-            </FlexItem>
-            <StyledHr borderTop="box" marginTop="xLarge" />
-            <FlexItem flexGrow={1}>
-                {isLoading && <Loader />}
-                {!isLoading &&
-                    <AiResults onChange={onDescriptionChange} results={results} />
-                }
-            </FlexItem>
-        </StyledWrapper>
-    );
-}
+export const DescriptionGenerator = ({ isLoading, results, setPromptAttributes, onDescriptionChange, generateDescription }: DescriptionGeneratorProps) => (
+    <StyledWrapper flexDirection="column">
+        <FlexItem>
+            <PromptForm generateDescription={generateDescription} onChange={(prompt) => setPromptAttributes(prompt)} />
+        </FlexItem>
+        <StyledHr borderTop="box" marginTop="xLarge" />
+        <FlexItem flexGrow={1}>
+            {isLoading && <Loader />}
+            {!isLoading && <AiResults onChange={onDescriptionChange} results={results} />}
+        </FlexItem>
+        <FlexItem>
+            <Flex justifyContent="flex-end" flexDirection="row">
+                <Button mobileWidth="auto" variant="secondary">Cancel</Button>
+                <Button mobileWidth="auto" variant="primary">Use this result</Button>
+            </Flex>
+        </FlexItem>
+    </StyledWrapper>
+);

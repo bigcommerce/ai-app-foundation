@@ -1,10 +1,13 @@
-import { serializePromptAttributes } from '~/utils/utils';
-import React, { useState } from 'react';
-import { useLocalStorage } from '~/hooks/useLocalStorage';
-import { type TemplatePromptAttributes, type PromptAttributes, type Result, DescriptionGenerator } from '~/components/DescriptionGenerator';
+import React, { useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
-import { generateDescription } from '../api/generate-description';
+import { api } from '~/utils/api';
+import { useRouter } from 'next/router';
+import { useProductInfo } from 'lib/hooks';
+import { type PromptAttributes, type Result, DescriptionGenerator, type TemplatePromptAttributes } from '~/components/DescriptionGenerator';
+import { useLocalStorage } from '~/hooks';
+import { serializePromptAttributes } from '~/utils/utils';
 
+const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
 const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
   style: 'story',
@@ -17,12 +20,23 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
   instructions: '',
 };
 
-function ProductAppExtensionContent({ productId = 1 }) {
+const ProductAppExtensionContent = () => {
+  const router = useRouter();
+  const productId = Number(router.query?.productId);
+  const { isLoading } = useProductInfo(productId);
+
+  const { isLoading: isPrompting, mutateAsync: generateDescription } = api.generativeAi.useMutation(
+    { onSuccess: description => addResult(promptAttributes, description) }
+  );
+
   const storageKey = `${STORAGE_KEY}:${productId}`;
 
   const [promptAttributes, setPromptAttributes] = useState<PromptAttributes>(DEFAULT_PROMPT_ATTRIBUTES);
   const [results, setResults] = useLocalStorage<Result[]>(storageKey, []);
-  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    void generateDescription(DEFAULT_PROMPT_ATTRIBUTES);
+  }, [generateDescription]);
 
   const handleDescriptionChange = (index: number, description: string) => {
     setResults((prevResults: Result[]) => {
@@ -42,7 +56,7 @@ function ProductAppExtensionContent({ productId = 1 }) {
   };
 
   const addResult = (promptAttributes: PromptAttributes, description: string) => {
-    const MAX_LOCAL_STORAGE_RESULTS = 20;
+
     const result: Result = {
       promptAttributes: serializePromptAttributes(promptAttributes),
       description,
@@ -52,11 +66,8 @@ function ProductAppExtensionContent({ productId = 1 }) {
   }
 
   const handleDescriptionGeneration = async () => {
-    setIsLoading(true);
-    const description = await generateDescription(promptAttributes);
-    addResult(promptAttributes, description || '');
-    setIsLoading(false);
-  };
+    await generateDescription(promptAttributes);
+  }
 
   const saveProductDescription = () => {
     console.log('Saving the product with a new description', results.at(-1)?.description);
@@ -64,7 +75,7 @@ function ProductAppExtensionContent({ productId = 1 }) {
 
   return (
     <DescriptionGenerator
-      isLoading={isLoading}
+      isLoading={isLoading || isPrompting}
       results={results}
       setPromptAttributes={setPromptAttributes}
       onDescriptionChange={handleDescriptionChange}
@@ -75,4 +86,4 @@ function ProductAppExtensionContent({ productId = 1 }) {
 
 export default dynamic(() => Promise.resolve(ProductAppExtensionContent), {
   ssr: false
-})
+});

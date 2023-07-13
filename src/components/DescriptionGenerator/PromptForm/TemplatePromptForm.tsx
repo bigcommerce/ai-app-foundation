@@ -35,7 +35,7 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
     additionalAttributes: '',
     keywords: '',
     instructions: '',
-  };
+};
 
 export function TemplatePromptForm({ onChange }: BasePromptFormProps) {
     const [formAttributes, setFormAttributes] = useState(DEFAULT_PROMPT_ATTRIBUTES);
@@ -60,8 +60,8 @@ export function TemplatePromptForm({ onChange }: BasePromptFormProps) {
     return (
         <>
             <Flex
-                alignItems={{ mobile: 'flex-start', tablet: 'center' }}
-                flexDirection={{ mobile: 'column', tablet: 'row' }}
+                alignItems="center"
+                flexDirection="row"
                 justifyContent="space-between"
             >
                 <FormGroup>
@@ -105,84 +105,85 @@ export function TemplatePromptForm({ onChange }: BasePromptFormProps) {
                 </FormGroup>
             </Flex>
 
-                <Collapse onCollapseChange={handleChange} title={collapseTitle}>
-                    <FormGroup>
-                        <Flex flexDirection="row" alignItems="center">
-                            <Checkbox
-                                checked={formAttributes.includeProductAttributes}
-                                label={
-                                    <CheckboxLabel>
-                                        <InputLabel
-                                            bold={false}
-                                            text="Include product information"
-                                            tooltip="If checked, the description will feature information from the product page for this product. This includes: product name, product type, brand, dimensions and weight, categories and condition."
-                                        />
-                                    </CheckboxLabel>
-                                }
-                                onChange={() => handleInputChange(!formAttributes.includeProductAttributes, 'includeProductAttributes')}
-                            />
-                        </Flex>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input
-                            value={formAttributes.brandVoice}
+            <Collapse onCollapseChange={handleChange} title={collapseTitle}>
+                <FormGroup>
+                    <Flex flexDirection="row" alignItems="center">
+                        <Checkbox
+                            checked={formAttributes.includeProductAttributes}
                             label={
-                                <FormControlLabel>
+                                <CheckboxLabel>
                                     <InputLabel
-                                        bold={true}
-                                        text="Brand voice"
-                                        tooltip="Enter the words that best describe the personality of your brand. For example, “upbeat and confident” or “friendly and conversational.”"
+                                        bold={false}
+                                        text="Include product information"
+                                        tooltip="If checked, the description will feature information from the product page for this product. This includes: product name, product type, brand, dimensions and weight, categories and condition."
                                     />
-                                </FormControlLabel>
+                                </CheckboxLabel>
                             }
-                            onChange={(event) => handleInputChange(event.target.value, 'brandVoice')}
+                            onChange={() => handleInputChange(!formAttributes.includeProductAttributes, 'includeProductAttributes')}
                         />
-                    </FormGroup>
-                    <FormGroup>
-                        <Input
-                            value={formAttributes.additionalAttributes}
-                            label={
-                                <FormControlLabel>
-                                    <InputLabel
-                                        bold={true}
-                                        text="Attributes"
-                                        tooltip="Enter any words or phrases that help describe or differentiate this product in addition to what is already mentioned on the product information page. You should enter attributes as key-value pairs. For example, “color: red” or “material: recycled cotton”."
-                                    />
-                                </FormControlLabel>
-                            }
-                            onChange={(event) => handleInputChange(event.target.value, 'additionalAttributes')}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Input
-                            value={formAttributes.keywords}
-                            label={
-                                <FormControlLabel>
-                                    <InputLabel
-                                        bold={true}
-                                        text="Keywords"
-                                        tooltip="Enter any words or phrases that you want to make sure are included in the description."
-                                    />
-                                </FormControlLabel>
-                            }
-                            onChange={(event) => handleInputChange(event.target.value, 'keywords')}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Input
-                            value={formAttributes.instructions}
-                            label={
-                                <FormControlLabel>
-                                    <InputLabel
-                                        bold={true}
-                                        text="Instructions"
-                                        tooltip="You can fine-tune your description by entering any special instructions here. For example, words or phrases to avoid or formatting requirements."
-                                    />
-                                </FormControlLabel>
-                            }
-                            onChange={(event) => handleInputChange(event.target.value, 'instructions')}
-                        />
-                    </FormGroup>
-                </Collapse>
-        </>);
+                    </Flex>
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.brandVoice}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Brand voice"
+                                    tooltip="Enter the words that best describe the personality of your brand. For example, “upbeat and confident” or “friendly and conversational.”"
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'brandVoice')}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.additionalAttributes}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Attributes"
+                                    tooltip="Enter any words or phrases that help describe or differentiate this product in addition to what is already mentioned on the product information page. You should enter attributes as key-value pairs. For example, “color: red” or “material: recycled cotton”."
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'additionalAttributes')}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.keywords}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Keywords"
+                                    tooltip="Enter any words or phrases that you want to make sure are included in the description."
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'keywords')}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Input
+                        value={formAttributes.instructions}
+                        label={
+                            <FormControlLabel>
+                                <InputLabel
+                                    bold={true}
+                                    text="Instructions"
+                                    tooltip="You can fine-tune your description by entering any special instructions here. For example, words or phrases to avoid or formatting requirements."
+                                />
+                            </FormControlLabel>
+                        }
+                        onChange={(event) => handleInputChange(event.target.value, 'instructions')}
+                    />
+                </FormGroup>
+            </Collapse>
+        </>
+    );
 }
