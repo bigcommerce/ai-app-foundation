@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSession } from '../context/session';
-import { ErrorProps, ListItem } from '../types';
+import { ErrorProps, Product } from '../types';
 
 async function fetcher([url, query]) {
     const res = await fetch(`${url}?${query}`);
@@ -16,22 +16,15 @@ async function fetcher([url, query]) {
     return res.json();
 }
 
-export function useProductInfo(pid: number, list?: ListItem[] | any) {
+export function useProductInfo(pid: number) {
     const { context } = useSession();
     const params = new URLSearchParams({ context }).toString();
 
-    let product: ListItem | undefined;
-
-    if (list?.length) {
-        product = list.find(item => item.id === pid);
-    }
-
-    // Conditionally fetch product if it doesn't exist in the list (e.g. deep linking)
-    const { data, error } = useSWR(!product && context ? [`/api/products/${pid}`, params] : null, fetcher);
+    const { isLoading, data, error } = useSWR<Product>(context ? [`/api/products/${pid}`, params] : null, fetcher, { shouldRetryOnError: false, revalidateOnFocus: false });
 
     return {
-        product: product ?? data,
-        isLoading: product ? false : (!data && !error),
+        product: data,
+        isLoading,
         error,
     };
 }

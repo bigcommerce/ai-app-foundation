@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import dynamic from "next/dynamic";
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import { useProductInfo } from 'lib/hooks';
@@ -7,6 +6,7 @@ import { type PromptAttributes, type Result, DescriptionGenerator, type Template
 import { useLocalStorage } from '~/hooks';
 import { serializePromptAttributes } from '~/utils/utils';
 import Loader from '~/components/Loader';
+import { type Product } from 'types';
 
 const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
@@ -21,10 +21,24 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
   instructions: '',
 };
 
-const ProductAppExtensionContent = () => {
+const prepareAiPromptAttributes = (promptAttributes: PromptAttributes, product: Product | undefined) => {
+  const { includeProductAttributes, ...restAttributes } = promptAttributes;
+  const productAttributes = includeProductAttributes && product ? product : null;
+
+  return { ...restAttributes, productAttributes };
+}
+
+export default function Page() {
   const router = useRouter();
-  const productId = Number(router.query?.productId);
-  const { isLoading } = useProductInfo(productId);
+  const { productId } = router.query;
+
+  if (!productId) return null;
+
+  return <ProductDescriptionWithAi productId={Number(productId)} />;
+}
+
+const ProductDescriptionWithAi = ({ productId }: { productId: number }) => {
+  const { isLoading: isProductLoading, product } = useProductInfo(productId);
 
   const { isLoading: isPrompting, mutateAsync: generateDescription } = api.generativeAi.useMutation(
     { onSuccess: description => addResult(promptAttributes, description) }
@@ -38,8 +52,10 @@ const ProductAppExtensionContent = () => {
 
   useEffect(() => {
     setInitialLoading(true);
-    void generateDescription(DEFAULT_PROMPT_ATTRIBUTES).finally(() => setInitialLoading(false));
-  }, [generateDescription]);
+    void generateDescription(
+      prepareAiPromptAttributes(DEFAULT_PROMPT_ATTRIBUTES, product)
+    ).finally(() => setInitialLoading(false));
+  }, [generateDescription, product]);
 
   const handleDescriptionChange = (index: number, description: string) => {
     setResults((prevResults: Result[]) => {
@@ -59,7 +75,6 @@ const ProductAppExtensionContent = () => {
   };
 
   const addResult = (promptAttributes: PromptAttributes, description: string) => {
-
     const result: Result = {
       promptAttributes: serializePromptAttributes(promptAttributes),
       description,
@@ -69,7 +84,7 @@ const ProductAppExtensionContent = () => {
   }
 
   const handleDescriptionGeneration = async () => {
-    await generateDescription(promptAttributes);
+    await generateDescription(prepareAiPromptAttributes(promptAttributes, product));
   }
 
   const saveProductDescription = () => {
@@ -81,7 +96,7 @@ const ProductAppExtensionContent = () => {
       {initialiLoading && <Loader />}
       {!initialiLoading &&
         <DescriptionGenerator
-          isLoading={isLoading || isPrompting}
+          isLoading={isProductLoading || isPrompting}
           results={results}
           setPromptAttributes={setPromptAttributes}
           onDescriptionChange={handleDescriptionChange}
@@ -90,7 +105,3 @@ const ProductAppExtensionContent = () => {
     </>
   );
 }
-
-export default dynamic(() => Promise.resolve(ProductAppExtensionContent), {
-  ssr: false
-});

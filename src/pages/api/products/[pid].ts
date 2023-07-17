@@ -1,4 +1,5 @@
 import { type NextApiRequest, type NextApiResponse } from 'next';
+import { type SessionContextProps } from 'types';
 import { bigcommerceClient, getSession } from '~/../lib/auth';
 
 export default async function products(req: NextApiRequest, res: NextApiResponse) {
@@ -11,12 +12,12 @@ export default async function products(req: NextApiRequest, res: NextApiResponse
     switch (method) {
         case 'GET':
             try {
-                const { accessToken, storeHash } = await getSession(req);
+                const { accessToken, storeHash } = await getSession(req) as SessionContextProps;
                 const bigcommerce = bigcommerceClient(accessToken, storeHash);
 
                 const params = new URLSearchParams({ include: 'images' }).toString();
                 const { data } = await bigcommerce.get(`/catalog/products/${pid}?${params}}`);
-                console.log(data)
+
                 res.status(200).json(data);
             } catch (error) {
                 const { message, response } = error;
@@ -39,6 +40,4 @@ export default async function products(req: NextApiRequest, res: NextApiResponse
             res.setHeader('Allow', ['GET', 'PUT']);
             res.status(405).end(`Method ${method} Not Allowed`);
     }
-
-
 }

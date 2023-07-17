@@ -14,6 +14,9 @@ dependencies:
   '@bigcommerce/big-design-theme':
     specifier: ^0.19.2
     version: 0.19.2(react-dom@18.2.0)(react@18.2.0)(styled-components@5.3.11)
+  '@google-ai/generativelanguage':
+    specifier: ^0.2.1
+    version: 0.2.1
   '@google-cloud/aiplatform':
     specifier: ^2.16.0
     version: 2.16.0
@@ -44,6 +47,9 @@ dependencies:
   firebase:
     specifier: ^9.23.0
     version: 9.23.0
+  google-auth-library:
+    specifier: ^8.9.0
+    version: 8.9.0
   jsonwebtoken:
     specifier: ^9.0.0
     version: 9.0.0
@@ -788,6 +794,16 @@ packages:
 
   /@firebase/webchannel-wrapper@0.10.1:
     resolution: {integrity: sha512-Dq5rYfEpdeel0bLVN+nfD1VWmzCkK+pJbSjIawGE+RY4+NIJqhbUDDQjvV0NUK84fMfwxvtFoCtEe70HfZjFcw==}
+    dev: false
+
+  /@google-ai/generativelanguage@0.2.1:
+    resolution: {integrity: sha512-oqEQScnGO6UoEqdKMIGiRfLWNpc83RtLWcO/g/VH3+2PnqIwEqJThDAMCHmRZ9B3zUiiL2cd4FaHx3ZU93CXEA==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      google-gax: 3.6.1
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
     dev: false
 
   /@google-cloud/aiplatform@2.16.0:
@@ -2671,7 +2687,7 @@ packages:
       fast-text-encoding: 1.0.6
       google-auth-library: 8.9.0
       is-stream-ended: 0.1.4
-      node-fetch: 2.6.7
+      node-fetch: 2.6.12
       object-hash: 3.0.0
       proto3-json-serializer: 1.1.1
       protobufjs: 7.2.4

@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/trpc";
-import generateDescription from "../vertex-ai";
+import generateDescription from "../google-ai";
+
+const ProductAttributesSchema = z.object({
+  name: z.string(),
+  price: z.number(),
+  type: z.string(),
+  description: z.string(),
+  isVisible: z.boolean(),
+});
 
 export const AiSchema = z.union([
   z.object({
@@ -11,11 +19,11 @@ export const AiSchema = z.union([
     additionalAttributes: z.string(),
     keywords: z.string(),
     instructions: z.string(),
-    includeProductAttributes: z.boolean(),
+    productAttributes: ProductAttributesSchema.nullable()
   }),
   z.object({
-    includeProductAttributes: z.boolean(),
     customPrompt: z.string(),
+    productAttributes: ProductAttributesSchema.nullable()
   })
 ]);
 
