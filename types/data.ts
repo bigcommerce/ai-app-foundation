@@ -1,11 +1,8 @@
-export interface FormData {
+export interface Product extends FormData {
+    id: number;
     description: string;
     isVisible: boolean;
     name: string;
     price: number;
     type: string;
-}
-
-export interface ListItem extends FormData {
-    id: number;
 }

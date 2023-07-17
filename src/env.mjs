@@ -38,7 +38,7 @@ export const env = createEnv({
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     JWT_KEY: process.env.JWT_KEY,
     LOGIN_URL: process.env.LOGIN_URL,
-    GOOGLE_API_KEY: process.env.OPENAI_API_KEY,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -28,15 +28,17 @@ export const DescriptionGenerator = ({ isLoading, results, setPromptAttributes, 
             <PromptForm generateDescription={generateDescription} onChange={(prompt) => setPromptAttributes(prompt)} />
         </FlexItem>
         <StyledHr borderTop="box" marginTop="xLarge" />
-        <FlexItem flexGrow={1}>
+        <FlexItem marginTop="medium">
             {isLoading && <Loader />}
             {!isLoading && <AiResults onChange={onDescriptionChange} results={results} />}
         </FlexItem>
-        <FlexItem>
-            <Flex justifyContent="flex-end" flexDirection="row">
-                <Button mobileWidth="auto" variant="secondary">Cancel</Button>
-                <Button mobileWidth="auto" variant="primary">Use this result</Button>
-            </Flex>
-        </FlexItem>
+        {!isLoading &&
+            <FlexItem marginTop="xxLarge">
+                <Flex justifyContent="flex-end" flexDirection="row">
+                    <Button mobileWidth="auto" variant="secondary">Cancel</Button>
+                    <Button mobileWidth="auto" variant="primary">Use this result</Button>
+                </Flex>
+            </FlexItem>
+        }
     </StyledWrapper>
 );

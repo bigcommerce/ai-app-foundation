@@ -40,8 +40,8 @@ const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
 export function TemplatePromptForm({ onChange }: BasePromptFormProps) {
     const [formAttributes, setFormAttributes] = useState(DEFAULT_PROMPT_ATTRIBUTES);
     const [collapseTitle, setCollapseTitle] = useState('Show more');
-    const handleChange = (isOpen: boolean) => setCollapseTitle(isOpen ? 'Show less' : 'Show more');
 
+    const handleChange = (isOpen: boolean) => setCollapseTitle(isOpen ? 'Show less' : 'Show more');
 
     const handleInputChange = (value: InputFieldValue, fieldName: keyof TemplatePromptAttributes) => {
         const updatedAttributes = {
