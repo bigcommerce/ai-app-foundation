@@ -35,6 +35,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
+    "lib/auth.ts",
   ],
   "exclude": [
     "node_modules",
