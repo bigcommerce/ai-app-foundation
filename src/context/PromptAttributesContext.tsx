@@ -38,9 +38,10 @@ interface PromptAttributesContextType {
   isFormStructured: boolean;
   structuredAttributes: StructuredAttributes;
   customAttributes: CustomAttributes;
-  setIsFormStructured(state: boolean): void;
-  setStructuredAttributes(attr: StructuredAttributes): void;
-  setCustomAttributes(attr: CustomAttributes): void;
+
+  setIsFormStructured: (state: boolean) => void;
+  setStructuredAttributes: (attr: StructuredAttributes) => void;
+  setCustomAttributes: (attr: CustomAttributes) => void;
 }
 
 export const PromptAttributesContext = createContext<PromptAttributesContextType>({
@@ -48,6 +49,7 @@ export const PromptAttributesContext = createContext<PromptAttributesContextType
   isFormStructured: true,
   structuredAttributes: DEFAULT_STRUCTURED_ATTRIBUTES,
   customAttributes: DEFAULT_CUSTOM_ATTRIBUTES,
+
   setIsFormStructured: () => undefined,
   setStructuredAttributes: () => undefined,
   setCustomAttributes: () => undefined,
