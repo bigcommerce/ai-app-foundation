@@ -3,7 +3,7 @@ import { type NewProduct, type Product } from "types";
 import AiResults from "~/components/AiResults/AiResults";
 import Loader from "~/components/Loader";
 import { CustomPromptForm } from "~/components/PromptForm/CustomPromptForm";
-import { StucturedPromptForm } from "~/components/PromptForm/TemplatePromptForm";
+import { StucturedPromptForm } from "~/components/PromptForm/StructuredPromptForm";
 import { StyledButton } from "~/components/PromptForm/styled";
 import { usePromptAttributes } from "~/context/PromptAttributesContext";
 import { useAIDescriptions } from "~/hooks";

@@ -2,7 +2,7 @@ import { type z } from "zod";
 import { env } from "~/env.mjs";
 import { GoogleAuth } from "google-auth-library";
 import { TextServiceClient } from "@google-ai/generativelanguage";
-import { STYLE_OPTIONS } from "~/components/PromptForm/TemplatePromptForm";
+import { STYLE_OPTIONS } from "~/components/PromptForm/StructuredPromptForm";
 import { type aiSchema } from "../routers/_app";
 
 const MODEL_NAME = 'models/text-bison-001';

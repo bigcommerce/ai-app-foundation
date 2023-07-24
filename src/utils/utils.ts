@@ -1,5 +1,5 @@
 import { type NewProduct, type Product } from 'types';
-import { STYLE_OPTIONS } from '~/components/PromptForm/TemplatePromptForm';
+import { STYLE_OPTIONS } from '~/components/PromptForm/StructuredPromptForm';
 import { type PromptAttributes } from '~/context/PromptAttributesContext';
 interface KeyToLabelMap {
   [key: string]: string;
