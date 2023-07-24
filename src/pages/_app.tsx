@@ -24,7 +24,6 @@ const MyApp: AppType = ({ Component, pageProps }) =>
         </SessionProvider>
       </Box>
     </ThemeProvider>
-  </>
-  ;
+  </>;
 
 export default api.withTRPC(MyApp);
