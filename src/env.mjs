@@ -8,6 +8,9 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    FIRE_API_KEY: z.string().min(3),
+    FIRE_DOMAIN: z.string().min(3),
+    FIRE_PROJECT_ID: z.string().min(3),
     API_URL: z.string().min(3),
     AUTH_CALLBACK: z.string().min(3),
     CLIENT_ID: z.string().min(3),
@@ -32,13 +35,16 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    FIRE_API_KEY: process.env.FIRE_API_KEY,
+    FIRE_DOMAIN: process.env.FIRE_DOMAIN,
+    FIRE_PROJECT_ID: process.env.FIRE_PROJECT_ID,
     API_URL: process.env.API_URL,
     AUTH_CALLBACK: process.env.AUTH_CALLBACK,
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     JWT_KEY: process.env.JWT_KEY,
     LOGIN_URL: process.env.LOGIN_URL,
-    GOOGLE_API_KEY: process.env.OPENAI_API_KEY,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

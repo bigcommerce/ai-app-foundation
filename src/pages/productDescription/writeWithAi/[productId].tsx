@@ -1,89 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import dynamic from "next/dynamic";
-import { api } from '~/utils/api';
-import { useRouter } from 'next/router';
-import { useProductInfo } from 'lib/hooks';
-import { type PromptAttributes, type Result, DescriptionGenerator, type TemplatePromptAttributes } from '~/components/DescriptionGenerator';
-import { useLocalStorage } from '~/hooks';
-import { serializePromptAttributes } from '~/utils/utils';
+import { DEFAULT_STRUCTURED_ATTRIBUTES, PromptAttributesProvider } from '~/context/PromptAttributesContext';
+import { type InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
+import { prepareAiPromptAttributes } from '~/utils/utils';
+import { caller } from '~/server/routers/_app';
+import { fetchProductWithAttributes } from '~/server/bigcommerce-api';
+import DescriptionGenerator from '~/containers/DescriptionGenerator';
+import { useAIDescriptions } from '~/hooks';
+import { useEffect, useState } from 'react';
 
-const MAX_LOCAL_STORAGE_RESULTS = 20;
-const STORAGE_KEY = 'ai-product-descriptions:history:product';
-const DEFAULT_PROMPT_ATTRIBUTES: TemplatePromptAttributes = {
-  style: 'story',
-  wordCount: 250,
-  includeProductAttributes: true,
-  optimizedForSeo: true,
-  brandVoice: '',
-  additionalAttributes: '',
-  keywords: '',
-  instructions: '',
-};
+export default dynamic(Promise.resolve(Page), { ssr: false })
 
-const ProductAppExtensionContent = () => {
-  const router = useRouter();
-  const productId = Number(router.query?.productId);
-  const { isLoading } = useProductInfo(productId);
+function Page({ product, initialDescription }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [isInitialLoad, setInitialLoad] = useState(false);
 
-  const { isLoading: isPrompting, mutateAsync: generateDescription } = api.generativeAi.useMutation(
-    { onSuccess: description => addResult(promptAttributes, description) }
-  );
-
-  const storageKey = `${STORAGE_KEY}:${productId}`;
-
-  const [promptAttributes, setPromptAttributes] = useState<PromptAttributes>(DEFAULT_PROMPT_ATTRIBUTES);
-  const [results, setResults] = useLocalStorage<Result[]>(storageKey, []);
+  const { setResults } = useAIDescriptions(product.id);
 
   useEffect(() => {
-    void generateDescription(DEFAULT_PROMPT_ATTRIBUTES);
-  }, [generateDescription]);
-
-  const handleDescriptionChange = (index: number, description: string) => {
-    setResults((prevResults: Result[]) => {
-      if (index < 0 || index >= prevResults.length) {
-        return prevResults;
-      }
-
-      const updatedResults = [...prevResults];
-
-      updatedResults[index] = {
-        promptAttributes: updatedResults[index]?.promptAttributes || '',
-        description: description,
-      };
-
-      return updatedResults;
-    });
-  };
-
-  const addResult = (promptAttributes: PromptAttributes, description: string) => {
-
-    const result: Result = {
-      promptAttributes: serializePromptAttributes(promptAttributes),
-      description,
-    };
-
-    setResults([...results.slice(-(MAX_LOCAL_STORAGE_RESULTS - 1)), ...[result]])
-  }
-
-  const handleDescriptionGeneration = async () => {
-    await generateDescription(promptAttributes);
-  }
-
-  const saveProductDescription = () => {
-    console.log('Saving the product with a new description', results.at(-1)?.description);
-  }
+    setResults({ description: initialDescription, promptAttributes: DEFAULT_STRUCTURED_ATTRIBUTES });
+    setInitialLoad(true);
+  }, []);
 
   return (
-    <DescriptionGenerator
-      isLoading={isLoading || isPrompting}
-      results={results}
-      setPromptAttributes={setPromptAttributes}
-      onDescriptionChange={handleDescriptionChange}
-      generateDescription={handleDescriptionGeneration}
-    />
+    <PromptAttributesProvider>
+      {isInitialLoad && <DescriptionGenerator product={product} />}
+    </PromptAttributesProvider>
   );
 }
 
-export default dynamic(() => Promise.resolve(ProductAppExtensionContent), {
-  ssr: false
-});
+type ReqProps = { query: { productId: string, product_name: string, context: string } };
+
+export async function getServerSideProps({ query: { productId, context, product_name: name } }: ReqProps) {
+  const id = Number(productId);
+
+  // cover case when product is not created yet
+  const product = id === 0
+    ? { id, name }
+    : await fetchProductWithAttributes(id, context);
+
+  // Generate product description for the initial load
+  const input = prepareAiPromptAttributes(DEFAULT_STRUCTURED_ATTRIBUTES, product);
+  const initialDescription = await caller.generativeAi(input);
+
+  return { props: { product, initialDescription } };
+}

@@ -4,12 +4,10 @@ import { encodePayload, getBCAuth, setSession } from 'lib/auth';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const isAppExtensionsScopeEnabled = req.query?.scope?.includes('store_app_extensions_manage');
-
         const session = await getBCAuth(req.query);
         const encodedContext = encodePayload(session);
-        const { access_token: accessToken, context } = session;
 
+        const { access_token: accessToken, context } = session;
         const storeHash = context.split('/')[1] || '';
 
         await setSession(session);
@@ -18,7 +16,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
          * For stores that do not have the app installed yet, create App Extensions when app is
          * installed.
          */
-
+        const isAppExtensionsScopeEnabled = req.query?.scope?.includes('store_app_extensions_manage');
         if (isAppExtensionsScopeEnabled && accessToken) {
             await createAppExtension({ accessToken, storeHash })
         } else {

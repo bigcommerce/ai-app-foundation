@@ -1,8 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 import { SessionProps, UserData } from 'types';
+import { env } from '~/env.mjs';
 
-const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = process.env;
+const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = env;
+
 const firebaseConfig = {
     apiKey: FIRE_API_KEY,
     authDomain: FIRE_DOMAIN,
