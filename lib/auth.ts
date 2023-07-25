@@ -1,5 +1,4 @@
 import * as jwt from 'jsonwebtoken';
-import { type NextApiRequest } from 'next';
 import * as BigCommerce from 'node-bigcommerce';
 import { type ApiConfig, type SessionContextProps, type SessionProps } from '../types';
 import { env } from '~/env.mjs';
@@ -32,7 +31,7 @@ const bigcommerceSigned = new BigCommerce({
     responseType: 'json',
 });
 
-export function bigcommerceClient(accessToken: string, storeHash: string, apiVersion = 'v3') {
+export function bigcommerceClient(accessToken: string, storeHash: string, apiVersion = 'v3'): BigCommerce {
     return new BigCommerce({
         clientId: CLIENT_ID,
         accessToken,
@@ -58,7 +57,7 @@ export async function setSession(session: SessionProps) {
     await db.setStoreUser(session);
 }
 
-export async function getSession({ query: { context = '' } }: NextApiRequest) {
+export async function getSession(context = '') {
     if (typeof context !== 'string') return;
     const { context: storeHash, user } = decodePayload(context);
     const hasUser = await db.hasStoreUser(storeHash, user?.id);

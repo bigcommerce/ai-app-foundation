@@ -10,7 +10,6 @@ const buildRedirectUrl = (url: string, encodedContext: string) => {
         `context=${encodedContext}&${query}`
     );
 
-    console.log(`${path}?${queryParams.toString()}`);
     return `${path}?${queryParams.toString()}`;
 };
 

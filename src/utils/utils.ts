@@ -1,6 +1,7 @@
-import { type PromptAttributes } from '~/components/DescriptionGenerator';
+import { type NewProduct, type Product } from 'types';
+import { STYLE_OPTIONS } from '~/components/PromptForm/StructuredPromptForm';
+import { type PromptAttributes } from '~/context/PromptAttributesContext';
 interface KeyToLabelMap {
-
   [key: string]: string;
 }
 
@@ -28,13 +29,26 @@ export const serializePromptAttributes = (promptAttributes: PromptAttributes): s
       let part = KEY_TO_LABEL_MAP[key];
 
       if (part && typeof value !== 'boolean') {
-        part += `: ${value as string}`;
+        if (key === 'style') {
+          part += `: ${STYLE_OPTIONS.find((option) => option.value === value)?.content || value as string}`;
+        } else {
+          part += `: ${value as string}`;
+        }
       }
 
       result += part;
     }
   }
 
+  result += ';';
+
   return result;
 }
 
+export const prepareAiPromptAttributes = (promptAttributes: PromptAttributes, product: Product | NewProduct) => {
+  const { includeProductAttributes, ...restAttributes } = promptAttributes;
+
+  return {
+    ...restAttributes, product: includeProductAttributes ? product : null
+  };
+}

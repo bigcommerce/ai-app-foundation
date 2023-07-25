@@ -5,7 +5,7 @@ import { type SessionContextProps } from 'types';
 
 export default async function logout(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const session = await getSession(req) as SessionContextProps;
+        const session = await getSession(req.query?.context?.toString()) as SessionContextProps;
 
         await logoutUser(session);
         res.status(200).end();

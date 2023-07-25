@@ -27,23 +27,11 @@ To run the app locally, follow these instructions:
 4. [Replace BC_CLIENT_ID and BC_CLIENT_SECRET in .env](https://devtools.bigcommerce.com/my/apps)
    (from `View Client ID` in the dev portal).
 5. Update `BC_OAUTH_REDIRECT` in `.env` with the Ngrok `install` callback URL.
-6. Specify DB_TYPE in .env
-    firebase or mysql
-    If using Firebase, enter your firebase config keys. See Firebase quickstart
-    If using MySQL, enter your mysql database config keys (host, database, user/pass and optionally port). If not using the heroku deploy button above, you will now want to run npm run db:setup to perform the initial database setup. Note: if using Heroku with ClearDB, the DB should create the necessary Config Var, i.e. CLEARDB_DATABASE_URL.
+6. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](https://console.firebase.google.com)
 7. Start your dev environment in a **separate** terminal from `ngrok`. If
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
    - `npm run dev`
 8. [Install the app and launch.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#install-the-app)
-
-### Environment Variables
-
-Both the `lib/env.server.ts` and `lib/env.client.ts` files validate and strongly
-type environment variables at run time for use throughout your application. When
-you add a new server environment variable in your `.env` or `.env.local` file,
-add the variable in the `serverSchema` object in `lib/env.server.ts`; when you
-add a new client environment variable to your `.env` or `.env.local` file, add
-the variable in the `clientSchema` object in `lib/env.client.ts`.
 
 ## Contributing
 

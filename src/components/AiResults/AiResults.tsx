@@ -1,23 +1,16 @@
 import { Flex, Pagination, Textarea, Small, H3, Grid } from "@bigcommerce/big-design";
 import React, { type SetStateAction, type ChangeEvent, useState } from "react";
-import { type Result } from "./types";
-import styled from 'styled-components';
+import { StyledFlex } from "./styled";
+
+export interface Result {
+    description: string;
+    promptAttributes: string;
+}
 
 interface AiResultsProps {
     results: Result[];
     onChange(index: number, description: string): void;
 }
-
-const StyledTextarea = styled(Flex)`
-  & > div:first-child {
-    width: 100%;
-  }
-  textarea {
-    height: ${({ theme }) => theme.helpers.remCalc(300)};
-    max-height: ${({ theme }) => theme.helpers.remCalc(500)};
-    min-height: ${({ theme }) => theme.helpers.remCalc(150)};
-  }
-`;
 
 export default function AiResults({ results, onChange }: AiResultsProps) {
     const [page, setPage] = useState(results.length);
@@ -48,9 +41,9 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
                     />
                 </Flex>
             </Grid>
-            <StyledTextarea>
+            <StyledFlex>
                 <Textarea onChange={handleValueChange} value={currentResult.description} />
-            </StyledTextarea>
+            </StyledFlex>
             <Small marginTop="medium">{currentResult.promptAttributes}</Small>
         </Flex>
     );
