@@ -1,4 +1,4 @@
-# Contributing to the Control Panel AI App
+# Contributing to the AI App Foundation
 
 ## Pull Requests
 
