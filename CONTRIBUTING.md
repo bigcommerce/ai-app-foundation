@@ -1,4 +1,4 @@
-# Contributing to gruf
+# Contributing to the Control Panel AI App
 
 ## Pull Requests
 
