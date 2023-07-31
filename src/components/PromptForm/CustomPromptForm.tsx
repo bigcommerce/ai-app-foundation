@@ -16,7 +16,7 @@ export const CustomPromptForm = ({ attributes, onChange }: CustomFormProps) =>
                         <InputLabel
                             bold={true}
                             text="Instructions"
-                            tooltip="Here are some tips to get a better quality product description. Imagine that you’re talking to a person. Provide as much context as possible. Ask the AI to assume a profession relevant to what you're selling, like interior designer or chef, for example. You can also try asking the AI to write as a famous person with a distinct voice, like Shakespeare or Hemingway."
+                            tooltip="Try and provide as much information as possible. You can also try asking the AI to write in the voice of a famous person, like Shakespeare or Hemingway, or assume a profession, like interior designer or chef."
                         />
                     </FormControlLabel>
                 }
