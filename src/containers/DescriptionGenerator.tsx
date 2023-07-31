@@ -46,10 +46,10 @@ export default function DescriptonGenerator({ product }: DescriptonGeneratorProp
                 <FlexItem>
                     <Box display="inline-flex" marginBottom="medium">
                         <StyledButton isActive={isFormStructured} onClick={() => setIsFormStructured(true)}>
-                            Structured prompt
+                            Guided
                         </StyledButton>
                         <StyledButton isActive={!isFormStructured} onClick={() => setIsFormStructured(false)}>
-                            Custom prompt
+                            Custom
                         </StyledButton>
                     </Box>
                     {isFormStructured
@@ -58,7 +58,7 @@ export default function DescriptonGenerator({ product }: DescriptonGeneratorProp
                     }
                     <FlexItem marginTop="small">
                         <Button disabled={isPrompting} mobileWidth="auto" variant="secondary" onClick={() => void handleGenerateDescription()}>
-                            Write more
+                            Generate
                         </Button>
                     </FlexItem>
                 </FlexItem>
@@ -71,7 +71,7 @@ export default function DescriptonGenerator({ product }: DescriptonGeneratorProp
                 <FlexItem marginTop="xxLarge">
                     <Flex justifyContent="flex-end" flexDirection="row">
                         <Button mobileWidth="auto" variant="secondary">Cancel</Button>
-                        <Button mobileWidth="auto" variant="primary">Use this result</Button>
+                        <Button mobileWidth="auto" variant="primary">Use this</Button>
                     </Flex>
                 </FlexItem>
             }

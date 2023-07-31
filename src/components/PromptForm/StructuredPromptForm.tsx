@@ -94,7 +94,7 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                                     <InputLabel
                                         bold={false}
                                         text="Include product information"
-                                        tooltip="If checked, the description will feature information from the product page for this product. This includes: product name, product type, brand, dimensions and weight, categories and condition."
+                                        tooltip="Checking this box will include product information from the control panel in the description. For example, product name and weight."
                                     />
                                 </CheckboxLabel>
                             }
@@ -110,7 +110,7 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                                 <InputLabel
                                     bold={true}
                                     text="Brand voice"
-                                    tooltip="Enter the words that best describe the personality of your brand. For example, “upbeat and confident” or “friendly and conversational.”"
+                                    tooltip="Describe how your brand views itself. For example, “upbeat and confident” or “friendly and conversational.”"
                                 />
                             </FormControlLabel>
                         }
@@ -124,8 +124,8 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                             <FormControlLabel>
                                 <InputLabel
                                     bold={true}
-                                    text="Attributes"
-                                    tooltip="Enter any words or phrases that help describe or differentiate this product in addition to what is already mentioned on the product information page. You should enter attributes as key-value pairs. For example, “color: red” or “material: recycled cotton”."
+                                    text="Additional attributes"
+                                    tooltip="Additional attributes are key-value pairs that provide more information and improve search engine rankings. For example, “organic, recycled cotton” or “sports, running.”"
                                 />
                             </FormControlLabel>
                         }
@@ -139,8 +139,8 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                             <FormControlLabel>
                                 <InputLabel
                                     bold={true}
-                                    text="Keywords"
-                                    tooltip="Enter any words or phrases that you want to make sure are included in the description."
+                                    text="Additional keywords"
+                                    tooltip="Additional keywords are words or phrases that provide more information and improve search engine rankings. For example, “blue,” “shirt,” “clothing” and “women.”"
                                 />
                             </FormControlLabel>
                         }
@@ -154,8 +154,8 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                             <FormControlLabel>
                                 <InputLabel
                                     bold={true}
-                                    text="Instructions"
-                                    tooltip="You can fine-tune your description by entering any special instructions here. For example, words or phrases to avoid or formatting requirements."
+                                    text="Special instructions "
+                                    tooltip="If you have any special instructions, you can enter them here. For example, words to avoid, words to be sure and include or special formatting requirements."
                                 />
                             </FormControlLabel>
                         }
