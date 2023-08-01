@@ -6,9 +6,9 @@ const sourceSans = Source_Sans_3({
 });
 
 const Layout = ({ children }: { children: React.ReactNode }) =>(
-  <html lang="en" className={sourceSans.className}>
-    <body>{children}</body>
-  </html>
+  <main className={sourceSans.className}>
+    {children}
+  </main>
 );
 
 export default Layout;

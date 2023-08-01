@@ -1,15 +1,10 @@
-import { Flex, ProgressCircle } from "@bigcommerce/big-design";
-import styled from 'styled-components';
-
-const LoaderContainer = styled(Flex)`
-  height: 100%;
-  width: 100%;
-`
+import { ProgressCircle } from "@bigcommerce/big-design";
+import { FullSizeContainer } from '~/components/FullSizeContainer';
 
 export default function Loader() {
     return (
-        <LoaderContainer alignItems="center" justifyContent="center">
+        <FullSizeContainer alignItems="center" justifyContent="center">
             <ProgressCircle size="large" />
-        </LoaderContainer>
+        </FullSizeContainer>
     );
 }
