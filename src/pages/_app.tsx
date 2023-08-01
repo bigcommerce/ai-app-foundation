@@ -6,8 +6,10 @@ import { ThemeProvider } from 'styled-components';
 import Head from "next/head";
 import SessionProvider from '../../context/session';
 
+import Layout from '~/pages/layout';
+
 const MyApp: AppType = ({ Component, pageProps }) =>
-  <>
+  <Layout>
     <Head>
       <title>Control Panel AI App</title>
       <link rel="icon" href="/magic.svg" />
@@ -15,15 +17,12 @@ const MyApp: AppType = ({ Component, pageProps }) =>
 
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
-      <Box
-        marginHorizontal={{ mobile: 'none', tablet: 'xxxLarge' }}
-        marginVertical={{ mobile: 'none', tablet: "xxLarge" }}
-      >
+      <Box>
         <SessionProvider>
           <Component {...pageProps} />
         </SessionProvider>
       </Box>
     </ThemeProvider>
-  </>;
+  </Layout>;
 
 export default api.withTRPC(MyApp);
