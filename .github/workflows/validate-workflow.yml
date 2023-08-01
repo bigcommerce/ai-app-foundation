@@ -6,6 +6,18 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  FIRE_API_KEY: "test"
+  FIRE_DOMAIN: "test"
+  FIRE_PROJECT_ID: "test"
+  API_URL: "test"
+  AUTH_CALLBACK: "test"
+  CLIENT_ID: "test"
+  CLIENT_SECRET: "test"
+  JWT_KEY: "test"
+  LOGIN_URL: "test"
+  GOOGLE_API_KEY: "test"
+
 jobs:
   build:
     runs-on: ubuntu-20.04
