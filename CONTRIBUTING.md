@@ -28,4 +28,4 @@ or helping spread the word about gruf.
 * Contribute directly to gRPC! This helps gruf and all other initiatives.
 
 
-Thank you again for your interest in contributing to gruf!
+Thank you again for your interest in contributing to the AI App Foundation!
