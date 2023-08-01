@@ -25,8 +25,8 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
     const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => onChange(page - 1, event.target.value);
 
     return (
-        <Flex marginTop="xxLarge" flexDirection="column">
-            <Grid gridColumns="repeat(2, 1fr)" marginBottom="xxSmall">
+        <Flex marginTop="large" flexDirection="column">
+            <Grid gridColumns="repeat(2, 1fr)" marginBottom="medium">
                 <Flex flexDirection="row" alignItems="center">
                     <H3 marginBottom="none">Results</H3>
                 </Flex>
