@@ -5,6 +5,8 @@ This is
 which presents BigCommerce merchants with the ability to generate product
 descriptions.
 
+:star2: If you are hacking right now in the Google <> BigCommerce AI Hackathon event, check out our [Hackpack](https://developer.bigcommerce.com/big-ai-hackathon-2023/welcome) for more detail on Vertex AI and BigCommerce App Extensions! :star2:
+
 ## Install
 
 1. [Use Node 18+ and NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#checking-your-version-of-npm-and-node-js)
@@ -30,7 +32,7 @@ To run the app locally, follow these instructions:
 5. Update `BC_OAUTH_REDIRECT` in `.env` with the Ngrok `install` callback URL.
 6. Enter a jwt secret in `.env`.
     - JWT key should be at least 32 random characters (256 bits) for HS256
-7. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](https://console.firebase.google.com)
+7. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env]([https://console.firebase.google.com](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database))
 8. [Replace GOOGLE_API_KEY= in .env](https://cloud.google.com/docs/authentication/api-keys)
 9. Start your dev environment in a **separate** terminal from `ngrok`. If
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
