@@ -4,12 +4,19 @@ import { GoogleAuth } from "google-auth-library";
 import { TextServiceClient } from "@google-ai/generativelanguage";
 import { STYLE_OPTIONS } from "~/components/PromptForm/StructuredPromptForm";
 import { type aiSchema } from "../routers/_app";
+import { DEFAULT_STRUCTURED_ATTRIBUTES } from "~/context/PromptAttributesContext";
 
 const MODEL_NAME = 'models/text-bison-001';
 const API_KEY = env.GOOGLE_API_KEY;
 
 export default async function generateDescription(attributes: z.infer<typeof aiSchema>): Promise<string> {
-    const prompt = preparePrompt(attributes);
+    const input = prepareInput(attributes);
+    const productAttributes = prepareProductAttributes(attributes);
+
+    const prompt = `Act as an e - commerce merchandising expert who writes product descriptions.
+    Task: Based on provided input parameters, write a product description
+    ${input}
+    ${productAttributes}`;
 
     try {
         const client = new TextServiceClient({ authClient: new GoogleAuth().fromAPIKey(API_KEY) });
@@ -30,54 +37,44 @@ export default async function generateDescription(attributes: z.infer<typeof aiS
     return 'No response from Google AI';
 }
 
-
-const preparePrompt = (attributes: z.infer<typeof aiSchema>): string => {
-    let input = '';
-    let productAttributes = '';
-
+const prepareInput = (attributes: z.infer<typeof aiSchema>): string => {
     if ('customPrompt' in attributes) {
-        input = `Instruction: ${attributes.customPrompt}
-        `;
-    } else {
+        return `Instruction: ${attributes.customPrompt}`;
+    } else if ('style' in attributes) {
         const style = STYLE_OPTIONS.find((option) => option.value === attributes.style)?.content || '';
 
-        input = `
-Style of writing: ["${style}"]
-Brand tone: ["${attributes.brandVoice}"]
-Word limit: [${attributes.wordCount}]
-SEO optimized: ["${attributes.optimizedForSeo ? 'yes' : 'no'}"]
-Additional product attributes: ["${attributes.additionalAttributes}"]
-Additional keywords: ["${attributes.keywords}"]
-Additional instructions: ["${attributes.instructions}"]
-        `;
-    }
-
-    if (attributes.product && 'type' in attributes.product) {
-        productAttributes = `Product attributes: {
-    "name": ${attributes.product.name}
-    "brand": ${attributes.product.brand}
-    "type": ${attributes.product.type}
-    "condition": ${attributes.product.condition}
-    "weight": ${attributes.product.weight}
-    "height": ${attributes.product.height}
-    "width": ${attributes.product.width}
-    "depth": ${attributes.product.depth}
-    "categories": ${attributes.product.categoriesNames}
-    "videos descriptions": ${attributes.product.videosDescriptions}
-    "imnages descritpions": ${attributes.product.imagesDescriptions}
-    "custom_fields": ${attributes.product.custom_fields.map((field) => `"${field.name}": "${field.value}"`).join(',')}
-}
-        `;
+        return `Style of writing: ["${style}"]
+        Brand tone: ["${attributes.brandVoice}"]
+        Word limit: [${attributes.wordCount}]
+        SEO optimized: ["${attributes.optimizedForSeo ? 'yes' : 'no'}"]
+        Additional product attributes: ["${attributes.additionalAttributes}"]
+        Additional keywords: ["${attributes.keywords}"]
+        Additional instructions: ["${attributes.instructions}"]`;
     } else {
-        productAttributes = `Product attributes: {
-    "name": ${attributes.product?.name || ''}
-}
-        `;
+        return `Style of writing: ["${DEFAULT_STRUCTURED_ATTRIBUTES.style}"]
+        Brand tone: ["${DEFAULT_STRUCTURED_ATTRIBUTES.brandVoice}"]
+        Word limit: [${DEFAULT_STRUCTURED_ATTRIBUTES.wordCount}]
+        SEO optimized: ["${DEFAULT_STRUCTURED_ATTRIBUTES.optimizedForSeo ? 'yes' : 'no'}"]`;
     }
+}
 
-    return `Act as an e-commerce merchandising expert who writes product descriptions.
-Task: Based on provided input parameters, write a product description
-${input}
-${productAttributes}
-`;
+const prepareProductAttributes = (attributes: z.infer<typeof aiSchema>): string => {
+    if (attributes.product && 'type' in attributes.product) {
+        return `Product attributes:
+        "name": ${attributes.product.name}
+        "brand": ${attributes.product.brand}
+        "type": ${attributes.product.type}
+        "condition": ${attributes.product.condition}
+        "weight": ${attributes.product.weight}
+        "height": ${attributes.product.height}
+        "width": ${attributes.product.width}
+        "depth": ${attributes.product.depth}
+        "categories": ${attributes.product.categoriesNames}
+        "videos descriptions": ${attributes.product.videosDescriptions}
+        "imnages descritpions": ${attributes.product.imagesDescriptions}
+        "custom_fields": ${attributes.product.custom_fields.map((field) => `"${field.name}": "${field.value}"`).join(',')} `;
+    } else {
+        return `Product attributes:
+        "name": ${attributes.product?.name || ''} `;
+    }
 }

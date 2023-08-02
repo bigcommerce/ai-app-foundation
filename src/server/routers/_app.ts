@@ -37,6 +37,9 @@ export const aiSchema = z.union([
   z.object({
     customPrompt: z.string(),
     product: z.union([productSchema, newProductSchema]).nullable()
+  }),
+  z.object({
+    product: z.union([productSchema, newProductSchema]).nullable()
   })
 ]);
 
