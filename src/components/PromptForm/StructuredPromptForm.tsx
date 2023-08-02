@@ -66,7 +66,7 @@ export function StucturedPromptForm({ attributes, onChange }: StructuredFormProp
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Flex flexDirection="row" alignItems="flex-end" paddingBottom="large">
+                    <Flex flexDirection="row" alignItems="center">
                         <Checkbox
                             checked={attributes.optimizedForSeo}
                             label={

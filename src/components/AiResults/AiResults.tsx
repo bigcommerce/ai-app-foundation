@@ -26,7 +26,7 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
 
     return (
         <Flex marginTop="large" flexDirection="column">
-            <Grid gridColumns="repeat(2, 1fr)" marginBottom="medium">
+            <Grid gridColumns="1fr 4fr" marginBottom="medium" gridColumnGap="0">
                 <Flex flexDirection="row" alignItems="center">
                     <H3 marginBottom="none">Results</H3>
                 </Flex>
