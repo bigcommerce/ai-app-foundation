@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
+import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
 
-export type PromptAttributes = StructuredAttributes | CustomAttributes;
-export interface StructuredAttributes {
+export type PromptAttributes = GuidedAttributes | CustomAttributes;
+export interface GuidedAttributes {
   style: string;
   wordCount: number;
   includeProductAttributes: boolean;
@@ -17,17 +18,6 @@ export interface CustomAttributes {
   includeProductAttributes: boolean;
 }
 
-export const DEFAULT_STRUCTURED_ATTRIBUTES: StructuredAttributes = {
-  style: 'story',
-  wordCount: 250,
-  includeProductAttributes: true,
-  optimizedForSeo: true,
-  brandVoice: '',
-  additionalAttributes: '',
-  keywords: '',
-  instructions: '',
-};
-
 export const DEFAULT_CUSTOM_ATTRIBUTES: CustomAttributes = {
   customPrompt: 'Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.',
   includeProductAttributes: true,
@@ -35,41 +25,41 @@ export const DEFAULT_CUSTOM_ATTRIBUTES: CustomAttributes = {
 
 interface PromptAttributesContextType {
   currentAttributes: PromptAttributes
-  isFormStructured: boolean;
-  structuredAttributes: StructuredAttributes;
+  isFormGuided: boolean;
+  guidedAttributes: GuidedAttributes;
   customAttributes: CustomAttributes;
 
-  setIsFormStructured: (state: boolean) => void;
-  setStructuredAttributes: (attr: StructuredAttributes) => void;
+  setIsFormGuided: (state: boolean) => void;
+  setGuidedAttributes: (attr: GuidedAttributes) => void;
   setCustomAttributes: (attr: CustomAttributes) => void;
 }
 
 export const PromptAttributesContext = createContext<PromptAttributesContextType>({
-  currentAttributes: DEFAULT_STRUCTURED_ATTRIBUTES,
-  isFormStructured: true,
-  structuredAttributes: DEFAULT_STRUCTURED_ATTRIBUTES,
+  currentAttributes: DEFAULT_GUIDED_ATTRIBUTES,
+  isFormGuided: true,
+  guidedAttributes: DEFAULT_GUIDED_ATTRIBUTES,
   customAttributes: DEFAULT_CUSTOM_ATTRIBUTES,
 
-  setIsFormStructured: () => undefined,
-  setStructuredAttributes: () => undefined,
+  setIsFormGuided: () => undefined,
+  setGuidedAttributes: () => undefined,
   setCustomAttributes: () => undefined,
 });
 
 export const PromptAttributesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isFormStructured, setIsFormStructured] = useState(true);
+  const [isFormGuided, setIsFormGuided] = useState(true);
 
-  const [structuredAttributes, setStructuredAttributes] = useState(DEFAULT_STRUCTURED_ATTRIBUTES);
+  const [guidedAttributes, setGuidedAttributes] = useState(DEFAULT_GUIDED_ATTRIBUTES);
   const [customAttributes, setCustomAttributes] = useState(DEFAULT_CUSTOM_ATTRIBUTES);
 
-  const currentAttributes = isFormStructured ? structuredAttributes : customAttributes;
+  const currentAttributes = isFormGuided ? guidedAttributes : customAttributes;
 
   const contextValue = {
     currentAttributes,
-    isFormStructured,
-    structuredAttributes,
+    isFormGuided,
+    guidedAttributes,
     customAttributes,
-    setIsFormStructured,
-    setStructuredAttributes,
+    setIsFormGuided,
+    setGuidedAttributes,
     setCustomAttributes
   }
 

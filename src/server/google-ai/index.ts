@@ -2,9 +2,9 @@ import { type z } from "zod";
 import { env } from "~/env.mjs";
 import { GoogleAuth } from "google-auth-library";
 import { TextServiceClient } from "@google-ai/generativelanguage";
-import { STYLE_OPTIONS } from "~/components/PromptForm/StructuredPromptForm";
-import { type aiSchema } from "../routers/_app";
-import { DEFAULT_STRUCTURED_ATTRIBUTES } from "~/context/PromptAttributesContext";
+
+import { DEFAULT_GUIDED_ATTRIBUTES, STYLE_OPTIONS } from "~/constants";
+import { type aiSchema } from "~/app/api/generateDescription/route";
 
 const MODEL_NAME = 'models/text-bison-001';
 const API_KEY = env.GOOGLE_API_KEY;
@@ -31,7 +31,7 @@ export default async function generateDescription(attributes: z.infer<typeof aiS
             return response[0].candidates[0]?.output || 'No response from Google AI';
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
     }
 
     return 'No response from Google AI';
@@ -51,10 +51,9 @@ const prepareInput = (attributes: z.infer<typeof aiSchema>): string => {
         Additional keywords: ["${attributes.keywords}"]
         Additional instructions: ["${attributes.instructions}"]`;
     } else {
-        return `Style of writing: ["${DEFAULT_STRUCTURED_ATTRIBUTES.style}"]
-        Brand tone: ["${DEFAULT_STRUCTURED_ATTRIBUTES.brandVoice}"]
-        Word limit: [${DEFAULT_STRUCTURED_ATTRIBUTES.wordCount}]
-        SEO optimized: ["${DEFAULT_STRUCTURED_ATTRIBUTES.optimizedForSeo ? 'yes' : 'no'}"]`;
+        return `Style of writing: ["${DEFAULT_GUIDED_ATTRIBUTES.style}"]
+        Word limit: [${DEFAULT_GUIDED_ATTRIBUTES.wordCount}]
+        SEO optimized: ["${DEFAULT_GUIDED_ATTRIBUTES.optimizedForSeo ? 'yes' : 'no'}"]`;
     }
 }
 

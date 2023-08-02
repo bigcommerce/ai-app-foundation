@@ -95,12 +95,12 @@ const createAppExtensionMutation = () => ({
   variables: {
     input: {
       context: 'PANEL',
-      model: 'PRODUCTS',
-      url: '/productDescription/writeWithAi/${id}',
+      model: 'PRODUCT_DESCRIPTION',
+      url: '/productDescription/${id}',
       label: {
-        defaultValue: 'Write with AI', locales: [
+        defaultValue: 'Generate text', locales: [
           {
-            value: 'Write with AI',
+            value: 'Generate text',
             localeCode: 'en-US',
           }
         ],
