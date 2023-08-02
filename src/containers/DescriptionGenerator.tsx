@@ -52,7 +52,7 @@ export default function DescriptonGenerator({ product }: DescriptonGeneratorProp
     };
 
     return (
-        <FullScreenHeightWrapper flexDirection="column" justifyContent="space-between" padding="xLarge">
+        <FullScreenHeightWrapper flexDirection="column" justifyContent="space-between" padding="xSmall">
             <FullSizeContainer flexDirection="column">
                 <FlexItem>
                     <Box display="inline-flex" marginBottom="large">
