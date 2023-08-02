@@ -4,7 +4,7 @@ import { GoogleAuth } from "google-auth-library";
 import { TextServiceClient } from "@google-ai/generativelanguage";
 
 import { DEFAULT_GUIDED_ATTRIBUTES, STYLE_OPTIONS } from "~/constants";
-import { type aiSchema } from "~/app/api/generateDescription/route";
+import { type aiSchema } from "~/app/api/generateDescription/schema";
 
 const MODEL_NAME = 'models/text-bison-001';
 const API_KEY = env.GOOGLE_API_KEY;
@@ -31,7 +31,7 @@ export default async function generateDescription(attributes: z.infer<typeof aiS
             return response[0].candidates[0]?.output || 'No response from Google AI';
         }
     } catch (error) {
-        // console.error(error);
+        console.error(error);
     }
 
     return 'No response from Google AI';

@@ -6,41 +6,37 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  FIRE_API_KEY: "test"
-  FIRE_DOMAIN: "test"
-  FIRE_PROJECT_ID: "test"
-  API_URL: "test"
-  AUTH_CALLBACK: "test"
-  CLIENT_ID: "test"
-  CLIENT_SECRET: "test"
-  JWT_KEY: "test"
-  LOGIN_URL: "test"
-  GOOGLE_API_KEY: "test"
-
 jobs:
   build:
     runs-on: ubuntu-20.04
     env:
       DATABASE_URL: file:./db.sqlite
+      FIRE_API_KEY: "test"
+      FIRE_DOMAIN: "test"
+      FIRE_PROJECT_ID: "test"
+      API_URL: "test"
+      AUTH_CALLBACK: "test"
+      CLIENT_ID: "test"
+      CLIENT_SECRET: "test"
+      JWT_KEY: "test"
+      LOGIN_URL: "test"
+      GOOGLE_API_KEY: "test"
     strategy:
       matrix:
         node-version: [18]
     steps:
-    - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
-      with:
-        version: 8
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
-    - name: Install dependencies
-      run: pnpm install
+      - uses: actions/checkout@v3
 
-    - name: Run Lint
-      run: pnpm lint
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Run Build
-      run: pnpm build
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Lint
+        run: npm run build

@@ -1,9 +1,14 @@
+'use client';
+
 import React from 'react';
-import { Text, Panel, H1 } from '@bigcommerce/big-design';
+import { Text, Panel, H1, Box } from '@bigcommerce/big-design';
 import Image from 'next/image';
 
-const Index = () => (
-    <>
+const HomePage = () => (
+    <Box
+        marginHorizontal={{ mobile: 'none', tablet: 'xxxLarge' }}
+        marginVertical={{ mobile: 'none', tablet: "xxLarge" }}
+    >
         <H1>Product description generator</H1>
         <Panel header="Generate text">
             <Text>
@@ -14,14 +19,14 @@ const Index = () => (
                 alt="Example"
                 width={700}
                 height={500}
+                priority={true}
             />
-
             <Text>
                 Open the existing product or create a new one.
                 Click on the Generate text action and check the result.
             </Text>
         </Panel>
-    </>
+    </Box>
 );
 
-export default Index;
+export default HomePage;
