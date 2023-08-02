@@ -1,13 +1,12 @@
 import { type Result } from '~/components/AiResults/AiResults';
 import { useLocalStorage } from './useLocalStorage';
-import { api } from '~/utils/api';
 import { serializePromptAttributes } from '~/utils/utils';
 import { type PromptAttributes } from '~/context/PromptAttributesContext';
 
 const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
 
-export const useAIDescriptions = (productId: number) => {
+export const useDescriptionsHistory = (productId: number) => {
     const [results, setResults] = useLocalStorage<Result[]>(`${STORAGE_KEY}:${productId}`, []);
 
     const setResultsWrapper = ({ description, promptAttributes }: { description: string, promptAttributes: PromptAttributes }) => {
@@ -32,12 +31,8 @@ export const useAIDescriptions = (productId: number) => {
         });
     };
 
-    const { isLoading: isPrompting, mutateAsync: generateDescription } = api.generativeAi.useMutation();
-
     return {
-        isPrompting,
         results,
-        generateDescription,
         handleDescriptionChange,
         setResults: setResultsWrapper
     };

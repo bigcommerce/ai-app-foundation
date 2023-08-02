@@ -26,7 +26,12 @@
       "~/*": [
         "./src/*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     ".eslintrc.cjs",
@@ -36,6 +41,7 @@
     "**/*.cjs",
     "**/*.mjs",
     "lib/auth.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

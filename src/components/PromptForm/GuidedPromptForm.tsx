@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import {
     Checkbox,
@@ -12,32 +14,23 @@ import {
     Grid
 } from '@bigcommerce/big-design';
 import { InputLabel } from '~/components/PromptForm/InputLabel';
-import { type StructuredAttributes } from '~/context/PromptAttributesContext';
 import { theme } from '@bigcommerce/big-design-theme';
+import { STYLE_OPTIONS } from '~/constants';
+import { type GuidedAttributes } from '~/context/PromptAttributesContext';
 
 type InputFieldValue = string | number | boolean | undefined;
 
-export const STYLE_OPTIONS = [
-    { value: 'concise', content: 'Concise' },
-    { value: 'featureBased', content: 'Features-based' },
-    { value: 'benefitsBased', content: 'Benefits-based' },
-    { value: 'professional', content: 'Professional' },
-    { value: 'humorous', content: 'Humorous' },
-    { value: 'emotional', content: 'Emotional' },
-    { value: 'story', content: 'Story-telling' },
-];
-
-interface StructuredFormProps {
-    attributes: StructuredAttributes;
-    onChange(attributes: StructuredAttributes): void;
+interface GuidedPromptForm {
+    attributes: GuidedAttributes;
+    onChange(attributes: GuidedAttributes): void;
 }
 
-export function StucturedPromptForm({ attributes, onChange }: StructuredFormProps) {
+export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
     const [collapseTitle, setCollapseTitle] = useState('Show more');
 
     const handleCollapseChange = (isOpen: boolean) => setCollapseTitle(isOpen ? 'Show less' : 'Show more');
 
-    const handleInputChange = (value: InputFieldValue, fieldName: keyof StructuredAttributes) =>
+    const handleInputChange = (value: InputFieldValue, fieldName: keyof GuidedAttributes) =>
         onChange({ ...attributes, [fieldName]: value });
 
     return (

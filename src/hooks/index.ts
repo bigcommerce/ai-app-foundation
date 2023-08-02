@@ -1,2 +1,2 @@
 export * from './useLocalStorage';
-export * from './useAIDescriptionGenerator';
+export * from './useDescriptionsHistory';
