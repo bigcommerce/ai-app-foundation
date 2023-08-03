@@ -1,11 +1,7 @@
 'use client';
 
-import { Flex, ProgressCircle } from "@bigcommerce/big-design";
+import Loader from "~/components/Loader";
 
 export default function Loading() {
-    return (
-        <Flex justifyContent="center" alignItems="center" style={{ minHeight: "90vh" }}>
-            <ProgressCircle size="large" />
-        </Flex>
-    );
+    return <Loader minHeight="90vh" />;
 }

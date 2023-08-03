@@ -68,10 +68,10 @@ export default function Form({ product }: { product: Product | NewProduct }) {
                     </Button>
                 </FlexItem>
             </FlexItem>
-            <Hr border="box" marginTop="xLarge" />
             {isPrompting && <Loader />}
             {!isPrompting &&
                 <>
+                    <Hr border="box" marginTop="xLarge" />
                     <AiResults onChange={handleDescriptionChange} results={results} />
                     <Flex justifyContent="flex-end" flexDirection="row" marginTop="xxLarge">
                         <Button mobileWidth="auto" variant="secondary" onClick={handleCancelClick}>Cancel</Button>

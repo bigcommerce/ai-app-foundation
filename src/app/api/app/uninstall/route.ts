@@ -36,7 +36,7 @@ export async function GET({ nextUrl: { searchParams } }: NextRequest) {
         return new NextResponse('Invalid query parameters', { status: 400 });
     }
 
-    const decoded = jwt.verify(parsedParams.data.signed_payload_jwt, env.BC_CLIENT_SECRET);
+    const decoded = jwt.verify(parsedParams.data.signed_payload_jwt, env.JWT_KEY);
 
     const parsedJwt = jwtSchema.safeParse(decoded);
 
@@ -44,7 +44,7 @@ export async function GET({ nextUrl: { searchParams } }: NextRequest) {
         return new NextResponse('Invalid JWT', { status: 500 });
     }
 
-    const storeHash = parsedJwt.data.sub.split('/')[1];
+    const storeHash = parsedJwt.data.sub.split('/')[1] || '';
 
     await db.deleteStore(storeHash);
     await db.deleteUser(storeHash, parsedJwt.data.user);
