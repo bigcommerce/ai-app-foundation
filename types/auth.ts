@@ -15,14 +15,3 @@ export interface SessionProps {
     timestamp?: number;
     user: User;
 }
-
-export interface SessionContextProps {
-    accessToken: string;
-    storeHash: string;
-    user: User;
-}
-
-export interface ApiConfig {
-    apiUrl?: string;
-    loginUrl?: string;
-}

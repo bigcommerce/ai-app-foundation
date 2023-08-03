@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
-import { SessionProps, UserData } from 'types';
+import { SessionProps, User, UserData } from 'types';
 import { env } from '~/env.mjs';
 
 const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = env;
@@ -17,7 +17,7 @@ const db = getFirestore(app);
 // Firestore data management functions
 
 // Use setUser for storing global user data (persists between installs)
-export async function setUser({ user }: SessionProps) {
+export async function setUser(user: User) {
     if (!user) return Promise.resolve();
 
     const { email, id, username } = user;
@@ -83,10 +83,8 @@ export async function setStoreUser(session: SessionProps) {
     }
 }
 
-export async function deleteUser({ context, user, sub }: SessionProps) {
-    const contextString = context ?? sub;
-    const storeHash = contextString?.split('/')[1] || '';
-    const docId = `${user?.id}_${storeHash}`;
+export async function deleteUser(storeHash: string, user: User) {
+    const docId = `${user.id}_${storeHash}`;
     const ref = doc(db, 'storeUsers', docId);
 
     await deleteDoc(ref);
@@ -108,12 +106,9 @@ export async function getStoreToken(storeHash: string): Promise<string | null> {
     return storeDoc.data()?.accessToken;
 }
 
-export async function deleteStore({ store_hash: storeHash }: SessionProps) {
-    if (storeHash) {
-        const ref = doc(db, 'store', storeHash);
-
-        await deleteDoc(ref);
-    }
+export async function deleteStore(storeHash: string) {
+    const ref = doc(db, 'store', storeHash);
+    await deleteDoc(ref);
 }
 
 export async function hasAppExtensionsScope(storeHash: string): Promise<boolean> {

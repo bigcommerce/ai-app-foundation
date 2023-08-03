@@ -1,9 +1,7 @@
-import { getSession } from "lib/auth";
 import { fetchProduct, fetchCategories, fetchBrand } from "lib/client";
-import { type SessionContextProps, type Product } from "types";
+import { type Product } from "types";
 
-export const fetchProductWithAttributes = async (id: number, context: string) => {
-    const { accessToken, storeHash } = await getSession(context) as SessionContextProps;
+export const fetchProductWithAttributes = async (id: number, accessToken: string, storeHash: string) => {
     const product = await fetchProduct(id, accessToken, storeHash);
 
     const [categories, brand] = await Promise.all([
