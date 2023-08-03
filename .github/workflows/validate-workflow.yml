@@ -15,6 +15,7 @@ jobs:
       FIRE_DOMAIN: "test"
       FIRE_PROJECT_ID: "test"
       API_URL: "test"
+      APP_ORIGIN: "test"
       AUTH_CALLBACK: "test"
       CLIENT_ID: "test"
       CLIENT_SECRET: "test"

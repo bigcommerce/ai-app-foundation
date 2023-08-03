@@ -1,10 +1,21 @@
+const fetchFromBigCommerceApi = async (path: string, accessToken: string, storeHash: string) => {
+    const res = await fetch(`https://api.bigcommerce.com/stores/${storeHash}/v3${path}`, {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'X-Auth-Token': accessToken,
+        }
+    });
 
-import { bigcommerceClient } from './auth';
+    const data = await res.json();
+
+    return data;
+}
 
 export async function fetchProduct(productId: number, accessToken: string, storeHash: string) {
     const params = new URLSearchParams({ include: 'videos,images,custom_fields' }).toString();
-    const bigcommerce = bigcommerceClient(accessToken, storeHash);
-    const { data } = await bigcommerce.get(`/catalog/products/${productId.toString()}?${params}`);
+    const { data } = await fetchFromBigCommerceApi(`/catalog/products/${productId.toString()}?${params}`, accessToken, storeHash);
 
     return {
         name: data.name as string,
@@ -24,15 +35,13 @@ export async function fetchProduct(productId: number, accessToken: string, store
 
 export async function fetchCategories(categories: number[], accessToken: string, storeHash: string) {
     const params = new URLSearchParams({ 'id:in': categories.join(',') }).toString();
-    const bigcommerce = bigcommerceClient(accessToken, storeHash);
-    const { data } = await bigcommerce.get(`/catalog/categories?${params}`);
+    const { data } = await fetchFromBigCommerceApi(`/catalog/categories?${params}`, accessToken, storeHash);
 
     return data.map(({ name }: { name: string }) => name) as string[];
 }
 
 export async function fetchBrand(brandId: number, accessToken: string, storeHash: string) {
-    const bigcommerce = bigcommerceClient(accessToken, storeHash);
-    const { data } = await bigcommerce.get(`/catalog/brands/${brandId}`);
+    const { data } = await fetchFromBigCommerceApi(`/catalog/brands/${brandId}`, accessToken, storeHash);
 
     return data.name as string || '';
 }

@@ -2,9 +2,9 @@
 
 import { Flex, ProgressCircle } from "@bigcommerce/big-design";
 
-export default function Loader() {
+export default function Loader({ minHeight = '50vh' }) {
     return (
-        <Flex justifyContent="center" alignItems="center" style={{ minHeight: "50vh" }}>
+        <Flex justifyContent="center" alignItems="center" style={{ minHeight }}>
             <ProgressCircle size="large" />
         </Flex>
     );
