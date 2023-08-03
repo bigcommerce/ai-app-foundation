@@ -23,7 +23,6 @@
     "google-auth-library": "^8.9.0",
     "jsonwebtoken": "^9.0.0",
     "next": "^13.4.2",
-    "node-bigcommerce": "github:bigcommerce/node-bigcommerce",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^5.3.11",
