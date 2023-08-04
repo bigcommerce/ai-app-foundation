@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
 import Loader from '~/components/Loader';
-import Generator from './generator';
 import { fetchProductWithAttributes } from '~/server/bigcommerce-api';
 import generateDescription from '~/server/google-ai';
-import { authorize } from 'lib/authorize';
-import * as db from 'lib/db';
+import { authorize } from '~/lib/authorize';
+import * as db from '~/lib/db';
+import Generator from './generator';
+
 interface PageProps {
     params: { productId: string; };
     searchParams: { product_name: string; };
@@ -14,13 +15,13 @@ export default async function Page(props: PageProps) {
     const { productId } = props.params;
     const { product_name: name } = props.searchParams;
 
-    const auth = authorize();
+    const authorized = authorize();
 
-    if (!auth) {
+    if (!authorized) {
         throw new Error('JWT properties invalid');
     }
 
-    const accessToken = await db.getStoreToken(auth.storeHash);
+    const accessToken = await db.getStoreToken(authorized.storeHash);
 
     if (!accessToken) {
         throw new Error('Access token not found. Try to re-install the app.');
@@ -31,7 +32,7 @@ export default async function Page(props: PageProps) {
     // cover case when product is not created yet
     const product = id === 0
         ? { id, name: name || '' }
-        : await fetchProductWithAttributes(id, accessToken, auth.storeHash);
+        : await fetchProductWithAttributes(id, accessToken, authorized.storeHash);
 
     const description = await generateDescription({ product });
 

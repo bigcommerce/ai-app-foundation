@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { env } from '~/env.mjs';
-import * as db from 'lib/db';
+import * as db from '~/lib/db';
 
 const queryParamSchema = z.object({
     signed_payload_jwt: z.string(),
@@ -36,7 +36,7 @@ export async function GET({ nextUrl: { searchParams } }: NextRequest) {
         return new NextResponse('Invalid query parameters', { status: 400 });
     }
 
-    const decoded = jwt.verify(parsedParams.data.signed_payload_jwt, env.JWT_KEY);
+    const decoded = jwt.verify(parsedParams.data.signed_payload_jwt, env.CLIENT_SECRET);
 
     const parsedJwt = jwtSchema.safeParse(decoded);
 

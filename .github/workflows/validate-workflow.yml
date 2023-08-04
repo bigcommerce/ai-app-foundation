@@ -9,19 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    env:
-      DATABASE_URL: file:./db.sqlite
-      FIRE_API_KEY: "test"
-      FIRE_DOMAIN: "test"
-      FIRE_PROJECT_ID: "test"
-      API_URL: "test"
-      APP_ORIGIN: "test"
-      AUTH_CALLBACK: "test"
-      CLIENT_ID: "test"
-      CLIENT_SECRET: "test"
-      JWT_KEY: "test"
-      LOGIN_URL: "test"
-      GOOGLE_API_KEY: "test"
     strategy:
       matrix:
         node-version: [18]
@@ -37,7 +24,7 @@ jobs:
         run: npm install
 
       - name: Lint
-        run: npm run lint
+        run: SKIP_ENV_VALIDATION=true npm run lint
 
       - name: Lint
-        run: npm run build
+        run: SKIP_ENV_VALIDATION=true npm run build

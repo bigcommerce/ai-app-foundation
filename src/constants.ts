@@ -18,3 +18,6 @@ export const STYLE_OPTIONS = [
     { value: 'emotional', content: 'Emotional' },
     { value: 'story', content: 'Story-telling' },
 ];
+
+export const BIGCOMMERCE_LOGIN_URL = 'login.bigcommerce.com';
+export const BIGCOMMERCE_API_URL = 'api.bigcommerce.com';

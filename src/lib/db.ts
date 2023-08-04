@@ -1,7 +1,23 @@
 import { initializeApp } from 'firebase/app';
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
-import { SessionProps, User, UserData } from 'types';
 import { env } from '~/env.mjs';
+
+export interface UserData {
+    email: string;
+    username?: string;
+}
+export interface User {
+    email: string;
+    id: number;
+    username?: string;
+}
+
+export interface AuthProps {
+    access_token?: string;
+    context: string;
+    scope?: string;
+    user: User;
+}
 
 const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = env;
 
@@ -31,13 +47,13 @@ export async function setUser(user: User) {
     await setDoc(ref, data, { merge: true });
 }
 
-export async function setStore(session: SessionProps) {
+export async function setStore(props: AuthProps) {
     const {
         access_token: accessToken,
         context,
         scope,
         user: { id },
-    } = session;
+    } = props;
     // Only set on app install or update
     if (!accessToken || !scope) return null;
 
@@ -50,37 +66,16 @@ export async function setStore(session: SessionProps) {
 
 // User management for multi-user apps
 // Use setStoreUser for storing store specific variables
-export async function setStoreUser(session: SessionProps) {
-    const {
-        access_token: accessToken,
-        context,
-        owner,
-        sub,
-        user: { id: userId },
-    } = session;
+export async function setStoreUser(session: AuthProps) {
+    const { context, user: { id: userId } } = session;
+
     if (!userId) return null;
 
-    const contextString = context ?? sub;
-    const storeHash = contextString?.split('/')[1] || '';
-    const documentId = `${userId}_${storeHash}`; // users can belong to multiple stores
+    const storeHash = context.split('/')[1];
+    const documentId = `${userId}_${storeHash}`;
     const ref = doc(db, 'storeUsers', documentId);
-    const storeUser = await getDoc(ref);
 
-    // Set admin (store owner) if installing/ updating the app
-    // https://developer.bigcommerce.com/api-docs/apps/guide/users
-    if (accessToken) {
-        // Create a new admin user if none exists
-        if (!storeUser.exists()) {
-            await setDoc(ref, { storeHash, isAdmin: true });
-        } else if (!storeUser.data()?.isAdmin) {
-            await updateDoc(ref, { isAdmin: true });
-        }
-    } else {
-        // Create a new user if it doesn't exist
-        if (!storeUser.exists()) {
-            await setDoc(ref, { storeHash, isAdmin: owner?.id === userId }); // isAdmin true if owner == user
-        }
-    }
+    await setDoc(ref, { storeHash });
 }
 
 export async function deleteUser(storeHash: string, user: User) {
@@ -88,15 +83,6 @@ export async function deleteUser(storeHash: string, user: User) {
     const ref = doc(db, 'storeUsers', docId);
 
     await deleteDoc(ref);
-}
-
-export async function hasStoreUser(storeHash: string, userId: string) {
-    if (!storeHash || !userId) return false;
-
-    const docId = `${userId}_${storeHash}`;
-    const userDoc = await getDoc(doc(db, 'storeUsers', docId));
-
-    return userDoc.exists();
 }
 
 export async function getStoreToken(storeHash: string): Promise<string | null> {
@@ -109,11 +95,4 @@ export async function getStoreToken(storeHash: string): Promise<string | null> {
 export async function deleteStore(storeHash: string) {
     const ref = doc(db, 'store', storeHash);
     await deleteDoc(ref);
-}
-
-export async function hasAppExtensionsScope(storeHash: string): Promise<boolean> {
-    const storeDoc = await getDoc(doc(db, 'store', storeHash));
-    const scopes = storeDoc.data()?.scope ?? '';
-
-    return scopes.includes('store_app_extensions_manage');
 }

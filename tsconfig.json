@@ -40,12 +40,9 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "lib/auth.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "scripts/bcSdk.ts",
-    "lib"
+    "node_modules"
   ]
 }
