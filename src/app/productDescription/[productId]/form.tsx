@@ -19,9 +19,9 @@ const Hr = styled(Flex)`
 `;
 
 export default function Form({ product }: { product: Product | NewProduct }) {
-    const [isPrompting, setIsPrompting] = useState(false);
-
     const { results, setResults, handleDescriptionChange } = useDescriptionsHistory(product.id);
+    const [isPrompting, setIsPrompting] = useState(false);
+    const [description, setDescription] = useState(results.at(0)?.description || '');
 
     const {
         isFormGuided,
@@ -44,11 +44,16 @@ export default function Form({ product }: { product: Product | NewProduct }) {
         setIsPrompting(false);
     };
 
+    const descriptionChangeWrapper = (index: number, description: string) => {
+        setDescription(description);
+        handleDescriptionChange(index, description);
+    };
+
     const handleCancelClick = () => window.top?.postMessage(JSON.stringify({ namespace: 'APP_EXT', action: 'CLOSE' }), '*')
-    const handleUseThisClick = () => window.top?.postMessage(JSON.stringify({ namespace: 'APP_EXT', action: 'PRODUCT_DESCRIPTION', data: { description: "AI generated" } }), '*')
+    const handleUseThisClick = () => window.top?.postMessage(JSON.stringify({ namespace: 'APP_EXT', action: 'PRODUCT_DESCRIPTION', data: { description } }), '*')
 
     return (
-        <Flex flexDirection="column" justifyContent="space-between" padding="xSmall" style={{ minHeight: '90vh' }}>
+        <Flex flexDirection="column" padding="xSmall" style={{ minHeight: '90vh' }}>
             <FlexItem>
                 <Box display="inline-flex" marginBottom="large">
                     <StyledButton isActive={isFormGuided} onClick={() => setIsFormGuided(true)}>
@@ -62,8 +67,13 @@ export default function Form({ product }: { product: Product | NewProduct }) {
                     ? <GuidedPromptForm attributes={guidedAttributes} onChange={setGuidedAttributes} />
                     : <CustomPromptForm attributes={customAttributes} onChange={setCustomAttributes} />
                 }
-                <FlexItem marginTop="xSmall">
-                    <Button disabled={isPrompting} mobileWidth="auto" variant="secondary" onClick={() => void handleGenerateDescription()}>
+                <FlexItem>
+                    <Button
+                        marginTop="xSmall"
+                        disabled={isPrompting}
+                        mobileWidth="auto"
+                        variant="secondary"
+                        onClick={() => void handleGenerateDescription()}>
                         Generate
                     </Button>
                 </FlexItem>
@@ -71,9 +81,9 @@ export default function Form({ product }: { product: Product | NewProduct }) {
             {isPrompting && <Loader />}
             {!isPrompting &&
                 <>
-                    <Hr borderTop="box" marginTop="xLarge" />
-                    <AiResults onChange={handleDescriptionChange} results={results} />
-                    <Flex justifyContent="flex-end" flexDirection="row" marginTop="xxLarge">
+                    <Hr borderTop="box" marginTop="large" />
+                    <AiResults onChange={descriptionChangeWrapper} results={results} />
+                    <Flex justifyContent="flex-end" flexDirection="row">
                         <Button mobileWidth="auto" variant="secondary" onClick={handleCancelClick}>Cancel</Button>
                         <Button mobileWidth="auto" variant="primary" onClick={handleUseThisClick}>Use this</Button>
                     </Flex>

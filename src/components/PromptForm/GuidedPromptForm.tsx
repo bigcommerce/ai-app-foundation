@@ -59,7 +59,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Flex flexDirection="row" alignItems="center">
+                    <Flex flexDirection="row" alignItems="center" marginTop="medium">
                         <Checkbox
                             checked={attributes.optimizedForSeo}
                             label={

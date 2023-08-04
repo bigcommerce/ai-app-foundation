@@ -21,7 +21,11 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
         return null;
     }
 
-    const handlePageChange = (newPage: SetStateAction<number>) => setPage(Number(newPage));
+    const handlePageChange = (newPage: SetStateAction<number>) => {
+        const page = Number(newPage);
+        setPage(page);
+        onChange(page - 1, results.at(page - 1)?.description || '');
+    };
     const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => onChange(page - 1, event.target.value);
 
     return (
