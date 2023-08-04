@@ -1,20 +1,19 @@
-
-import { Source_Sans_3 } from 'next/font/google'
-import { type Metadata } from 'next/types';
-import StyledComponentsRegistry from '~/lib/registry';
-import ThemeProvider from './theme-provider';
+import { Source_Sans_3 } from "next/font/google";
+import { type Metadata } from "next/types";
+import StyledComponentsRegistry from "~/lib/registry";
+import ThemeProvider from "./theme-provider";
 
 const sourceSans = Source_Sans_3({
-  subsets: ['latin'],
-  weight: ['300', '400', '600', '700', '800'],
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700", "800"]
 });
 
-export const metadata: Metadata = { title: 'Product description generator' };
+export const metadata: Metadata = { title: "Product description generator" };
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -24,12 +23,10 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider>
-            <main className={sourceSans.className}>
-              {children}
-            </main>
+            <main className={sourceSans.className}>{children}</main>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
-  )
+  );
 }
