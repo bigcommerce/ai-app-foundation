@@ -2,26 +2,28 @@ import { z } from 'zod';
 import { BIGCOMMERCE_API_URL } from "~/constants";
 
 const productSchema = z.object({
-    name: z.string(),
-    type: z.string(),
-    condition: z.boolean(),
-    weight: z.number(),
-    height: z.number(),
-    width: z.number(),
-    depth: z.number(),
-    videos: z.array(z.object({ description: z.string() })),
-    images: z.array(z.object({ description: z.string() })),
-    custom_fields: z.array(z.object({ name: z.string(), value: z.string() })),
-    brand_id: z.number().optional(),
-    categories: z.array(z.number()),
+    data: z.object({
+        name: z.string(),
+        type: z.string(),
+        condition: z.string(),
+        weight: z.number(),
+        height: z.number(),
+        width: z.number(),
+        depth: z.number(),
+        videos: z.array(z.object({ description: z.string() })),
+        images: z.array(z.object({ description: z.string() })),
+        custom_fields: z.array(z.object({ name: z.string(), value: z.string() })),
+        brand_id: z.number().optional(),
+        categories: z.array(z.number()),
+    })
 });
 
-const categorySchema = z.array(z.object({ name: z.string() }));
+const categorySchema = z.object({ data: z.array(z.object({ name: z.string() })) });
 
-const brandSchema = z.object({ name: z.string().optional() });
+const brandSchema = z.object({ data: z.object({ name: z.string().optional() }) });
 
 const fetchFromBigCommerceApi = (path: string, accessToken: string, storeHash: string) =>
-    fetch(`https://${BIGCOMMERCE_API_URL}/stores/${storeHash}/v3${path}`, {
+    fetch(`${BIGCOMMERCE_API_URL}/stores/${storeHash}/v3${path}`, {
         method: 'GET',
         headers: {
             accept: 'application/json',
@@ -41,10 +43,11 @@ export async function fetchProduct(productId: number, accessToken: string, store
     const parsedProductResponse = productSchema.safeParse(await response.json());
 
     if (!parsedProductResponse.success) {
+        console.log(parsedProductResponse.error);
         throw new Error('Failed to parse product');
     }
 
-    const { videos, images, ...restAttr } = parsedProductResponse.data;
+    const { videos, images, ...restAttr } = parsedProductResponse.data.data;
 
     return {
         ...restAttr,
@@ -67,7 +70,7 @@ export async function fetchCategories(categories: number[], accessToken: string,
         throw new Error('Failed to parse categories');
     }
 
-    return parsedCategories.data.map(({ name }) => name);
+    return parsedCategories.data.data.map(({ name }) => name);
 }
 
 export async function fetchBrand(brandId: number, accessToken: string, storeHash: string) {
@@ -83,5 +86,5 @@ export async function fetchBrand(brandId: number, accessToken: string, storeHash
         throw new Error('Failed to parse brand');
     }
 
-    return parsedBrand.data.name;
+    return parsedBrand.data.data.name;
 }

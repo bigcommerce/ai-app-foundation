@@ -17,7 +17,7 @@ interface AppExtensionProps {
 
 export const createAppExtension = async ({ accessToken, storeHash }: AppExtensionProps) => {
   const response = await fetch(
-    `https://${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
+    `${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
       method: "POST",
       headers: {
@@ -38,7 +38,7 @@ export const createAppExtension = async ({ accessToken, storeHash }: AppExtensio
 
 export const getAppExtensions = async ({ accessToken, storeHash }: AppExtensionProps) => {
   const response = await fetch(
-    `https://${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
+    `${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
       method: "POST",
       headers: {

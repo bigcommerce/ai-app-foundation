@@ -5,7 +5,7 @@ export interface NewProduct {
 export interface Product extends NewProduct {
     brand: string;
     type: string;
-    condition: boolean;
+    condition: string;
     weight: number;
     height: number;
     width: number;

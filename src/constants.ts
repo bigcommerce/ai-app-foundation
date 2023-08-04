@@ -19,5 +19,5 @@ export const STYLE_OPTIONS = [
     { value: 'story', content: 'Story-telling' },
 ];
 
-export const BIGCOMMERCE_LOGIN_URL = 'login.bigcommerce.com';
-export const BIGCOMMERCE_API_URL = 'api.bigcommerce.com';
+export const BIGCOMMERCE_LOGIN_URL = 'https://login.bigcommerce.com';
+export const BIGCOMMERCE_API_URL = 'https://api.bigcommerce.com';
