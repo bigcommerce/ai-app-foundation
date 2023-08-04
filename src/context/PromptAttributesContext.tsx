@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
-import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
+import React, { createContext, useContext, useState } from "react";
+import { DEFAULT_GUIDED_ATTRIBUTES } from "~/constants";
 
 export type PromptAttributes = GuidedAttributes | CustomAttributes;
 export interface GuidedAttributes {
@@ -19,12 +19,13 @@ export interface CustomAttributes {
 }
 
 export const DEFAULT_CUSTOM_ATTRIBUTES: CustomAttributes = {
-  customPrompt: 'Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.',
-  includeProductAttributes: true,
+  customPrompt:
+    "Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.",
+  includeProductAttributes: true
 };
 
 interface PromptAttributesContextType {
-  currentAttributes: PromptAttributes
+  currentAttributes: PromptAttributes;
   isFormGuided: boolean;
   guidedAttributes: GuidedAttributes;
   customAttributes: CustomAttributes;
@@ -34,22 +35,29 @@ interface PromptAttributesContextType {
   setCustomAttributes: (attr: CustomAttributes) => void;
 }
 
-export const PromptAttributesContext = createContext<PromptAttributesContextType>({
-  currentAttributes: DEFAULT_GUIDED_ATTRIBUTES,
-  isFormGuided: true,
-  guidedAttributes: DEFAULT_GUIDED_ATTRIBUTES,
-  customAttributes: DEFAULT_CUSTOM_ATTRIBUTES,
+export const PromptAttributesContext =
+  createContext<PromptAttributesContextType>({
+    currentAttributes: DEFAULT_GUIDED_ATTRIBUTES,
+    isFormGuided: true,
+    guidedAttributes: DEFAULT_GUIDED_ATTRIBUTES,
+    customAttributes: DEFAULT_CUSTOM_ATTRIBUTES,
 
-  setIsFormGuided: () => undefined,
-  setGuidedAttributes: () => undefined,
-  setCustomAttributes: () => undefined,
-});
+    setIsFormGuided: () => undefined,
+    setGuidedAttributes: () => undefined,
+    setCustomAttributes: () => undefined
+  });
 
-export const PromptAttributesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PromptAttributesProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [isFormGuided, setIsFormGuided] = useState(true);
 
-  const [guidedAttributes, setGuidedAttributes] = useState(DEFAULT_GUIDED_ATTRIBUTES);
-  const [customAttributes, setCustomAttributes] = useState(DEFAULT_CUSTOM_ATTRIBUTES);
+  const [guidedAttributes, setGuidedAttributes] = useState(
+    DEFAULT_GUIDED_ATTRIBUTES
+  );
+  const [customAttributes, setCustomAttributes] = useState(
+    DEFAULT_CUSTOM_ATTRIBUTES
+  );
 
   const currentAttributes = isFormGuided ? guidedAttributes : customAttributes;
 
@@ -61,7 +69,7 @@ export const PromptAttributesProvider: React.FC<{ children: React.ReactNode }> =
     setIsFormGuided,
     setGuidedAttributes,
     setCustomAttributes
-  }
+  };
 
   return (
     <PromptAttributesContext.Provider value={contextValue}>
