@@ -4,8 +4,8 @@ import { PromptAttributesProvider } from '~/context/PromptAttributesContext';
 import { useDescriptionsHistory } from '~/hooks';
 import { useEffect, useState } from 'react';
 import { type NewProduct, type Product } from 'types';
-import Form from './form';
 import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
+import Form from './form';
 
 export default function Generator({ product, initialDescription }: { product: Product | NewProduct, initialDescription: string }) {
     const [isInitialLoad, setInitialLoad] = useState(false);

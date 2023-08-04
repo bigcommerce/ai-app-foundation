@@ -71,7 +71,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
             {isPrompting && <Loader />}
             {!isPrompting &&
                 <>
-                    <Hr border="box" marginTop="xLarge" />
+                    <Hr borderTop="box" marginTop="xLarge" />
                     <AiResults onChange={handleDescriptionChange} results={results} />
                     <Flex justifyContent="flex-end" flexDirection="row" marginTop="xxLarge">
                         <Button mobileWidth="auto" variant="secondary" onClick={handleCancelClick}>Cancel</Button>

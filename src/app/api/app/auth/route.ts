@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import * as db from 'lib/db';
+import * as db from '~/lib/db';
 import { env } from '~/env.mjs';
-import { createAppExtension } from 'lib/appExtensions';
+import { createAppExtension } from '~/lib/appExtensions';
+import { BIGCOMMERCE_LOGIN_URL } from '~/constants';
 
 const queryParamSchema = z.object({
   code: z.string(),
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse('Invalid query parameters', { status: 400 });
   }
 
-  const oauthResponse = await fetch(`https://login.bigcommerce.com/oauth2/token`, {
+  const oauthResponse = await fetch(`${BIGCOMMERCE_LOGIN_URL}/oauth2/token`, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -62,9 +63,9 @@ export async function GET(req: NextRequest) {
   await db.setStoreUser({ access_token: accessToken, context, scope, user: oauthUser });
 
   /**
-     * For stores that do not have the app installed yet, create App Extensions when app is
-     * installed.
-     */
+   * For stores that do not have the app installed yet, create App Extensions when app is
+   * installed.
+  */
   const isAppExtensionsScopeEnabled = scope.includes('store_app_extensions_manage');
   if (isAppExtensionsScopeEnabled && storeHash) {
     await createAppExtension({ accessToken, storeHash })
@@ -74,7 +75,7 @@ export async function GET(req: NextRequest) {
 
   const clientToken = jwt.sign({ userId: oauthUser.id, storeHash }, env.JWT_KEY, { expiresIn: 3600 });
 
-  return NextResponse.redirect('https://21e6-8-29-231-140.ngrok-free.app', {
+  return NextResponse.redirect(env.APP_ORIGIN, {
     status: 302,
     statusText: 'Found',
     headers: {

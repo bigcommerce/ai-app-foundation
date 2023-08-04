@@ -1,5 +1,4 @@
-import { env } from "~/env.mjs";
-
+import { BIGCOMMERCE_API_URL } from "~/constants";
 
 interface AppExtensionResponse {
   data: {
@@ -18,7 +17,7 @@ interface AppExtensionProps {
 
 export const createAppExtension = async ({ accessToken, storeHash }: AppExtensionProps) => {
   const response = await fetch(
-    `https://${env.API_URL}/stores/${storeHash}/graphql`,
+    `https://${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
       method: "POST",
       headers: {
@@ -39,7 +38,7 @@ export const createAppExtension = async ({ accessToken, storeHash }: AppExtensio
 
 export const getAppExtensions = async ({ accessToken, storeHash }: AppExtensionProps) => {
   const response = await fetch(
-    `https://${env.API_URL}/stores/${storeHash}/graphql`,
+    `https://${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
       method: "POST",
       headers: {

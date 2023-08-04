@@ -17,14 +17,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={sourceSans.className}>
+    <html lang="en">
       <head>
-        <link rel="icon" href="/magic.svg" />
+        <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider>
-            {children}
+            <main className={sourceSans.className}>
+              {children}
+            </main>
           </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
