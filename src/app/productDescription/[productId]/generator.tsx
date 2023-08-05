@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { PromptAttributesProvider } from "~/context/PromptAttributesContext";
-import { useDescriptionsHistory } from "~/hooks";
-import { useEffect, useState } from "react";
-import { type NewProduct, type Product } from "types";
-import { DEFAULT_GUIDED_ATTRIBUTES } from "~/constants";
-import Form from "./form";
+import { PromptAttributesProvider } from '~/context/PromptAttributesContext';
+import { useDescriptionsHistory } from '~/hooks';
+import { useEffect, useState } from 'react';
+import { type NewProduct, type Product } from 'types';
+import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
+import Form from './form';
 
 export default function Generator({
   product,
