@@ -25,9 +25,9 @@ To run the app locally, follow these instructions:
      - Uninstall Callback URL: `https://{ngrok_id}.ngrok.app/api/app/uninstall`
    - Configure the following OAuth scopes as directed in [Setup:](https://developer.bigcommerce.com/app-extensions/guide#setup)
 3. Copy `.env.example` to `.env`.
-4. [Replace `BC_CLIENT_ID` and `BC_CLIENT_SECRET` in `.env`](https://devtools.bigcommerce.com/my/apps)
+4. [Replace `CLIENT_ID` and `CLIENT_SECRET` in `.env`](https://devtools.bigcommerce.com/my/apps)
    (from `View Client ID` in the dev portal).
-5. Update `BC_OAUTH_REDIRECT` in `.env` with the ngrok `install` callback URL.
+5. Update `AUTH_REDIRECT` in `.env` with the ngrok `install` callback URL.
 6. Enter a JWT secret in `.env`.
    - JWT key should be at least 32 random characters (256 bits) for HS256
 7. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](<[https://console.firebase.google.com](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database)>)
@@ -44,6 +44,10 @@ To run the app locally, follow these instructions:
 ## Contributing
 
 Please feel free to ask questions or raise issues in GitHub Issues/Discussions.
+
+## Security
+
+To enhance security, include a CSRF token for sensitive actions (e.g., modifying product descriptions) or operations that might generate load or costs (such as AI prompts). This will provide an extra layer of protection and ensure proper authorization.
 
 ## Learn more
 
