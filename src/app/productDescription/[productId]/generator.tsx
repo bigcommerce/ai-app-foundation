@@ -9,7 +9,7 @@ import Form from './form';
 
 export default function Generator({
   product,
-  initialDescription
+  initialDescription,
 }: {
   product: Product | NewProduct;
   initialDescription: string;
@@ -20,7 +20,7 @@ export default function Generator({
   useEffect(() => {
     setResults({
       description: initialDescription,
-      promptAttributes: DEFAULT_GUIDED_ATTRIBUTES
+      promptAttributes: DEFAULT_GUIDED_ATTRIBUTES,
     });
     setInitialLoad(true);
   }, []);

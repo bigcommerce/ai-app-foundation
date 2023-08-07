@@ -3,11 +3,11 @@ import {
   CheckboxLabel,
   FormControlLabel,
   FormGroup,
-  Textarea
-} from "@bigcommerce/big-design";
-import React, { type ChangeEvent } from "react";
-import { InputLabel } from "~/components/PromptForm/InputLabel";
-import { type CustomAttributes } from "~/context/PromptAttributesContext";
+  Textarea,
+} from '@bigcommerce/big-design';
+import React, { type ChangeEvent } from 'react';
+import { InputLabel } from '~/components/PromptForm/InputLabel';
+import { type CustomAttributes } from '~/context/PromptAttributesContext';
 interface CustomFormProps {
   attributes: CustomAttributes;
   onChange(attributes: CustomAttributes): void;
@@ -48,7 +48,7 @@ export const CustomPromptForm = ({ attributes, onChange }: CustomFormProps) => (
         onChange={() =>
           onChange({
             ...attributes,
-            includeProductAttributes: !attributes.includeProductAttributes
+            includeProductAttributes: !attributes.includeProductAttributes,
           })
         }
       />

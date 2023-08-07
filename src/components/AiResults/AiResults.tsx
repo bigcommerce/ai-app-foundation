@@ -4,10 +4,10 @@ import {
   Textarea,
   Small,
   H3,
-  Grid
-} from "@bigcommerce/big-design";
-import React, { type SetStateAction, type ChangeEvent, useState } from "react";
-import { StyledFlex } from "./styled";
+  Grid,
+} from '@bigcommerce/big-design';
+import React, { type SetStateAction, type ChangeEvent, useState } from 'react';
+import { StyledFlex } from './styled';
 
 export interface Result {
   description: string;
@@ -31,7 +31,7 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
   const handlePageChange = (newPage: SetStateAction<number>) => {
     const page = Number(newPage);
     setPage(page);
-    onChange(page - 1, results.at(page - 1)?.description || "");
+    onChange(page - 1, results.at(page - 1)?.description || '');
   };
   const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
     onChange(page - 1, event.target.value);

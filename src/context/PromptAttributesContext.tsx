@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import { DEFAULT_GUIDED_ATTRIBUTES } from "~/constants";
+import React, { createContext, useContext, useState } from 'react';
+import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
 
 export type PromptAttributes = GuidedAttributes | CustomAttributes;
 export interface GuidedAttributes {
@@ -20,8 +20,8 @@ export interface CustomAttributes {
 
 export const DEFAULT_CUSTOM_ATTRIBUTES: CustomAttributes = {
   customPrompt:
-    "Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.",
-  includeProductAttributes: true
+    'Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.',
+  includeProductAttributes: true,
 };
 
 interface PromptAttributesContextType {
@@ -44,7 +44,7 @@ export const PromptAttributesContext =
 
     setIsFormGuided: () => undefined,
     setGuidedAttributes: () => undefined,
-    setCustomAttributes: () => undefined
+    setCustomAttributes: () => undefined,
   });
 
 export const PromptAttributesProvider: React.FC<{
@@ -68,7 +68,7 @@ export const PromptAttributesProvider: React.FC<{
     customAttributes,
     setIsFormGuided,
     setGuidedAttributes,
-    setCustomAttributes
+    setCustomAttributes,
   };
 
   return (

@@ -1,29 +1,32 @@
-import { BIGCOMMERCE_API_URL } from "~/constants";
+import { BIGCOMMERCE_API_URL } from '~/constants';
 
 interface AppExtensionResponse {
   data: {
     store: {
       appExtensions: {
-        edges: { node: { id: string; } }[];
-      }
-    }
-  }
-};
+        edges: { node: { id: string } }[];
+      };
+    };
+  };
+}
 
 interface AppExtensionProps {
   accessToken: string;
   storeHash: string;
 }
 
-export const createAppExtension = async ({ accessToken, storeHash }: AppExtensionProps) => {
+export const createAppExtension = async ({
+  accessToken,
+  storeHash,
+}: AppExtensionProps) => {
   const response = await fetch(
     `${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        "x-auth-token": accessToken,
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'x-auth-token': accessToken,
       },
       body: JSON.stringify(createAppExtensionMutation()),
     }
@@ -34,26 +37,33 @@ export const createAppExtension = async ({ accessToken, storeHash }: AppExtensio
   if (errors && errors.length > 0) {
     throw new Error(errors[0]?.message);
   }
-}
+};
 
-export const getAppExtensions = async ({ accessToken, storeHash }: AppExtensionProps) => {
+export const getAppExtensions = async ({
+  accessToken,
+  storeHash,
+}: AppExtensionProps) => {
   const response = await fetch(
     `${BIGCOMMERCE_API_URL}/stores/${storeHash}/graphql`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        "x-auth-token": accessToken,
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'x-auth-token': accessToken,
       },
       body: JSON.stringify(getAppExtensionsQuery()),
     }
   );
 
-  const { data: { store: { appExtensions } } }: AppExtensionResponse = await response.json();
+  const {
+    data: {
+      store: { appExtensions },
+    },
+  }: AppExtensionResponse = await response.json();
 
   return appExtensions.edges;
-}
+};
 
 const getAppExtensionsQuery = () => ({
   query: `
@@ -97,11 +107,12 @@ const createAppExtensionMutation = () => ({
       model: 'PRODUCT_DESCRIPTION',
       url: '/productDescription/${id}',
       label: {
-        defaultValue: 'Generate text', locales: [
+        defaultValue: 'Generate text',
+        locales: [
           {
             value: 'Generate text',
             localeCode: 'en-US',
-          }
+          },
         ],
       },
     },

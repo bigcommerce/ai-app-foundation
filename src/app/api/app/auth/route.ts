@@ -25,7 +25,9 @@ const oauthResponseSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
-  const parsedParams = queryParamSchema.safeParse(Object.fromEntries(req.nextUrl.searchParams));
+  const parsedParams = queryParamSchema.safeParse(
+    Object.fromEntries(req.nextUrl.searchParams)
+  );
 
   if (!parsedParams.success) {
     return new NextResponse('Invalid query parameters', { status: 400 });
@@ -48,32 +50,57 @@ export async function GET(req: NextRequest) {
     }),
   });
 
-  const parsedOAuthResponse = oauthResponseSchema.safeParse(await oauthResponse.json());
+  const parsedOAuthResponse = oauthResponseSchema.safeParse(
+    await oauthResponse.json()
+  );
 
   if (!parsedOAuthResponse.success) {
     return new NextResponse('Invalid access token response', { status: 500 });
   }
 
-  const { access_token: accessToken, context, scope, user: oauthUser } = parsedOAuthResponse.data;
+  const {
+    access_token: accessToken,
+    context,
+    scope,
+    user: oauthUser,
+  } = parsedOAuthResponse.data;
 
   const storeHash = context.split('/')[1];
 
-  await db.setStore({ access_token: accessToken, context, scope, user: oauthUser });
+  await db.setStore({
+    access_token: accessToken,
+    context,
+    scope,
+    user: oauthUser,
+  });
   await db.setUser(oauthUser);
-  await db.setStoreUser({ access_token: accessToken, context, scope, user: oauthUser });
+  await db.setStoreUser({
+    access_token: accessToken,
+    context,
+    scope,
+    user: oauthUser,
+  });
 
   /**
    * For stores that do not have the app installed yet, create App Extensions when app is
    * installed.
-  */
-  const isAppExtensionsScopeEnabled = scope.includes('store_app_extensions_manage');
+   */
+  const isAppExtensionsScopeEnabled = scope.includes(
+    'store_app_extensions_manage'
+  );
   if (isAppExtensionsScopeEnabled && storeHash) {
-    await createAppExtension({ accessToken, storeHash })
+    await createAppExtension({ accessToken, storeHash });
   } else {
-    console.warn("WARNING: App extensions scope is not enabled yet. To register app extensions update the scope in Developer Portal: https://devtools.bigcommerce.com");
+    console.warn(
+      'WARNING: App extensions scope is not enabled yet. To register app extensions update the scope in Developer Portal: https://devtools.bigcommerce.com'
+    );
   }
 
-  const clientToken = jwt.sign({ userId: oauthUser.id, storeHash }, env.JWT_KEY, { expiresIn: 3600 });
+  const clientToken = jwt.sign(
+    { userId: oauthUser.id, storeHash },
+    env.JWT_KEY,
+    { expiresIn: 3600 }
+  );
 
   return NextResponse.redirect(env.APP_ORIGIN, {
     status: 302,
