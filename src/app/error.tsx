@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export default function Error({
   error,
-  reset
+  reset,
 }: {
   error: Error;
   reset: () => void;

@@ -33,7 +33,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
     guidedAttributes,
     customAttributes,
     setGuidedAttributes,
-    setCustomAttributes
+    setCustomAttributes,
   } = usePromptAttributes();
 
   const handleGenerateDescription = async () => {
@@ -42,7 +42,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       method: 'POST',
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
-      )
+      ),
     });
 
     if (!res.ok) {
@@ -70,7 +70,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       JSON.stringify({
         namespace: 'APP_EXT',
         action: 'PRODUCT_DESCRIPTION',
-        data: { description }
+        data: { description },
       }),
       '*'
     );

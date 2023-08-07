@@ -15,9 +15,11 @@ const KEY_TO_LABEL_MAP: KeyToLabelMap = {
   customPrompt: 'Instructions',
   keywords: 'Keywords',
   instructions: 'Instructions',
-}
+};
 
-export const serializePromptAttributes = (promptAttributes: PromptAttributes): string => {
+export const serializePromptAttributes = (
+  promptAttributes: PromptAttributes
+): string => {
   let result = '';
 
   for (const [key, value] of Object.entries(promptAttributes)) {
@@ -30,7 +32,10 @@ export const serializePromptAttributes = (promptAttributes: PromptAttributes): s
 
       if (part && typeof value !== 'boolean') {
         if (key === 'style') {
-          part += `: ${STYLE_OPTIONS.find((option) => option.value === value)?.content || value as string}`;
+          part += `: ${
+            STYLE_OPTIONS.find((option) => option.value === value)?.content ||
+            (value as string)
+          }`;
         } else {
           part += `: ${value as string}`;
         }
@@ -43,12 +48,16 @@ export const serializePromptAttributes = (promptAttributes: PromptAttributes): s
   result += ';';
 
   return result;
-}
+};
 
-export const prepareAiPromptAttributes = (promptAttributes: PromptAttributes, product: Product | NewProduct) => {
+export const prepareAiPromptAttributes = (
+  promptAttributes: PromptAttributes,
+  product: Product | NewProduct
+) => {
   const { includeProductAttributes, ...restAttributes } = promptAttributes;
 
   return {
-    ...restAttributes, product: includeProductAttributes ? product : null
+    ...restAttributes,
+    product: includeProductAttributes ? product : null,
   };
-}
+};

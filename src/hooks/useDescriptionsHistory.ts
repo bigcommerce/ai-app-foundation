@@ -7,33 +7,48 @@ const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
 
 export const useDescriptionsHistory = (productId: number) => {
-    const [results, setResults] = useLocalStorage<Result[]>(`${STORAGE_KEY}:${productId}`, []);
+  const [results, setResults] = useLocalStorage<Result[]>(
+    `${STORAGE_KEY}:${productId}`,
+    []
+  );
 
-    const setResultsWrapper = ({ description, promptAttributes }: { description: string, promptAttributes: PromptAttributes }) => {
-        const result = { description, promptAttributes: serializePromptAttributes(promptAttributes) };
-        setResults([...results.slice(-(MAX_LOCAL_STORAGE_RESULTS - 1)), ...[result]])
+  const setResultsWrapper = ({
+    description,
+    promptAttributes,
+  }: {
+    description: string;
+    promptAttributes: PromptAttributes;
+  }) => {
+    const result = {
+      description,
+      promptAttributes: serializePromptAttributes(promptAttributes),
     };
+    setResults([
+      ...results.slice(-(MAX_LOCAL_STORAGE_RESULTS - 1)),
+      ...[result],
+    ]);
+  };
 
-    const handleDescriptionChange = (index: number, description: string) => {
-        setResults((prevResults: Result[]) => {
-            if (index < 0 || index >= prevResults.length) {
-                return prevResults;
-            }
+  const handleDescriptionChange = (index: number, description: string) => {
+    setResults((prevResults: Result[]) => {
+      if (index < 0 || index >= prevResults.length) {
+        return prevResults;
+      }
 
-            const updatedResults = [...prevResults];
+      const updatedResults = [...prevResults];
 
-            updatedResults[index] = {
-                promptAttributes: updatedResults[index]?.promptAttributes || '',
-                description: description,
-            };
+      updatedResults[index] = {
+        promptAttributes: updatedResults[index]?.promptAttributes || '',
+        description: description,
+      };
 
-            return updatedResults;
-        });
-    };
+      return updatedResults;
+    });
+  };
 
-    return {
-        results,
-        handleDescriptionChange,
-        setResults: setResultsWrapper
-    };
-}
+  return {
+    results,
+    handleDescriptionChange,
+    setResults: setResultsWrapper,
+  };
+};

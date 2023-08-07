@@ -1,6 +1,6 @@
-import { Flex, Text, Tooltip } from "@bigcommerce/big-design";
-import { BaselineHelpIcon } from "@bigcommerce/big-design-icons";
-import React from "react";
+import { Flex, Text, Tooltip } from '@bigcommerce/big-design';
+import { BaselineHelpIcon } from '@bigcommerce/big-design-icons';
+import React from 'react';
 
 interface InputLabelProps {
   text: string;

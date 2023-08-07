@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Text, Panel, H1, Box } from "@bigcommerce/big-design";
-import Image from "next/image";
+import React from 'react';
+import { Text, Panel, H1, Box } from '@bigcommerce/big-design';
+import Image from 'next/image';
 
 const HomePage = () => (
   <Box
-    marginHorizontal={{ mobile: "none", tablet: "xxxLarge" }}
-    marginVertical={{ mobile: "none", tablet: "xxLarge" }}
+    marginHorizontal={{ mobile: 'none', tablet: 'xxxLarge' }}
+    marginVertical={{ mobile: 'none', tablet: 'xxLarge' }}
   >
     <H1>Product description generator</H1>
     <Panel header="Generate text">

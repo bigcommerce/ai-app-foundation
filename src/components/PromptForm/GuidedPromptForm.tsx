@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Checkbox,
   Collapse,
@@ -11,12 +11,12 @@ import {
   CheckboxLabel,
   FormControlLabel,
   Flex,
-  Grid
-} from "@bigcommerce/big-design";
-import { InputLabel } from "~/components/PromptForm/InputLabel";
-import { theme } from "@bigcommerce/big-design-theme";
-import { STYLE_OPTIONS } from "~/constants";
-import { type GuidedAttributes } from "~/context/PromptAttributesContext";
+  Grid,
+} from '@bigcommerce/big-design';
+import { InputLabel } from '~/components/PromptForm/InputLabel';
+import { theme } from '@bigcommerce/big-design-theme';
+import { STYLE_OPTIONS } from '~/constants';
+import { type GuidedAttributes } from '~/context/PromptAttributesContext';
 
 type InputFieldValue = string | number | boolean | undefined;
 
@@ -26,10 +26,10 @@ interface GuidedPromptForm {
 }
 
 export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
-  const [collapseTitle, setCollapseTitle] = useState("Show more");
+  const [collapseTitle, setCollapseTitle] = useState('Show more');
 
   const handleCollapseChange = (isOpen: boolean) =>
-    setCollapseTitle(isOpen ? "Show less" : "Show more");
+    setCollapseTitle(isOpen ? 'Show less' : 'Show more');
 
   const handleInputChange = (
     value: InputFieldValue,
@@ -43,7 +43,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           <Select
             label="Style"
             maxHeight={300}
-            onOptionChange={value => handleInputChange(value, "style")}
+            onOptionChange={(value) => handleInputChange(value, 'style')}
             options={STYLE_OPTIONS}
             placement="bottom-start"
             required
@@ -56,7 +56,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
             max={1000}
             min={10}
             step={10}
-            onCountChange={value => handleInputChange(value, "wordCount")}
+            onCountChange={(value) => handleInputChange(value, 'wordCount')}
             value={attributes.wordCount}
             required
           />
@@ -77,7 +77,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
               onChange={() =>
                 handleInputChange(
                   !attributes.optimizedForSeo,
-                  "optimizedForSeo"
+                  'optimizedForSeo'
                 )
               }
             />
@@ -108,7 +108,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                 onChange={() =>
                   handleInputChange(
                     !attributes.includeProductAttributes,
-                    "includeProductAttributes"
+                    'includeProductAttributes'
                   )
                 }
               />
@@ -126,8 +126,8 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                   />
                 </FormControlLabel>
               }
-              onChange={event =>
-                handleInputChange(event.target.value, "brandVoice")
+              onChange={(event) =>
+                handleInputChange(event.target.value, 'brandVoice')
               }
             />
           </FormGroup>
@@ -143,8 +143,8 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                   />
                 </FormControlLabel>
               }
-              onChange={event =>
-                handleInputChange(event.target.value, "additionalAttributes")
+              onChange={(event) =>
+                handleInputChange(event.target.value, 'additionalAttributes')
               }
             />
           </FormGroup>
@@ -160,8 +160,8 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                   />
                 </FormControlLabel>
               }
-              onChange={event =>
-                handleInputChange(event.target.value, "keywords")
+              onChange={(event) =>
+                handleInputChange(event.target.value, 'keywords')
               }
             />
           </FormGroup>
@@ -177,8 +177,8 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                   />
                 </FormControlLabel>
               }
-              onChange={event =>
-                handleInputChange(event.target.value, "instructions")
+              onChange={(event) =>
+                handleInputChange(event.target.value, 'instructions')
               }
             />
           </FormGroup>
