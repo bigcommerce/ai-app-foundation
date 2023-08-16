@@ -5,7 +5,6 @@ import {
   getDoc,
   getFirestore,
   setDoc,
-  updateDoc,
 } from 'firebase/firestore';
 import { env } from '~/env.mjs';
 

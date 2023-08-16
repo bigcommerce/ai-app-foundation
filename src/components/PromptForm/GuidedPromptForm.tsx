@@ -17,6 +17,8 @@ import { InputLabel } from '~/components/PromptForm/InputLabel';
 import { theme } from '@bigcommerce/big-design-theme';
 import { STYLE_OPTIONS } from '~/constants';
 import { type GuidedAttributes } from '~/context/PromptAttributesContext';
+import { useTracking } from '~/hooks/useTracking';
+import { useAppContext } from '~/context/AppContext';
 
 type InputFieldValue = string | number | boolean | undefined;
 
@@ -28,8 +30,20 @@ interface GuidedPromptForm {
 export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
   const [collapseTitle, setCollapseTitle] = useState('Show more');
 
-  const handleCollapseChange = (isOpen: boolean) =>
-    setCollapseTitle(isOpen ? 'Show less' : 'Show more');
+  const { locale, storeHash, context } = useAppContext();
+  const { trackClick } = useTracking();
+
+  const handleCollapseChange = (isOpen: boolean) => {
+    const title = isOpen ? 'Show less' : 'Show more';
+    setCollapseTitle(title);
+
+    trackClick({
+      action: title,
+      context,
+      storeHash,
+      locale,
+    });
+  };
 
   const handleInputChange = (
     value: InputFieldValue,
@@ -56,7 +70,19 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
             max={1000}
             min={10}
             step={10}
-            onCountChange={(value) => handleInputChange(value, 'wordCount')}
+            onCountChange={(value) => {
+              handleInputChange(value, 'wordCount');
+
+              trackClick({
+                action:
+                  value > attributes.wordCount
+                    ? 'PlusWordLimit'
+                    : 'MinusWordLimit',
+                context,
+                storeHash,
+                locale,
+              });
+            }}
             value={attributes.wordCount}
             required
           />
@@ -74,12 +100,18 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                   />
                 </CheckboxLabel>
               }
-              onChange={() =>
+              onChange={() => {
                 handleInputChange(
                   !attributes.optimizedForSeo,
                   'optimizedForSeo'
-                )
-              }
+                );
+                trackClick({
+                  action: !attributes.optimizedForSeo ? 'SEO On' : 'SEO Off',
+                  context,
+                  storeHash,
+                  locale,
+                });
+              }}
             />
           </Flex>
         </FormGroup>
@@ -105,12 +137,20 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
                     />
                   </CheckboxLabel>
                 }
-                onChange={() =>
+                onChange={() => {
                   handleInputChange(
                     !attributes.includeProductAttributes,
                     'includeProductAttributes'
-                  )
-                }
+                  );
+                  trackClick({
+                    action: !attributes.includeProductAttributes
+                      ? 'Include Product Attributes On'
+                      : 'Include Product Attributes Off',
+                    context,
+                    storeHash,
+                    locale,
+                  });
+                }}
               />
             </Flex>
           </FormGroup>

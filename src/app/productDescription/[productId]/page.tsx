@@ -5,6 +5,7 @@ import generateDescription from '~/server/google-ai';
 import { authorize } from '~/lib/authorize';
 import * as db from '~/lib/db';
 import Generator from './generator';
+import { headers } from 'next/headers';
 
 interface PageProps {
   params: { productId: string };
@@ -39,7 +40,13 @@ export default async function Page(props: PageProps) {
 
   return (
     <Suspense fallback={<Loader />}>
-      <Generator initialDescription={description} product={product} />
+      <Generator
+        locale={headers().get('Accept-Language')?.split(',')[0] || ''}
+        storeHash={authorized.storeHash}
+        initialDescription={description}
+        product={product}
+        context="product_edit"
+      />
     </Suspense>
   );
 }

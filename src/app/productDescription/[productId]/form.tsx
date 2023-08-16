@@ -12,6 +12,8 @@ import { GuidedPromptForm } from '~/components/PromptForm/GuidedPromptForm';
 import { StyledButton } from '~/components/PromptForm/styled';
 import { prepareAiPromptAttributes } from '~/utils/utils';
 import Loader from '~/components/Loader';
+import { useAppContext } from '~/context/AppContext';
+import { useTracking } from '~/hooks/useTracking';
 
 const Hr = styled(Flex)`
   margin-left: -${({ theme }) => theme.spacing.xLarge};
@@ -25,6 +27,9 @@ export default function Form({ product }: { product: Product | NewProduct }) {
   const [description, setDescription] = useState(
     results.at(0)?.description || ''
   );
+
+  const { locale, storeHash, context } = useAppContext();
+  const { trackSubmit, trackClick } = useTracking();
 
   const {
     isFormGuided,
@@ -53,6 +58,8 @@ export default function Form({ product }: { product: Product | NewProduct }) {
     const { description } = (await res.json()) as { description: string };
     setResults({ promptAttributes: currentAttributes, description });
     setIsPrompting(false);
+
+    trackClick({ context, locale, storeHash, action: 'Generate' });
   };
 
   const descriptionChangeWrapper = (index: number, description: string) => {
@@ -60,12 +67,14 @@ export default function Form({ product }: { product: Product | NewProduct }) {
     handleDescriptionChange(index, description);
   };
 
-  const handleCancelClick = () =>
+  const handleCancelClick = () => {
     window.top?.postMessage(
       JSON.stringify({ namespace: 'APP_EXT', action: 'CLOSE' }),
       '*'
     );
-  const handleUseThisClick = () =>
+    trackClick({ context, locale, storeHash, action: 'Cancel' });
+  };
+  const handleUseThisClick = () => {
     window.top?.postMessage(
       JSON.stringify({
         namespace: 'APP_EXT',
@@ -74,6 +83,17 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       }),
       '*'
     );
+    trackSubmit({
+      context,
+      locale,
+      storeHash,
+      isFormGuided,
+      guidedAttributes,
+      customAttributes,
+      results: results.length,
+    });
+    trackClick({ context, locale, storeHash, action: 'Use this' });
+  };
 
   return (
     <Flex flexDirection="column" padding="xSmall" style={{ minHeight: '90vh' }}>
@@ -81,13 +101,19 @@ export default function Form({ product }: { product: Product | NewProduct }) {
         <Box display="inline-flex" marginBottom="large">
           <StyledButton
             isActive={isFormGuided}
-            onClick={() => setIsFormGuided(true)}
+            onClick={() => {
+              setIsFormGuided(true);
+              trackClick({ context, locale, storeHash, action: 'Guided' });
+            }}
           >
             Guided
           </StyledButton>
           <StyledButton
             isActive={!isFormGuided}
-            onClick={() => setIsFormGuided(false)}
+            onClick={() => {
+              setIsFormGuided(false);
+              trackClick({ context, locale, storeHash, action: 'Custom' });
+            }}
           >
             Custom
           </StyledButton>

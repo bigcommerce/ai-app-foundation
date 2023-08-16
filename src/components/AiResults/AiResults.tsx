@@ -8,6 +8,8 @@ import {
 } from '@bigcommerce/big-design';
 import React, { type SetStateAction, type ChangeEvent, useState } from 'react';
 import { StyledFlex } from './styled';
+import { useAppContext } from '~/context/AppContext';
+import { useTracking } from '~/hooks/useTracking';
 
 export interface Result {
   description: string;
@@ -22,17 +24,23 @@ interface AiResultsProps {
 export default function AiResults({ results, onChange }: AiResultsProps) {
   const [page, setPage] = useState(results.length);
 
+  const { locale, storeHash, context } = useAppContext();
+  const { trackClick } = useTracking();
+
   const currentResult = results.at(page - 1);
 
   if (!currentResult) {
     return null;
   }
 
-  const handlePageChange = (newPage: SetStateAction<number>) => {
-    const page = Number(newPage);
-    setPage(page);
-    onChange(page - 1, results.at(page - 1)?.description || '');
+  const handlePageChange = (newPageVal: SetStateAction<number>) => {
+    const newPage = Number(newPageVal);
+    setPage(newPage);
+    onChange(newPage - 1, results.at(newPage - 1)?.description || '');
+
+    trackClick({ context, locale, storeHash, action: newPage > page ? 'Next result' : 'Previous result' });
   };
+
   const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
     onChange(page - 1, event.target.value);
 
