@@ -38,3 +38,6 @@ yarn-error.log*
 *.tsbuildinfo
 
 .history
+
+# Sentry Auth Token
+.sentryclirc

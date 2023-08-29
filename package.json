@@ -32,6 +32,7 @@
     "@bigcommerce/big-design-theme": "^0.19.2",
     "@google-ai/generativelanguage": "^0.2.1",
     "@segment/snippet": "^4.16.2",
+    "@sentry/nextjs": "^7.65.0",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/styled-components": "^5.1.26",
