@@ -17,7 +17,6 @@ export const env = createEnv({
     CLIENT_SECRET: z.string().min(3),
     JWT_KEY: z.string().min(3),
     GOOGLE_API_KEY: z.string().min(3),
-    SENTRY_DSN: z.string().min(3),
   },
 
   /**
@@ -27,6 +26,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_SEGMENT_WRITE_KEY: z.string().min(1),
+    NEXT_PUBLIC_SENTRY_DSN: z.string().min(1),
   },
 
   /**
@@ -45,7 +45,7 @@ export const env = createEnv({
     JWT_KEY: process.env.JWT_KEY,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     NEXT_PUBLIC_SEGMENT_WRITE_KEY: process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY,
-    SENTRY_DSN: process.env.SENTRY_DSN,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
