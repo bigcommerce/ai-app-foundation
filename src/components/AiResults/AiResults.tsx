@@ -1,13 +1,13 @@
 import {
   Flex,
-  Pagination,
   Textarea,
   Small,
   H3,
   Grid,
+  Pagination,
 } from '@bigcommerce/big-design';
 import React, { type SetStateAction, type ChangeEvent, useState } from 'react';
-import { StyledFlex } from './styled';
+import { StyledFlex, StyledAiResults } from './styled';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
 
@@ -47,15 +47,16 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
 
   return (
     <Flex marginTop="large" flexDirection="column">
-      <Grid gridColumns="1fr 4fr" marginBottom="medium" gridColumnGap="0">
-        <Flex flexDirection="row" alignItems="center">
-          <H3 marginBottom="none">Results</H3>
-        </Flex>
-        <Flex
+      <Grid marginBottom="medium" gridColumnGap="0">
+        <StyledAiResults
           alignItems="flex-end"
-          justifyContent="flex-end"
+          justifyContent="space-between"
           flexDirection="row"
         >
+          <Flex flexDirection="column" alignItems="flex-start">
+            <H3 marginBottom="none">Results</H3>
+            <Small>Please review and proofread before publishing.</Small>
+          </Flex>
           <Pagination
             currentPage={page}
             itemsPerPage={1}
@@ -64,7 +65,7 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
             onPageChange={handlePageChange}
             totalItems={results.length}
           />
-        </Flex>
+        </StyledAiResults>
       </Grid>
       <StyledFlex>
         <Textarea

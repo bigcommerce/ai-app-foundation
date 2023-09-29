@@ -11,3 +11,9 @@ export const StyledFlex = styled(Flex)`
     min-height: ${({ theme }) => theme.helpers.remCalc(150)};
   }
 `;
+
+export const StyledAiResults = styled(Flex)`
+  button[role='button'] {
+    display: none;
+  }
+`;

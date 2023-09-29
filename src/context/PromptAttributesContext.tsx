@@ -8,7 +8,6 @@ export interface GuidedAttributes {
   includeProductAttributes: boolean;
   optimizedForSeo: boolean;
   brandVoice: string;
-  additionalAttributes: string;
   keywords: string;
   instructions: string;
 }
@@ -20,7 +19,7 @@ export interface CustomAttributes {
 
 export const DEFAULT_CUSTOM_ATTRIBUTES: CustomAttributes = {
   customPrompt:
-    'Short product description highlighting usage innovative environment-friendly materials. Include material names, tell about props of each and compare to the most popular ones. Add summary in a last paragraph. Make it sound professional and convincing.',
+    'Generate a product description that highlights the benefits of using the product in a professional style in not more than 500 words. List the features of the product. Summarize and say what the shopper should do next.',
   includeProductAttributes: true,
 };
 
