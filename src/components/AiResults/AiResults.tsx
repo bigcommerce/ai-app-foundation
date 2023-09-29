@@ -29,16 +29,17 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
 
   const currentResult = results.at(page - 1);
 
-  if (!currentResult) {
-    return null;
-  }
-
   const handlePageChange = (newPageVal: SetStateAction<number>) => {
     const newPage = Number(newPageVal);
     setPage(newPage);
     onChange(newPage - 1, results.at(newPage - 1)?.description || '');
 
-    trackClick({ context, locale, storeHash, action: newPage > page ? 'Next result' : 'Previous result' });
+    trackClick({
+      context,
+      locale,
+      storeHash,
+      action: newPage > page ? 'Next result' : 'Previous result',
+    });
   };
 
   const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
@@ -68,10 +69,10 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
       <StyledFlex>
         <Textarea
           onChange={handleValueChange}
-          value={currentResult.description}
+          value={currentResult?.description}
         />
       </StyledFlex>
-      <Small marginTop="medium">{currentResult.promptAttributes}</Small>
+      <Small marginTop="medium">{currentResult?.promptAttributes}</Small>
     </Flex>
   );
 }

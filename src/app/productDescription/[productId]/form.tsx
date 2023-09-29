@@ -21,11 +21,12 @@ const Hr = styled(Flex)`
 `;
 
 export default function Form({ product }: { product: Product | NewProduct }) {
-  const { results, setResults, handleDescriptionChange } =
+  const { descriptions, addDescriptionToHistory, updateDescriptionInHistory } =
     useDescriptionsHistory(product.id);
-  const [isPrompting, setIsPrompting] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [description, setDescription] = useState(
-    results.at(0)?.description || ''
+    descriptions.at(-1)?.description || ''
   );
 
   const { locale, storeHash, context } = useAppContext();
@@ -42,7 +43,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
   } = usePromptAttributes();
 
   const handleGenerateDescription = async () => {
-    setIsPrompting(true);
+    setIsLoading(true);
     const res = await fetch('/api/generateDescription', {
       method: 'POST',
       body: JSON.stringify(
@@ -51,20 +52,24 @@ export default function Form({ product }: { product: Product | NewProduct }) {
     });
 
     if (!res.ok) {
-      setIsPrompting(false);
+      setIsLoading(false);
       throw new Error('Cannot generate description, try again later');
     }
 
     const { description } = (await res.json()) as { description: string };
-    setResults({ promptAttributes: currentAttributes, description });
-    setIsPrompting(false);
+    addDescriptionToHistory({
+      promptAttributes: currentAttributes,
+      description,
+    });
+    setDescription(description);
+    setIsLoading(false);
 
     trackClick({ context, locale, storeHash, action: 'Generate' });
   };
 
   const descriptionChangeWrapper = (index: number, description: string) => {
     setDescription(description);
-    handleDescriptionChange(index, description);
+    updateDescriptionInHistory(index, description);
   };
 
   const handleCancelClick = () => {
@@ -90,7 +95,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       isFormGuided,
       guidedAttributes,
       customAttributes,
-      results: results.length,
+      results: descriptions.length,
     });
     trackClick({ context, locale, storeHash, action: 'Use this' });
   };
@@ -132,7 +137,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
         <FlexItem>
           <Button
             marginTop="xSmall"
-            disabled={isPrompting}
+            disabled={isLoading}
             mobileWidth="auto"
             variant="secondary"
             onClick={() => void handleGenerateDescription()}
@@ -141,11 +146,14 @@ export default function Form({ product }: { product: Product | NewProduct }) {
           </Button>
         </FlexItem>
       </FlexItem>
-      {isPrompting && <Loader />}
-      {!isPrompting && (
+      {isLoading && <Loader />}
+      {!isLoading && (
         <>
           <Hr borderTop="box" marginTop="large" />
-          <AiResults onChange={descriptionChangeWrapper} results={results} />
+          <AiResults
+            onChange={descriptionChangeWrapper}
+            results={descriptions}
+          />
           <Flex
             justifyContent="flex-end"
             flexDirection="row"
@@ -162,6 +170,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
               mobileWidth="auto"
               variant="primary"
               onClick={handleUseThisClick}
+              disabled={!description}
             >
               Use this
             </Button>
