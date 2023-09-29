@@ -32,6 +32,7 @@ const fetchFromBigCommerceApi = (
   storeHash: string
 ) =>
   fetch(`${BIGCOMMERCE_API_URL}/stores/${storeHash}/v3${path}`, {
+    next: { revalidate: 60 }, // 1 minute cache
     method: 'GET',
     headers: {
       accept: 'application/json',

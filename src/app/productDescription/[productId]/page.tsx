@@ -1,7 +1,4 @@
-import { Suspense } from 'react';
-import Loader from '~/components/Loader';
 import { fetchProductWithAttributes } from '~/server/bigcommerce-api';
-import generateDescription from '~/server/google-ai';
 import { authorize } from '~/lib/authorize';
 import * as db from '~/lib/db';
 import Generator from './generator';
@@ -36,17 +33,12 @@ export default async function Page(props: PageProps) {
       ? { id, name: name || '' }
       : await fetchProductWithAttributes(id, accessToken, authorized.storeHash);
 
-  const description = await generateDescription({ product });
-
   return (
-    <Suspense fallback={<Loader />}>
-      <Generator
-        locale={headers().get('Accept-Language')?.split(',')[0] || ''}
-        storeHash={authorized.storeHash}
-        initialDescription={description}
-        product={product}
-        context="product_edit"
-      />
-    </Suspense>
+    <Generator
+      locale={headers().get('Accept-Language')?.split(',')[0] || ''}
+      storeHash={authorized.storeHash}
+      product={product}
+      context="product_edit"
+    />
   );
 }

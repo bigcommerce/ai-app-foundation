@@ -52,8 +52,9 @@ const prepareInput = (attributes: z.infer<typeof aiSchema>): string => {
         Brand tone: ["${attributes.brandVoice}"]
         Word limit: [${attributes.wordCount}]
         SEO optimized: ["${attributes.optimizedForSeo ? 'yes' : 'no'}"]
-        Additional product attributes: ["${attributes.additionalAttributes}"]
-        Additional keywords: ["${attributes.keywords}"]
+        Additional keywords(insert a set of keywords separately and naturally into the description, rather than as a single phrase, ensuring they are used appropriately within the text.): ["${
+          attributes.keywords
+        }"]
         Additional instructions: ["${attributes.instructions}"]`;
   } else {
     return `Style of writing: ["${DEFAULT_GUIDED_ATTRIBUTES.style}"]

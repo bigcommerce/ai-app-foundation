@@ -68,7 +68,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           <Counter
             label="Word limit"
             max={1000}
-            min={10}
+            min={1}
             step={10}
             onCountChange={(value) => {
               handleInputChange(value, 'wordCount');
@@ -88,13 +88,13 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           />
         </FormGroup>
         <FormGroup>
-          <Flex flexDirection="row" alignItems="center" marginTop="medium">
+          <Flex flexDirection="row" alignItems="center" marginTop="xxLarge">
             <Checkbox
               checked={attributes.optimizedForSeo}
               label={
                 <CheckboxLabel>
                   <InputLabel
-                    text="Optimised for SEO"
+                    text="Optimize for SEO"
                     tooltip="If checked, the description will include words and phrases that shoppers typically use when searching for similar products online. This may improve the visibility of the product in search results and drive more traffic to your storefront."
                     bold={false}
                   />
@@ -115,6 +115,34 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
             />
           </Flex>
         </FormGroup>
+        <FormGroup>
+          <Checkbox
+            checked={attributes.includeProductAttributes}
+            label={
+              <CheckboxLabel>
+                <InputLabel
+                  bold={false}
+                  text="Include product information"
+                  tooltip="Checking this box will include product information from the control panel in the description. For example, product name and weight."
+                />
+              </CheckboxLabel>
+            }
+            onChange={() => {
+              handleInputChange(
+                !attributes.includeProductAttributes,
+                'includeProductAttributes'
+              );
+              trackClick({
+                action: !attributes.includeProductAttributes
+                  ? 'Include Product Attributes On'
+                  : 'Include Product Attributes Off',
+                context,
+                storeHash,
+                locale,
+              });
+            }}
+          />
+        </FormGroup>
       </Grid>
 
       <Collapse onCollapseChange={handleCollapseChange} title={collapseTitle}>
@@ -124,36 +152,6 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           marginTop="xSmall"
           marginBottom="large"
         >
-          <FormGroup>
-            <Flex flexDirection="row" alignItems="center">
-              <Checkbox
-                checked={attributes.includeProductAttributes}
-                label={
-                  <CheckboxLabel>
-                    <InputLabel
-                      bold={false}
-                      text="Include product information"
-                      tooltip="Checking this box will include product information from the control panel in the description. For example, product name and weight."
-                    />
-                  </CheckboxLabel>
-                }
-                onChange={() => {
-                  handleInputChange(
-                    !attributes.includeProductAttributes,
-                    'includeProductAttributes'
-                  );
-                  trackClick({
-                    action: !attributes.includeProductAttributes
-                      ? 'Include Product Attributes On'
-                      : 'Include Product Attributes Off',
-                    context,
-                    storeHash,
-                    locale,
-                  });
-                }}
-              />
-            </Flex>
-          </FormGroup>
           <FormGroup>
             <Input
               value={attributes.brandVoice}
@@ -173,30 +171,13 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           </FormGroup>
           <FormGroup>
             <Input
-              value={attributes.additionalAttributes}
-              label={
-                <FormControlLabel>
-                  <InputLabel
-                    bold={true}
-                    text="Additional attributes"
-                    tooltip="Additional attributes are key-value pairs that provide more information and improve search engine rankings. For example, “organic, recycled cotton” or “sports, running.”"
-                  />
-                </FormControlLabel>
-              }
-              onChange={(event) =>
-                handleInputChange(event.target.value, 'additionalAttributes')
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <Input
               value={attributes.keywords}
               label={
                 <FormControlLabel>
                   <InputLabel
                     bold={true}
                     text="Additional keywords"
-                    tooltip="Additional keywords are words or phrases that provide more information and improve search engine rankings. For example, “blue,” “shirt,” “clothing” and “women.”"
+                    tooltip="Enter any important keywords, separated by commas, you want to make sure are included in the description. For example, “blue, shirt, clothing, women.” These keywords will be used throughout the description wherever it makes sense."
                   />
                 </FormControlLabel>
               }

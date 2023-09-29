@@ -7,12 +7,12 @@ const MAX_LOCAL_STORAGE_RESULTS = 20;
 const STORAGE_KEY = 'ai-product-descriptions:history:product';
 
 export const useDescriptionsHistory = (productId: number) => {
-  const [results, setResults] = useLocalStorage<Result[]>(
+  const [descriptions, setDescriptions] = useLocalStorage<Result[]>(
     `${STORAGE_KEY}:${productId}`,
     []
   );
 
-  const setResultsWrapper = ({
+  const setDescriptionsWrapper = ({
     description,
     promptAttributes,
   }: {
@@ -23,14 +23,14 @@ export const useDescriptionsHistory = (productId: number) => {
       description,
       promptAttributes: serializePromptAttributes(promptAttributes),
     };
-    setResults([
-      ...results.slice(-(MAX_LOCAL_STORAGE_RESULTS - 1)),
+    setDescriptions([
+      ...descriptions.slice(-(MAX_LOCAL_STORAGE_RESULTS - 1)),
       ...[result],
     ]);
   };
 
   const handleDescriptionChange = (index: number, description: string) => {
-    setResults((prevResults: Result[]) => {
+    setDescriptions((prevResults: Result[]) => {
       if (index < 0 || index >= prevResults.length) {
         return prevResults;
       }
@@ -47,8 +47,8 @@ export const useDescriptionsHistory = (productId: number) => {
   };
 
   return {
-    results,
-    handleDescriptionChange,
-    setResults: setResultsWrapper,
+    descriptions,
+    addDescriptionToHistory: setDescriptionsWrapper,
+    updateDescriptionInHistory: handleDescriptionChange,
   };
 };
