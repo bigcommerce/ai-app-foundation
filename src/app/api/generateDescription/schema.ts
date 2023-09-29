@@ -27,7 +27,6 @@ export const aiSchema = z.union([
     wordCount: z.number(),
     optimizedForSeo: z.boolean(),
     brandVoice: z.string(),
-    additionalAttributes: z.string(),
     keywords: z.string(),
     instructions: z.string(),
     product: z.union([productSchema, newProductSchema]).nullable(),

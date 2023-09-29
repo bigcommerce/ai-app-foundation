@@ -11,7 +11,6 @@ const KEY_TO_LABEL_MAP: KeyToLabelMap = {
   wordCount: 'Words',
   optimizedForSeo: 'Optimized for SEO',
   brandVoice: 'Brand voice',
-  additionalAttributes: 'Attributes',
   customPrompt: 'Instructions',
   keywords: 'Keywords',
   instructions: 'Instructions',

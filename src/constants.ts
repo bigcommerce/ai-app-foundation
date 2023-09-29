@@ -1,10 +1,9 @@
 export const DEFAULT_GUIDED_ATTRIBUTES = {
-  style: 'story',
+  style: 'professional',
   wordCount: 250,
   includeProductAttributes: true,
   optimizedForSeo: true,
   brandVoice: '',
-  additionalAttributes: '',
   keywords: '',
   instructions: '',
 };
