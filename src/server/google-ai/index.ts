@@ -16,9 +16,10 @@ export default async function generateDescription(
   const productAttributes = prepareProductAttributes(attributes);
 
   const prompt = `Act as an e - commerce merchandising expert who writes product descriptions.
-    Task: Based on provided input parameters, write a product description
-    ${input}
-    ${productAttributes}`;
+    Task: Based on provided input parameters, write a product description styled in HTML.
+    Response format: HTML.
+    Input: ${input}.
+    Product attributes: ${productAttributes}.`;
 
   try {
     const client = new TextServiceClient({
