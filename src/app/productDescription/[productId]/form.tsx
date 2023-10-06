@@ -1,5 +1,3 @@
-'use client';
-
 import { usePromptAttributes } from '~/context/PromptAttributesContext';
 import { useDescriptionsHistory } from '~/hooks';
 import { useState } from 'react';

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { DEFAULT_GUIDED_ATTRIBUTES } from '~/constants';
+import { useLocalStorage } from '~/hooks';
 
 export type PromptAttributes = GuidedAttributes | CustomAttributes;
 export interface GuidedAttributes {
@@ -46,14 +47,16 @@ export const PromptAttributesContext =
     setCustomAttributes: () => undefined,
   });
 
+const STORAGE_KEY = 'ai-product-descriptions:guided-form';
+
 export const PromptAttributesProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const [guidedAttributes, setGuidedAttributes] =
+    useLocalStorage<GuidedAttributes>(STORAGE_KEY, DEFAULT_GUIDED_ATTRIBUTES);
+
   const [isFormGuided, setIsFormGuided] = useState(true);
 
-  const [guidedAttributes, setGuidedAttributes] = useState(
-    DEFAULT_GUIDED_ATTRIBUTES
-  );
   const [customAttributes, setCustomAttributes] = useState(
     DEFAULT_CUSTOM_ATTRIBUTES
   );

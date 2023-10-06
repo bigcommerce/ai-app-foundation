@@ -68,7 +68,7 @@ export function GuidedPromptForm({ attributes, onChange }: GuidedPromptForm) {
           <Counter
             label="Word limit"
             max={1000}
-            min={1}
+            min={0}
             step={10}
             onCountChange={(value) => {
               handleInputChange(value, 'wordCount');
