@@ -43,6 +43,7 @@
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-quill": "^2.0.0",
     "styled-components": "^5.3.11",
     "superjson": "1.12.2",
     "zod": "^3.21.4"

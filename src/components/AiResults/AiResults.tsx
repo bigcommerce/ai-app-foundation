@@ -1,15 +1,15 @@
-import {
-  Flex,
-  Textarea,
-  Small,
-  H3,
-  Grid,
-  Pagination,
-} from '@bigcommerce/big-design';
-import React, { type SetStateAction, type ChangeEvent, useState } from 'react';
+import { Flex, Small, H3, Grid, Pagination } from '@bigcommerce/big-design';
+import React, { type SetStateAction, useState } from 'react';
 import { StyledFlex, StyledAiResults } from './styled';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import Loader from '../Loader';
+
+const ReactQuill = dynamic(() => import('react-quill'), {
+  loading: () => <Loader />,
+});
 
 export interface Result {
   description: string;
@@ -42,8 +42,8 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
     });
   };
 
-  const handleValueChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
-    onChange(page - 1, event.target.value);
+  const handleValueChange = (editorState: string) =>
+    onChange(page - 1, editorState);
 
   return (
     <Flex marginTop="large" flexDirection="column">
@@ -68,9 +68,9 @@ export default function AiResults({ results, onChange }: AiResultsProps) {
         </StyledAiResults>
       </Grid>
       <StyledFlex>
-        <Textarea
-          onChange={handleValueChange}
+        <ReactQuill
           value={currentResult?.description}
+          onChange={handleValueChange}
         />
       </StyledFlex>
       <Small marginTop="medium">{currentResult?.promptAttributes}</Small>
