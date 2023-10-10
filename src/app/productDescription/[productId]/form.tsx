@@ -2,7 +2,6 @@ import { usePromptAttributes } from '~/context/PromptAttributesContext';
 import { useDescriptionsHistory } from '~/hooks';
 import { useState } from 'react';
 import { type NewProduct, type Product } from 'types';
-import styled from 'styled-components';
 import { Box, Button, Flex, FlexItem } from '@bigcommerce/big-design';
 import AiResults from '~/components/AiResults/AiResults';
 import { CustomPromptForm } from '~/components/PromptForm/CustomPromptForm';
@@ -12,11 +11,6 @@ import { prepareAiPromptAttributes } from '~/utils/utils';
 import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
-
-const Hr = styled(Flex)`
-  margin-left: -${({ theme }) => theme.spacing.xLarge};
-  margin-right: -${({ theme }) => theme.spacing.xLarge};
-`;
 
 export default function Form({ product }: { product: Product | NewProduct }) {
   const { descriptions, addDescriptionToHistory, updateDescriptionInHistory } =
@@ -147,7 +141,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       {isLoading && <Loader />}
       {!isLoading && (
         <>
-          <Hr borderTop="box" marginTop="large" />
+          <Flex borderTop="box" marginTop="large" />
           <AiResults
             onChange={descriptionChangeWrapper}
             results={descriptions}

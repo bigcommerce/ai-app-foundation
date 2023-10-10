@@ -1,16 +1,12 @@
 import { Flex } from '@bigcommerce/big-design';
 import styled from 'styled-components';
 
-export const StyledFlex = styled(Flex)`
-  div:nth-child(2) {
-    height: ${({ theme }) => theme.helpers.remCalc(300)};
-    max-height: ${({ theme }) => theme.helpers.remCalc(500)};
-    min-height: ${({ theme }) => theme.helpers.remCalc(150)};
-  }
-`;
-
+// Workaround to avoid the per page dropdown to be clickable, but still provide the content
 export const StyledAiResults = styled(Flex)`
   button[role='button'] {
-    display: none;
+    pointer-events: none;
+    svg {
+      display: none;
+    }
   }
 `;
