@@ -9,7 +9,8 @@
     "lint": "next lint",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
-    "format": "prettier --write **/*.{js,ts,tsx}"
+    "format": "prettier --write **/*.{js,ts,tsx}",
+    "postinstall": "node ./postinstall.mjs"
   },
   "husky": {
     "hooks": {
@@ -35,11 +36,13 @@
     "@sentry/nextjs": "^7.65.0",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@tinymce/tinymce-react": "^4.3.0",
+    "@types/fs-extra": "^11.0.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/styled-components": "^5.1.26",
     "@types/tinymce": "^4.6.6",
     "@vercel/analytics": "^1.0.2",
     "firebase": "^9.23.0",
+    "fs-extra": "^11.1.1",
     "google-auth-library": "^8.9.0",
     "jsonwebtoken": "^9.0.0",
     "next": "^13.4.2",
