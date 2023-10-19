@@ -79,9 +79,9 @@ const prepareProductAttributes = (
         "width": ${attributes.product.width}
         "depth": ${attributes.product.depth}
         "categories": ${attributes.product.categoriesNames}
-        "videos descriptions": ${attributes.product.videosDescriptions}
-        "imnages descritpions": ${attributes.product.imagesDescriptions}
-        "custom_fields": ${attributes.product.custom_fields
+        "video descriptions": ${attributes.product.videosDescriptions}
+        "image descriptions": ${attributes.product.imagesDescriptions}
+        "custom fields": ${attributes.product.custom_fields
           .map((field) => `"${field.name}": "${field.value}"`)
           .join(',')} `;
   } else {

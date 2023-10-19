@@ -28,7 +28,7 @@ export const CustomPromptForm = ({ attributes, onChange }: CustomFormProps) => {
               <InputLabel
                 bold={true}
                 text="Instructions"
-                tooltip="Try and provide as much information as possible. You can also try asking the description generator to write in the voice of a famous person, like Shakespeare or Hemingway, or assume a profession, like interior designer or chef."
+                tooltip="Try and provide as much information as possible. You can also try asking the BigAI Copywriter to write in the voice of a famous person, like Shakespeare or Hemingway, or assume a profession, like interior designer or chef."
               />
             </FormControlLabel>
           }

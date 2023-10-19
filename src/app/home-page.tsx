@@ -9,13 +9,12 @@ const HomePage = () => (
     marginHorizontal={{ mobile: 'none', tablet: 'xxxLarge' }}
     marginVertical={{ mobile: 'none', tablet: 'xxLarge' }}
   >
-    <H1>Product description generator</H1>
+    <H1>BigAI Copywriter</H1>
     <Panel header="Generate text">
       <Text>
-        Create eye-catching product descriptions in a flash with the Product
-        Description Generator. Using the product information from your catalog,
-        the generator creates product descriptions in limitless styles and
-        voices designed to drive traffic to your storefront and generate sales.
+        Create eye-catching product descriptions in a flash with the BigAI
+        Copywriter. Using the product information from your catalog, the BigAI Copywriter creates product descriptions in limitless styles and voices
+        designed to drive traffic to your storefront and generate sales.
       </Text>
       <Image
         src="images/example.svg"
