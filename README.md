@@ -1,8 +1,8 @@
 # AI App Foundation
 
-This [single-click app](https://developer.bigcommerce.com/api-docs/apps/guide/types) presents BigCommerce merchants with the ability to generate product descriptions.
+This [single-click app](https://developer.bigcommerce.com/api-docs/apps/guide/types) presents BigCommerce merchants with the ability to generate product descriptions. It's also listed in our app marketplace.
 
-:star2: If you are hacking right now in the Google <> BigCommerce AI Hackathon event, check out our [Hackpack](https://developer.bigcommerce.com/big-ai-hackathon-2023/welcome) for more detail on Vertex AI and BigCommerce App Extensions! :star2:
+:star2: This was originally open sourced as part of the Google <> BigCommerce AI Hackathon. Check out that event's [hackpack](https://developer.bigcommerce.com/big-ai-hackathon-2023/welcome) for more detail on Vertex AI and BigCommerce App Extensions. :star2:
 
 ## Install
 
@@ -58,20 +58,3 @@ Looking to help the world's leading brands and the next generation of successful
 - [BigCommerce Developer Center](https://developer.bigcommerce.com/) - Learn more about BigCommerce platform features, APIs, and SDKs
 - [BigDesign](https://developer.bigcommerce.com/api-docs/apps/guide/ui) - An interactive site for BigCommerce's React Components with live code editing
 - [Building BigCommerce Apps](https://developer.bigcommerce.com/api-docs/apps/guide/intro) - Learn how to build apps for the BigCommerce marketplace
-
-## License
-
-Copyright (c) 2017-present, BigCommerce Pty. Ltd. All rights reserved
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
