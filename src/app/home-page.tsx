@@ -25,7 +25,8 @@ const HomePage = () => (
             position: 'relative',
           }}
         />
-        BigAI Copywriter</H1>
+        BigAI Copywriter
+      </H1>
       <Panel header="Generate eye-catching descriptions in a flash">
         <Text>
           Using the product information from your catalog, BigAI Copywriter creates product descriptions in limitless styles and voices
