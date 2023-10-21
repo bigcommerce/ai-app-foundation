@@ -7,13 +7,13 @@ import Image from 'next/image';
 
 const HomePage = () => (
   <Box backgroundColor="secondary10">
-  <StyledMaxWidthContainer
-    maxWidth={768}
-    paddingHorizontal={{ mobile: 'small', tablet: 'xxxLarge' }}
-    paddingVertical={{ mobile: 'small', tablet: 'xxLarge' }}
-  >
-    <H1>
-    <Image
+    <StyledMaxWidthContainer
+      maxWidth={768}
+      paddingHorizontal={{ mobile: 'small', tablet: 'xxxLarge' }}
+      paddingVertical={{ mobile: 'small', tablet: 'xxLarge' }}
+    >
+      <H1>
+        <Image
           src="/images/bigcommerce-icon.png"
           alt="BigCommerce"
           priority={true}
@@ -26,18 +26,18 @@ const HomePage = () => (
           }}
         />
         BigAI Copywriter</H1>
-    <Panel header="Generate eye-catching descriptions in a flash">
-      <Text>
-        Using the product information from your catalog, BigAI Copywriter creates product descriptions in limitless styles and voices
-        designed to drive traffic to your storefront and generate sales.
-      </Text>
-      <H4>How to generate</H4>
+      <Panel header="Generate eye-catching descriptions in a flash">
+        <Text>
+          Using the product information from your catalog, BigAI Copywriter creates product descriptions in limitless styles and voices
+          designed to drive traffic to your storefront and generate sales.
+        </Text>
+        <H4>How to generate</H4>
         <Text>
           Open an existing product or create a new one. Under description, click on the 
           "Generate text" action and check the result.
         </Text>
         <Image
-          src="/images/example 2 (2).png"
+          src="/images/example.png"
           alt="Example"
           priority={true}
           height={447}
@@ -49,8 +49,8 @@ const HomePage = () => (
             maxWidth: '100%',
           }}
         />
-    </Panel>
-  </StyledMaxWidthContainer>
+      </Panel>
+    </StyledMaxWidthContainer>
   </Box>
 );
 
