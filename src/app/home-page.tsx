@@ -35,7 +35,7 @@ const HomePage = () => (
         <H4>How to generate</H4>
         <Text>
           Open an existing product or create a new one. Under description, click on the 
-          "Generate text" action and check the result.
+          &quot;Generate text&quot; action and check the result.
         </Text>
         <Image
           src="/images/example.png"
