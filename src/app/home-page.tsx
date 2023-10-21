@@ -1,33 +1,56 @@
 'use client';
 
 import React from 'react';
-import { Text, Panel, H1, Box } from '@bigcommerce/big-design';
+import { Text, Panel, H1, Box, H4 } from '@bigcommerce/big-design';
+import { StyledMaxWidthContainer } from '~/components/LayoutHelpers';
 import Image from 'next/image';
 
 const HomePage = () => (
-  <Box
-    marginHorizontal={{ mobile: 'none', tablet: 'xxxLarge' }}
-    marginVertical={{ mobile: 'none', tablet: 'xxLarge' }}
+  <Box backgroundColor="secondary10">
+  <StyledMaxWidthContainer
+    maxWidth={768}
+    paddingHorizontal={{ mobile: 'small', tablet: 'xxxLarge' }}
+    paddingVertical={{ mobile: 'small', tablet: 'xxLarge' }}
   >
-    <H1>BigAI Copywriter</H1>
-    <Panel header="Generate text">
+    <H1>
+    <Image
+          src="/images/bigcommerce-icon.png"
+          alt="BigCommerce"
+          priority={true}
+          height={30}
+          width={30}
+          style={{
+            marginRight: '0.5em',
+            top: '0.1em',
+            position: 'relative',
+          }}
+        />
+        BigAI Copywriter</H1>
+    <Panel header="Generate eye-catching descriptions in a flash">
       <Text>
-        Create eye-catching product descriptions in a flash with the BigAI
-        Copywriter. Using the product information from your catalog, the BigAI Copywriter creates product descriptions in limitless styles and voices
+        Using the product information from your catalog, BigAI Copywriter creates product descriptions in limitless styles and voices
         designed to drive traffic to your storefront and generate sales.
       </Text>
-      <Image
-        src="images/example.svg"
-        alt="Example"
-        width={700}
-        height={500}
-        priority={true}
-      />
-      <Text>
-        Open the existing product or create a new one. Click on the Generate
-        text action and check the result.
-      </Text>
+      <H4>How to generate</H4>
+        <Text>
+          Open an existing product or create a new one. Under description, click on the 
+          "Generate text" action and check the result.
+        </Text>
+        <Image
+          src="/images/example 2 (2).png"
+          alt="Example"
+          priority={true}
+          height={447}
+          width={1336}
+          style={{
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            height: 'auto',
+            maxWidth: '100%',
+          }}
+        />
     </Panel>
+  </StyledMaxWidthContainer>
   </Box>
 );
 
