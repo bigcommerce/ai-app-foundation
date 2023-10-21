@@ -1,4 +1,4 @@
-import { Box, Flex } from '@bigcommerce/big-design';
+import { Box } from '@bigcommerce/big-design';
 import styled, { css } from 'styled-components';
 
 export const StyledMaxWidthContainer = styled(Box)<{ maxWidth?: number }>`
