@@ -33,7 +33,7 @@
     "@bigcommerce/big-design-theme": "^0.19.2",
     "@google-ai/generativelanguage": "^0.2.1",
     "@segment/snippet": "^4.16.2",
-    "@sentry/nextjs": "^7.65.0",
+    "@sentry/nextjs": "^7.77.0",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@tinymce/tinymce-react": "^4.3.0",
     "@types/fs-extra": "^11.0.2",
