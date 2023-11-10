@@ -27,15 +27,18 @@ const HomePage = () => (
         />
         BigAI Copywriter
       </H1>
-      <Panel header="Generate eye-catching descriptions in a flash">
+      <Panel header="Create product descriptions">
         <Text>
-          Using the product information from your catalog, BigAI Copywriter creates product descriptions in limitless styles and voices
-          designed to drive traffic to your storefront and generate sales.
+            BigAI Copywriter app extends the capabilities of the existing Description section of the v3 Add/Edit Product experience.
         </Text>
         <H4>How to generate</H4>
-        <Text>
-          Open an existing product or create a new one. Under description, click on the 
-          &quot;Generate text&quot; action and check the result.
+        <Text as="span">
+            <Text as="span" bold={true}>
+                You will now see a new button in the Description section when adding or editing a product.
+            </Text>
+            <Text as="span">
+                Click the Action button (⋯) and select Create text. Set your desired settings, then click Generate to create your text. The generated text will appear in the Results window.
+            </Text>
         </Text>
         <Image
           src="/images/example.png"
