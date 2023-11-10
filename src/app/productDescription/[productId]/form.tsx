@@ -134,7 +134,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
             variant="secondary"
             onClick={() => void handleGenerateDescription()}
           >
-            Generate
+            Write
           </Button>
         </FlexItem>
       </FlexItem>

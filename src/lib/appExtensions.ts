@@ -107,10 +107,10 @@ const createAppExtensionMutation = () => ({
       model: 'PRODUCT_DESCRIPTION',
       url: '/productDescription/${id}',
       label: {
-        defaultValue: 'Generate text',
+        defaultValue: 'Create text',
         locales: [
           {
-            value: 'Generate text',
+            value: 'Create text',
             localeCode: 'en-US',
           },
         ],
