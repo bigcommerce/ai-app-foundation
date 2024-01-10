@@ -64,10 +64,16 @@ export default function Form({ product }: { product: Product | NewProduct }) {
     updateDescriptionInHistory(index, description);
   };
 
+  const getStoreURL = () => {
+    const suffix = process.env.NODE_ENV === 'production' ? 'mybigcommerce.com' : 'store.bcdev';
+
+    return `https://store-${storeHash}.${suffix}`;
+  };
+
   const handleCancelClick = () => {
     window.top?.postMessage(
       JSON.stringify({ namespace: 'APP_EXT', action: 'CLOSE' }),
-      '*'
+      getStoreURL()
     );
     trackClick({ context, locale, storeHash, action: 'Cancel' });
   };
@@ -78,7 +84,7 @@ export default function Form({ product }: { product: Product | NewProduct }) {
         action: 'PRODUCT_DESCRIPTION',
         data: { description },
       }),
-      '*'
+      getStoreURL()
     );
     trackSubmit({
       context,
