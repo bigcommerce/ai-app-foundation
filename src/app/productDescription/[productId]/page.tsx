@@ -33,12 +33,15 @@ export default async function Page(props: PageProps) {
       ? { id, name: name || '' }
       : await fetchProductWithAttributes(id, accessToken, authorized.storeHash);
 
+  const csrfToken = headers().get('X-CSRF-Token') || 'missing';
+
   return (
     <Generator
       locale={headers().get('Accept-Language')?.split(',')[0] || ''}
       storeHash={authorized.storeHash}
       product={product}
       context="product_edit"
+      csrfToken={csrfToken}
     />
   );
 }
