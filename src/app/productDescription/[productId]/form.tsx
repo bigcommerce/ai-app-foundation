@@ -12,10 +12,9 @@ import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
 
-export default function Form({ product }: { product: Product | NewProduct }) {
+export default function Form({ product, csrfToken }: { product: Product | NewProduct; csrfToken: string }) {
   const { descriptions, addDescriptionToHistory, updateDescriptionInHistory } =
     useDescriptionsHistory(product.id);
-
   const [isLoading, setIsLoading] = useState(false);
   const [description, setDescription] = useState(
     descriptions.at(-1)?.description || ''
@@ -41,6 +40,9 @@ export default function Form({ product }: { product: Product | NewProduct }) {
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
       ),
+      headers: {
+        'X-CSRF-Token': csrfToken,
+      },
     });
 
     if (!res.ok) {
