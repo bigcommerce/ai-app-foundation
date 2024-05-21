@@ -4,7 +4,9 @@ import { aiSchema } from './schema';
 import { authorize } from '~/lib/authorize';
 
 export async function POST(req: NextRequest) {
-  if (!authorize()) {
+  const authToken = req.nextUrl.searchParams.get('authToken') || 'missing';
+
+  if (!authorize(authToken)) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
