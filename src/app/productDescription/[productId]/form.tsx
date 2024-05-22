@@ -12,15 +12,7 @@ import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
 
-export default function Form({
-  product,
-  csrfToken,
-  authToken
-}: {
-  product: Product | NewProduct;
-  csrfToken: string;
-  authToken: string;
-}) {
+export default function Form({ product, csrfToken }: { product: Product | NewProduct; csrfToken: string }) {
   const { descriptions, addDescriptionToHistory, updateDescriptionInHistory } =
     useDescriptionsHistory(product.id);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +35,7 @@ export default function Form({
 
   const handleGenerateDescription = async () => {
     setIsLoading(true);
-    const res = await fetch(`/api/generateDescription?authToken=${authToken}`, {
+    const res = await fetch('/api/generateDescription', {
       method: 'POST',
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
