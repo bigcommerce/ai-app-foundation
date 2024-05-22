@@ -56,8 +56,11 @@ export function GET(request: NextRequest) {
     expiresIn: 3600,
   });
 
-  return NextResponse.redirect(new URL(`${path}&authToken=${clientToken}`, env.APP_ORIGIN), {
+  return NextResponse.redirect(new URL(path, env.APP_ORIGIN), {
     status: 302,
     statusText: 'Found',
+    headers: {
+      'set-cookie': `ai-app-foundation-token=${clientToken}; SameSite=None; Secure; Path=/; Partitioned; HttpOnly; Max-Age=3600;`,
+    },
   });
 }
