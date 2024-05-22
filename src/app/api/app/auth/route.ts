@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import * as db from '~/lib/db';
@@ -96,17 +95,8 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const clientToken = jwt.sign(
-    { userId: oauthUser.id, storeHash },
-    env.JWT_KEY,
-    { expiresIn: 3600 }
-  );
-
   return NextResponse.redirect(env.APP_ORIGIN, {
     status: 302,
     statusText: 'Found',
-    headers: {
-      'set-cookie': `ai-app-foundation-token=${clientToken}; SameSite=None; Secure; Path=/; Partitioned; HttpOnly; Max-Age=3600;`,
-    },
   });
 }

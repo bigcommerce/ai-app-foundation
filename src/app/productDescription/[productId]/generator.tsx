@@ -12,13 +12,15 @@ export default function Generator({
   storeHash,
   locale,
   context,
-  csrfToken
+  csrfToken,
+  authToken
 }: {
   product: Product | NewProduct;
   storeHash: string;
   locale: string;
   context: string;
   csrfToken: string;
+  authToken: string;
 }) {
   const [isClient, setIsClient] = useState(false);
 
@@ -33,7 +35,7 @@ export default function Generator({
       {isClient && (
         <AppContext.Provider value={{ locale, storeHash, context }}>
           <PromptAttributesProvider>
-            <Form product={product} csrfToken={csrfToken} />
+            <Form product={product} csrfToken={csrfToken} authToken={authToken} />
           </PromptAttributesProvider>
         </AppContext.Provider>
       )}

@@ -6,14 +6,14 @@ import { headers } from 'next/headers';
 
 interface PageProps {
   params: { productId: string };
-  searchParams: { product_name: string };
+  searchParams: { product_name: string; authToken: string };
 }
 
 export default async function Page(props: PageProps) {
   const { productId } = props.params;
-  const { product_name: name } = props.searchParams;
+  const { product_name: name, authToken } = props.searchParams;
 
-  const authorized = authorize();
+  const authorized = authorize(authToken);
 
   if (!authorized) {
     throw new Error('Token is not valid. Try to re-open the app.');
@@ -42,6 +42,7 @@ export default async function Page(props: PageProps) {
       product={product}
       context="product_edit"
       csrfToken={csrfToken}
+      authToken={authToken}
     />
   );
 }
