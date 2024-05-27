@@ -26,5 +26,8 @@ jobs:
       - name: Lint
         run: SKIP_ENV_VALIDATION=true npm run lint
 
-      - name: Lint
+      - name: Build
         run: SKIP_ENV_VALIDATION=true npm run build
+
+      - name: Test
+        run: SKIP_ENV_VALIDATION=true npm run test
