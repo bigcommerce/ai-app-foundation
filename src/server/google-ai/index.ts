@@ -1,12 +1,11 @@
 import { type z } from 'zod';
 import { env } from '~/env.mjs';
-import { GoogleAuth } from 'google-auth-library';
-import { TextServiceClient } from '@google-ai/generativelanguage';
 import { DEFAULT_GUIDED_ATTRIBUTES, STYLE_OPTIONS } from '~/constants';
 import { type aiSchema } from '~/app/api/generateDescription/schema';
+import { VertexAI } from '@google-cloud/vertexai';
+import { type JWTInput } from 'google-auth-library';
 
-const MODEL_NAME = 'models/text-bison-001';
-const API_KEY = env.GOOGLE_API_KEY;
+const MODEL_NAME = 'gemini-1.5-pro-001';
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
@@ -21,17 +20,21 @@ export default async function generateDescription(
     Product attributes: ${productAttributes}.`;
 
   try {
-    const client = new TextServiceClient({
-      authClient: new GoogleAuth().fromAPIKey(API_KEY),
+    const vertexAI = new VertexAI({
+      project: 'testing-ai-foundation-app',
+      location: 'us-central1',
+      googleAuthOptions: { credentials: getGoogleAuthCredentials() }
     });
 
-    const response = await client.generateText({
+    const model = vertexAI.getGenerativeModel({
       model: MODEL_NAME,
-      prompt: { text: prompt },
     });
 
-    if (response && response[0] && response[0].candidates) {
-      return response[0].candidates[0]?.output || 'No response from Google AI';
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+
+    if (response.candidates && response.candidates[0] && response.candidates[0].content && response.candidates[0].content.parts && response.candidates[0].content.parts[0]) {
+      return response.candidates[0].content.parts[0].text || 'No response from Google AI';
     }
   } catch (error) {
     console.error(error);
@@ -89,3 +92,9 @@ const prepareProductAttributes = (
         "name": ${attributes.product?.name || ''} `;
   }
 };
+
+const getGoogleAuthCredentials = (): JWTInput => {
+  const credentialsBuffer = Buffer.from(env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64, 'base64');
+
+  return JSON.parse(credentialsBuffer.toString('utf-8')) as JWTInput;
+}
