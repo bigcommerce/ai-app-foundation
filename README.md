@@ -31,7 +31,10 @@ To run the app locally, follow these instructions:
 6. Enter a JWT secret in `.env`.
    - JWT key should be at least 32 random characters (256 bits) for HS256
 7. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](<[https://console.firebase.google.com](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database)>)
-8. [Replace GOOGLE_API_KEY= in .env](https://cloud.google.com/docs/authentication/api-keys)
+8. Replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env
+   - [Create a service account](https://cloud.google.com/iam/docs/service-accounts-create)
+   - [Create a service account key](https://cloud.google.com/iam/docs/keys-create-delete)
+   - Download the result json file, base64 encode it and replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env with the result string
 9. Start your dev environment in a **separate** terminal from `ngrok`. If
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
    - `npm run dev`
