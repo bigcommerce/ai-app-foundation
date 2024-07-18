@@ -21,7 +21,7 @@ export default async function generateDescription(
 
   try {
     const vertexAI = new VertexAI({
-      project: 'testing-ai-foundation-app',
+      project: env.FIRE_PROJECT_ID,
       location: 'us-central1',
       googleAuthOptions: { credentials: getGoogleAuthCredentials() }
     });
