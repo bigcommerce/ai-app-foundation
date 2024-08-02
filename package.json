@@ -37,7 +37,7 @@
     "@segment/snippet": "^4.16.2",
     "@sentry/nextjs": "^7.77.0",
     "@t3-oss/env-nextjs": "^0.3.1",
-    "@tinymce/tinymce-react": "^4.3.0",
+    "@tinymce/tinymce-react": "^5.1.1",
     "@types/fs-extra": "^11.0.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/styled-components": "^5.1.26",
