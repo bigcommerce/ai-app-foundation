@@ -17,7 +17,34 @@ export async function middleware(request: NextRequest) {
         return new NextResponse('invalid csrf token', { status: 403 });
     }
 
-    return response;
+    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+    const cspHeader = `
+        script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+        frame-ancestors: 'https://store-*.mybigcommerce.com' 'https://store-*.my-integration.zone' 'https://store-*.my-staging.zone';
+    `;
+    const contentSecurityPolicyHeaderValue = cspHeader
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-nonce', nonce)
+   
+    requestHeaders.set(
+      'Content-Security-Policy',
+      contentSecurityPolicyHeaderValue
+    )
+   
+    const newResponse = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
+    newResponse.headers.set(
+      'Content-Security-Policy',
+      contentSecurityPolicyHeaderValue
+    )
+   
+    return newResponse
 }
 
 export const config = {

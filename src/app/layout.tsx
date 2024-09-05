@@ -31,7 +31,7 @@ export default function RootLayout({
   };
 
   const { storeHash } = useAppContext();
-  const allowedParents = () => [
+  const frameAncestors = [
     `https://store-${storeHash}.mybigcommerce.com`,
     `https://store-${storeHash}.my-staging.com`,
     `https://store-${storeHash}.my-integration.com`
@@ -42,7 +42,7 @@ export default function RootLayout({
       <head>
       <meta
         http-equiv="Content-Security-Policy"
-        frame-ancestors={allowedParents()} />
+        frame-ancestors={frameAncestors} />
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
