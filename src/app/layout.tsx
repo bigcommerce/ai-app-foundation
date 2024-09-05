@@ -6,6 +6,7 @@ import ThemeProvider from './theme-provider';
 import Script from 'next/script';
 import * as snippet from '@segment/snippet';
 import { env } from '~/env.mjs';
+import { useAppContext } from '~/context/AppContext';
 
 const sourceSans = Source_Sans_3({
   subsets: ['latin'],
@@ -29,9 +30,19 @@ export default function RootLayout({
     return snippet.min(opts);
   };
 
+  const { storeHash } = useAppContext();
+  const allowedParents = () => [
+    `https://store-${storeHash}.mybigcommerce.com`,
+    `https://store-${storeHash}.my-staging.com`,
+    `https://store-${storeHash}.my-integration.com`
+  ];
+
   return (
     <html lang="en">
       <head>
+      <meta
+        http-equiv="Content-Security-Policy"
+        frame-ancestors={allowedParents()} />
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
