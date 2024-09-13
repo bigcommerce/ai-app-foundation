@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from "@sentry/nextjs";
 import { Button, FlexItem, H2, Text } from '@bigcommerce/big-design';
 import { useEffect } from 'react';
 
@@ -7,11 +8,12 @@ export default function Error({
   error,
   reset,
 }: {
-  error: Error;
+  error: Error & { digest?: string };
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    // Log the error to Sentry
+    Sentry.captureException(error);
   }, [error]);
 
   return (
