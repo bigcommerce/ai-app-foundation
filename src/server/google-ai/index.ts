@@ -5,7 +5,7 @@ import { type aiSchema } from '~/app/api/generateDescription/schema';
 import { VertexAI } from '@google-cloud/vertexai';
 import { type JWTInput } from 'google-auth-library';
 
-const MODEL_NAME = 'gemini-1.5-pro-001';
+const MODEL_NAME = 'gemini-1.5-pro-002';
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
@@ -13,7 +13,7 @@ export default async function generateDescription(
   const input = prepareInput(attributes);
   const productAttributes = prepareProductAttributes(attributes);
 
-  const prompt = `Act as an e - commerce merchandising expert who writes product descriptions.
+  const prompt = `Act as an e-commerce merchandising expert who writes product descriptions.
     Task: Based on provided input parameters, write a product description styled in HTML.
     Response format: HTML.
     Input: ${input}.
