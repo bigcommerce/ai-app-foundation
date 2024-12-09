@@ -24,21 +24,22 @@ To run the app locally, follow these instructions:
      - Load Callback URL: `https://{ngrok_id}.ngrok.app/api/app/load`
      - Uninstall Callback URL: `https://{ngrok_id}.ngrok.app/api/app/uninstall`
    - Configure the following OAuth scopes as directed in [Setup:](https://developer.bigcommerce.com/app-extensions/guide#setup)
+     - App Extensions: Manage
+     - Products: Manage
 3. Copy `.env.example` to `.env`.
 4. [Replace `CLIENT_ID` and `CLIENT_SECRET` in `.env`](https://devtools.bigcommerce.com/my/apps)
    (from `View Client ID` in the dev portal).
-5. Update `AUTH_REDIRECT` in `.env` with the ngrok `install` callback URL.
-6. Enter a JWT secret in `.env`.
+5. Enter a JWT secret in `.env`.
    - JWT key should be at least 32 random characters (256 bits) for HS256
-7. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](<[https://console.firebase.google.com](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database)>)
-8. Replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env
+6. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database)
+7. Replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env
    - [Create a service account](https://cloud.google.com/iam/docs/service-accounts-create)
    - [Create a service account key](https://cloud.google.com/iam/docs/keys-create-delete)
    - Download the result json file, base64 encode it and replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env with the result string
-9. Start your dev environment in a **separate** terminal from `ngrok`. If
+8. Start your dev environment in a **separate** terminal from `ngrok`. If
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
    - `npm run dev`
-10. [Install the app and launch.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#install-the-app)
+9. [Install the app and launch.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#install-the-app)
 
 ## Deploy with Vercel
 
