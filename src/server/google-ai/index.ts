@@ -23,7 +23,7 @@ export default async function generateDescription(
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
       location: 'us-central1',
-      googleAuthOptions: { credentials: getGoogleAuthCredentials() }
+      googleAuthOptions: { credentials: getGoogleAuthCredentials() },
     });
 
     const model = vertexAI.getGenerativeModel({
@@ -33,8 +33,15 @@ export default async function generateDescription(
     const result = await model.generateContent(prompt);
     const response = result.response;
 
-    if (response.candidates && response.candidates[0] && response.candidates[0].content && response.candidates[0].content.parts && response.candidates[0].content.parts[0]) {
-      return response.candidates[0].content.parts[0].text || 'No response from Google AI';
+    if (
+      response.candidates &&
+      response.candidates[0] &&
+      response.candidates[0].content &&
+      response.candidates[0].content.parts &&
+      response.candidates[0].content.parts[0] &&
+      response.candidates[0].content.parts[0].text
+    ) {
+      return formatResponse(response.candidates[0].content.parts[0].text);
     }
   } catch (error) {
     console.error(error);
@@ -68,6 +75,17 @@ const prepareInput = (attributes: z.infer<typeof aiSchema>): string => {
   }
 };
 
+const formatResponse = (response: string): string => {
+  // Strips the markdown code block from the response
+  const match = /```html\n([\s\S]*)\n```/.exec(response);
+
+  if (match && match[1]) {
+    return match[1];
+  }
+
+  return response;
+};
+
 const prepareProductAttributes = (
   attributes: z.infer<typeof aiSchema>
 ): string => {
@@ -94,7 +112,10 @@ const prepareProductAttributes = (
 };
 
 const getGoogleAuthCredentials = (): JWTInput => {
-  const credentialsBuffer = Buffer.from(env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64, 'base64');
+  const credentialsBuffer = Buffer.from(
+    env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64,
+    'base64'
+  );
 
   return JSON.parse(credentialsBuffer.toString('utf-8')) as JWTInput;
-}
+};
