@@ -27,7 +27,7 @@
     ]
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "dependencies": {
     "@bigcommerce/big-design": "^0.36.2",

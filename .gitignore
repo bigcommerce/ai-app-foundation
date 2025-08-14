@@ -43,3 +43,5 @@ yarn-error.log*
 .sentryclirc
 
 /public/tinymce/
+
+.idea/
