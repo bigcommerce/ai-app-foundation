@@ -45,6 +45,12 @@ To run the app locally, follow these instructions:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbigcommerce%2Fai-app-foundation&env=CLIENT_ID,CLIENT_SECRET,APP_ORIGIN,AUTH_CALLBACK,JWT_KEY,FIRE_API_KEY,FIRE_DOMAIN,FIRE_PROJECT_ID,GOOGLE_API_KEY&envDescription=Doc%20for%20setting%20up%20ENV%20Variable&envLink=https%3A%2F%2Fdeveloper.bigcommerce.com%2Fapi-docs%2Fapps%2Ftutorials%2Fbuild-a-nextjs-sample-app%2Fstep-3-integrate%23set-up-firebase-database&project-name=ai-app-foundation&repository-name=ai-app-foundation)
 
+## Testing on preview environment
+1. Create a draft app in [dev portal](https://build.bigcommerce.com/apps) and set callback URLs to point to https://ai-app-dev.vercel.app
+2. Update `CLIENT_ID` and `CLIENT_SECRET` **preview** env variables in vercel from the draft app
+3. Once the PR is created and/or any new commit is pushed, vercel will create a new deployment and will generate a dynamic link to the new version. Though, we need our changes to be reflected on the domain we specified in the draft app (https://ai-app-dev.vercel.app). In order to do that navigate to Vercel->Project settings->Domains and update this domain to observe changes from your PR branch.
+4. Once completed you should be able to install the draft app from CP->Apps->Develop page and test your changes
+
 ## Contributing
 
 Please feel free to ask questions or raise issues in GitHub Issues/Discussions.
