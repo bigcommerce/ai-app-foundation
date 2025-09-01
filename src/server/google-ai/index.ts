@@ -5,7 +5,7 @@ import { type aiSchema } from '~/app/api/generateDescription/schema';
 import { VertexAI } from '@google-cloud/vertexai';
 import { type JWTInput } from 'google-auth-library';
 
-const MODEL_NAME = 'gemini-1.5-pro-002';
+const MODEL_NAME = 'gemini-2.0-flash';
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
