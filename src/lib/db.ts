@@ -5,6 +5,7 @@ import {
   getDoc,
   getFirestore,
   setDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import { env } from '~/env.mjs';
 
@@ -32,6 +33,11 @@ const firebaseConfig = {
   authDomain: FIRE_DOMAIN,
   projectId: FIRE_PROJECT_ID,
 };
+
+export interface ClientTokenData {
+  token: string;
+  expiresAt: Timestamp;
+}
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -104,4 +110,44 @@ export async function getStoreToken(storeHash: string): Promise<string | null> {
 export async function deleteStore(storeHash: string) {
   const ref = doc(db, 'store', storeHash);
   await deleteDoc(ref);
+}
+
+export async function saveClientToken(clientToken: string): Promise<string> {
+  if (!clientToken) {
+    throw new Error('A clientToken is required to create an exchange token.');
+  }
+
+  const exchangeToken = crypto.randomUUID();
+  const expiresAt = Timestamp.fromMillis(Date.now() + 120 * 1000); // 2 minutes from now
+
+  const ref = doc(db, 'exchangeTokens', exchangeToken);
+  const data: Omit<ClientTokenData, 'expiresAt'> & { expiresAt: Timestamp } = {
+    token: clientToken,
+    expiresAt
+  };
+
+  await setDoc(ref, data);
+
+  return exchangeToken;
+}
+
+export async function getClientTokenMaybeAndDelete(exchangeToken: string): Promise<string | false> {
+  const ref = doc(db, 'exchangeTokens', exchangeToken);
+  const docSnap = await getDoc(ref);
+
+  await deleteDoc(ref);
+
+  if (!docSnap.exists()) {
+    return false;
+  }
+
+  const data = docSnap.data() as ClientTokenData;
+  const now = Timestamp.now();
+
+  if (now > data.expiresAt) {
+    console.warn('Exchange token expired:', exchangeToken);
+    return false;
+  }
+
+  return data.token;
 }

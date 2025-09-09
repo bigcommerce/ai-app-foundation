@@ -6,12 +6,14 @@ import { headers } from 'next/headers';
 
 interface PageProps {
   params: { productId: string };
-  searchParams: { product_name: string; authToken: string };
+  searchParams: { product_name: string; exchangeToken: string };
 }
 
 export default async function Page(props: PageProps) {
   const { productId } = props.params;
-  const { product_name: name, authToken } = props.searchParams;
+  const { product_name: name, exchangeToken } = props.searchParams;
+
+  const authToken = await db.getClientTokenMaybeAndDelete(exchangeToken) || 'missing';
 
   const authorized = authorize(authToken);
 

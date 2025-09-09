@@ -43,13 +43,14 @@ export default function Form({
 
   const handleGenerateDescription = async () => {
     setIsLoading(true);
-    const res = await fetch(`/api/generateDescription?authToken=${authToken}`, {
+    const res = await fetch(`/api/generateDescription`, {
       method: 'POST',
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
       ),
       headers: {
         'X-CSRF-Token': csrfToken,
+        'X-Auth-Token': authToken,
       },
     });
 
