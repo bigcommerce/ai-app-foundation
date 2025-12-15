@@ -35,7 +35,7 @@ export interface ClientTokenData {
 let app: FirebaseApp;
 let db: Firestore;
 
-function getDb() {
+export function getDb() {
   if (!db) {
     const { FIRE_API_KEY, FIRE_DOMAIN, FIRE_PROJECT_ID } = env;
 
