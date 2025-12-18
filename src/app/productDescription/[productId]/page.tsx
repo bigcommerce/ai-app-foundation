@@ -6,12 +6,16 @@ import { headers } from 'next/headers';
 
 interface PageProps {
   params: { productId: string };
-  searchParams: { product_name: string; exchangeToken: string };
+  searchParams: { product_name?: string; exchangeToken?: string };
 }
 
 export default async function Page(props: PageProps) {
   const { productId } = props.params;
   const { product_name: name, exchangeToken } = props.searchParams;
+
+  if (!exchangeToken) {
+    throw new Error('Missing exchange token. Try to re-open the app.');
+  }
 
   const authToken = await db.getClientTokenMaybeAndDelete(exchangeToken) || 'missing';
 
