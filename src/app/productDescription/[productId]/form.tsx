@@ -12,6 +12,9 @@ import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
 
+const sanitizeProductNameForGeneration = (name: string) =>
+  name.replaceAll('#', '').replace(/\s{2,}/g, ' ').trim();
+
 export default function Form({
   product,
   csrfToken,
@@ -43,10 +46,19 @@ export default function Form({
 
   const handleGenerateDescription = async () => {
     setIsLoading(true);
+
+    // BigCommerce product names may contain '#' (e.g. for internal naming). For the
+    // /productDescription/${id} generator flow we strip those symbols only for the AI
+    // generation request, then keep the original name unchanged everywhere else.
+    const productForGeneration = {
+      ...product,
+      name: sanitizeProductNameForGeneration(product.name),
+    } satisfies Product | NewProduct;
+
     const res = await fetch(`/api/generateDescription`, {
       method: 'POST',
       body: JSON.stringify(
-        prepareAiPromptAttributes(currentAttributes, product)
+        prepareAiPromptAttributes(currentAttributes, productForGeneration)
       ),
       headers: {
         'X-CSRF-Token': csrfToken,
