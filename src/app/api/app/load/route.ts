@@ -30,12 +30,6 @@ const jwtSchema = z.object({
 });
 
 export async function GET(request: NextRequest) {
-  function appendExchangeToken(url: string, token: string): string {
-    const delimiter = new URL(url, env.APP_ORIGIN).search ? '&' : '?';
-
-    return `${url}${delimiter}exchangeToken=${token}`;
-  }
-
   const parsedParams = queryParamSchema.safeParse(
     Object.fromEntries(request.nextUrl.searchParams)
   );
@@ -65,7 +59,14 @@ export async function GET(request: NextRequest) {
 
   const exchangeToken = await db.saveClientToken(clientToken);
 
-  return NextResponse.redirect(new URL(appendExchangeToken(path, exchangeToken), env.APP_ORIGIN), {
+  // IMPORTANT: product names can contain '#' and BigCommerce may include them in the `url`.
+  // If we append query params by string concatenation, we can accidentally place `exchangeToken`
+  // after the '#' fragment, which browsers do not send to the server. Always mutate `searchParams`
+  // on a URL object so the token is guaranteed to be in the query string.
+  const redirectUrl = new URL(path, env.APP_ORIGIN);
+  redirectUrl.searchParams.set('exchangeToken', exchangeToken);
+
+  return NextResponse.redirect(redirectUrl, {
     status: 302,
     statusText: 'Found',
   });
