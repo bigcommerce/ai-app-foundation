@@ -30,26 +30,45 @@ const jwtSchema = z.object({
 });
 
 /**
- * BigCommerce can provide a URL where `product_name` contains a raw `#` (e.g. "Widget #2").
- * A raw `#` is interpreted as a fragment delimiter in URLs, truncating the query param value.
- * We pre-encode `#` inside `product_name` so Next can receive the full value.
+ * BigCommerce can provide a URL where `product_name` contains raw reserved characters
+ * (e.g. "Widget #2", "AT&T", "plus+sign"). These can be interpreted as URL delimiters
+ * (`#` fragment, `&` query separator, `+` becomes space in x-www-form-urlencoded parsing),
+ * truncating or mutating the query param value.
+ *
+ * We sanitize the value in-place so Next can receive the full name.
  */
-function encodeUnsafeHashInQueryParam(path: string, paramName: string): string {
+function sanitizeQueryParamValue(value: string): string {
+  // Preserve valid percent-escapes, but encode stray '%' to avoid confusing URL parsing.
+  const withSafePercents = value.replace(/%(?![0-9A-Fa-f]{2})/g, '%25');
+
+  // Encode characters that commonly break query parsing or semantics.
+  return withSafePercents
+    .replaceAll('+', '%2B') // URLSearchParams treats '+' as space
+    .replaceAll('#', '%23') // fragment delimiter
+    .replaceAll('&', '%26') // query separator
+    .replaceAll(' ', '%20'); // avoid raw spaces
+}
+
+function sanitizeQueryParamValueInPath(path: string, paramName: string): string {
   const key = `${paramName}=`;
   const keyIdx = path.indexOf(key);
   if (keyIdx === -1) return path;
 
   const valueStart = keyIdx + key.length;
-  const valueEnd = path.indexOf('&', valueStart);
-  const endIdx = valueEnd === -1 ? path.length : valueEnd;
+  // Find the next *likely* query param delimiter: `&<key>=`.
+  // This lets us keep unencoded `&` inside values like "AT&T".
+  const remainder = path.slice(valueStart);
+  const delimiterMatch = remainder.match(/&[A-Za-z0-9_.~-]+=/);
+  const endIdx =
+    delimiterMatch && typeof delimiterMatch.index === 'number'
+      ? valueStart + delimiterMatch.index
+      : path.length;
 
   const before = path.slice(0, valueStart);
   const value = path.slice(valueStart, endIdx);
   const after = path.slice(endIdx);
 
-  // Only encode raw '#'. Leave existing '%23' alone.
-  const safeValue = value.includes('#') ? value.replaceAll('#', '%23') : value;
-  return `${before}${safeValue}${after}`;
+  return `${before}${sanitizeQueryParamValue(value)}${after}`;
 }
 
 export async function GET(request: NextRequest) {
@@ -81,8 +100,8 @@ export async function GET(request: NextRequest) {
   });
 
   const exchangeToken = await db.saveClientToken(clientToken);
-  const safePath = encodeUnsafeHashInQueryParam(
-    encodeUnsafeHashInQueryParam(path, 'product_name'),
+  const safePath = sanitizeQueryParamValueInPath(
+    sanitizeQueryParamValueInPath(path, 'product_name'),
     'productName'
   );
   const redirectUrl = new URL(safePath, env.APP_ORIGIN);
