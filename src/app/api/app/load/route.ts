@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { NextResponse, type NextRequest } from 'next/server';
 import { env } from '~/env.mjs';
 import * as db from '~/lib/db';
+import { sanitizeQueryParamValueInPath } from '~/utils/sanitizeQueryParam';
 
 const queryParamSchema = z.object({
   signed_payload_jwt: z.string(),
@@ -30,12 +31,6 @@ const jwtSchema = z.object({
 });
 
 export async function GET(request: NextRequest) {
-  function appendExchangeToken(url: string, token: string): string {
-    const delimiter = new URL(url, env.APP_ORIGIN).search ? '&' : '?';
-
-    return `${url}${delimiter}exchangeToken=${token}`;
-  }
-
   const parsedParams = queryParamSchema.safeParse(
     Object.fromEntries(request.nextUrl.searchParams)
   );
@@ -64,8 +59,14 @@ export async function GET(request: NextRequest) {
   });
 
   const exchangeToken = await db.saveClientToken(clientToken);
+  const safePath = sanitizeQueryParamValueInPath(
+    sanitizeQueryParamValueInPath(path, 'product_name'),
+    'productName'
+  );
+  const redirectUrl = new URL(safePath, env.APP_ORIGIN);
+  redirectUrl.searchParams.set('exchangeToken', exchangeToken);
 
-  return NextResponse.redirect(new URL(appendExchangeToken(path, exchangeToken), env.APP_ORIGIN), {
+  return NextResponse.redirect(redirectUrl, {
     status: 302,
     statusText: 'Found',
   });
