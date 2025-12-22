@@ -29,6 +29,29 @@ const jwtSchema = z.object({
   channel_id: z.number().nullable(),
 });
 
+/**
+ * BigCommerce can provide a URL where `product_name` contains a raw `#` (e.g. "Widget #2").
+ * A raw `#` is interpreted as a fragment delimiter in URLs, truncating the query param value.
+ * We pre-encode `#` inside `product_name` so Next can receive the full value.
+ */
+function encodeUnsafeHashInQueryParam(path: string, paramName: string): string {
+  const key = `${paramName}=`;
+  const keyIdx = path.indexOf(key);
+  if (keyIdx === -1) return path;
+
+  const valueStart = keyIdx + key.length;
+  const valueEnd = path.indexOf('&', valueStart);
+  const endIdx = valueEnd === -1 ? path.length : valueEnd;
+
+  const before = path.slice(0, valueStart);
+  const value = path.slice(valueStart, endIdx);
+  const after = path.slice(endIdx);
+
+  // Only encode raw '#'. Leave existing '%23' alone.
+  const safeValue = value.includes('#') ? value.replaceAll('#', '%23') : value;
+  return `${before}${safeValue}${after}`;
+}
+
 export async function GET(request: NextRequest) {
   const parsedParams = queryParamSchema.safeParse(
     Object.fromEntries(request.nextUrl.searchParams)
@@ -58,7 +81,11 @@ export async function GET(request: NextRequest) {
   });
 
   const exchangeToken = await db.saveClientToken(clientToken);
-  const redirectUrl = new URL(path, env.APP_ORIGIN);
+  const safePath = encodeUnsafeHashInQueryParam(
+    encodeUnsafeHashInQueryParam(path, 'product_name'),
+    'productName'
+  );
+  const redirectUrl = new URL(safePath, env.APP_ORIGIN);
   redirectUrl.searchParams.set('exchangeToken', exchangeToken);
 
   return NextResponse.redirect(redirectUrl, {
