@@ -1,6 +1,9 @@
 import type { Config } from 'jest'
 import nextJest from 'next/jest.js'
 
+// Allow unit tests to run without requiring full runtime env vars.
+process.env.SKIP_ENV_VALIDATION ??= '1';
+
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
