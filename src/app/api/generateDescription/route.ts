@@ -3,6 +3,7 @@ import generateDescription from '~/server/google-ai';
 import { aiSchema } from './schema';
 import { authorize } from '~/lib/authorize';
 import { enforceRateLimit } from '~/lib/rate-limit';
+import { containsPromptInjection } from '~/lib/prompt-safety';
 
 const RATE_LIMIT_KEY = 'generateDescription';
 const RATE_LIMIT_MAX_REQUESTS = 60;
@@ -41,6 +42,29 @@ export async function POST(req: NextRequest) {
 
   if (!parsedParams.success) {
     return new NextResponse('Invalid query parameters', { status: 400 });
+  }
+
+  const instructionsMaybe =
+    'instructions' in parsedParams.data
+      ? parsedParams.data.instructions
+      : undefined;
+
+  const customPromptMaybe =
+    'customPrompt' in parsedParams.data
+      ? parsedParams.data.customPrompt
+      : undefined;
+
+  const injectionPatternDetected = containsPromptInjection([instructionsMaybe, customPromptMaybe]);
+
+  if (injectionPatternDetected) {
+    console.warn(
+      'Injection pattern detected! Original request data:',
+      parsedParams.data
+    );
+    return new NextResponse(
+      'Your request can’t be processed.',
+      { status: 400 }
+    );
   }
 
   const description = await generateDescription(parsedParams.data);
