@@ -2,7 +2,8 @@ import type { Config } from 'jest'
 import nextJest from 'next/jest.js'
 
 // Allow unit tests to run without requiring full runtime env vars.
-process.env.NODE_ENV ??= 'test';
+// Jest typically sets NODE_ENV=test already; avoid assigning it here because
+// some tooling/types treat NODE_ENV as readonly.
 process.env.SKIP_ENV_VALIDATION ??= '1';
 
 const createJestConfig = nextJest({
