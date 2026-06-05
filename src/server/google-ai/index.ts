@@ -6,7 +6,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { type JWTInput } from 'google-auth-library';
 import { sanitizeForPrompt } from '~/lib/prompt-safety';
 
-const MODEL_NAME = 'gemini-2.0-flash';
+const MODEL_NAME = 'gemini-2.5-flash-lite';
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
