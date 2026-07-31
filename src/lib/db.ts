@@ -6,8 +6,8 @@ import {
   getFirestore,
   setDoc,
   Timestamp,
-  Firestore
-} from 'firebase/firestore';
+  type Firestore,
+} from 'firebase/firestore/lite';
 import { env } from '~/env.mjs';
 
 export interface UserData {

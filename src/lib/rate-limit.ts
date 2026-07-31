@@ -1,11 +1,11 @@
 import {
   collection,
   doc,
-  getDocsFromServer,
+  getDocs,
   increment,
   setDoc,
   Timestamp,
-} from 'firebase/firestore';
+} from 'firebase/firestore/lite';
 import { getDb } from './db';
 
 interface RateLimitOptions {
@@ -51,7 +51,7 @@ export async function enforceRateLimit(
     { merge: true },
   );
 
-  const shardsSnapshot = await getDocsFromServer(windowRef);
+  const shardsSnapshot = await getDocs(windowRef);
   const count = shardsSnapshot.docs.reduce((sum, snapshot) => {
     const data = snapshot.data() as RateLimitDocument | undefined;
 

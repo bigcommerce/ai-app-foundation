@@ -8,6 +8,7 @@ import { CustomPromptForm } from '~/components/PromptForm/CustomPromptForm';
 import { GuidedPromptForm } from '~/components/PromptForm/GuidedPromptForm';
 import { StyledButton } from '~/components/PromptForm/styled';
 import { prepareAiPromptAttributes } from '~/utils/utils';
+import { resolveClientCsrfToken } from '~/utils/csrf';
 import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
@@ -43,15 +44,24 @@ export default function Form({
 
   const handleGenerateDescription = async () => {
     setIsLoading(true);
+
+    const resolvedCsrfToken = resolveClientCsrfToken(csrfToken);
+    const requestHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'X-Auth-Token': authToken,
+    };
+
+    if (resolvedCsrfToken) {
+      requestHeaders['X-CSRF-Token'] = resolvedCsrfToken;
+    }
+
     const res = await fetch(`/api/generateDescription`, {
       method: 'POST',
+      credentials: 'same-origin',
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
       ),
-      headers: {
-        'X-CSRF-Token': csrfToken,
-        'X-Auth-Token': authToken,
-      },
+      headers: requestHeaders,
     });
 
     if (!res.ok) {

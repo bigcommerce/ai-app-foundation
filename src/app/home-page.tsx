@@ -25,7 +25,7 @@ const HomePage = () => (
             position: 'relative',
           }}
         />
-        BigAI Copywriter
+        BigAI Copywriter - TEST
       </H1>
       <Panel header="Create product descriptions">
         <Text>

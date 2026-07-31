@@ -3,12 +3,13 @@
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { theme as defaultTheme } from '@bigcommerce/big-design-theme';
 import { GlobalStyles } from '@bigcommerce/big-design';
+import { type ReactNode } from 'react';
 
-export default function ThemeProvider({ children }) {
+export default function ThemeProvider({ children }: { children: ReactNode }) {
   return (
-    <>
+    <StyledThemeProvider theme={defaultTheme}>
       <GlobalStyles />
-      <StyledThemeProvider theme={defaultTheme}>{children}</StyledThemeProvider>
-    </>
+      {children}
+    </StyledThemeProvider>
   );
 }

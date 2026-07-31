@@ -8,6 +8,7 @@ const { withSentryConfig } = require("@sentry/nextjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  serverExternalPackages: ['firebase', '@firebase/firestore', '@firebase/app'],
 };
 
 // Make sure adding Sentry options is the last code to run before exporting

@@ -2,18 +2,20 @@ import { fetchProductWithAttributes } from '~/server/bigcommerce-api';
 import { authorize } from '~/lib/authorize';
 import * as db from '~/lib/db';
 import Generator from './generator';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { isValidSignedCsrfToken } from '~/utils/csrf';
 
 interface PageProps {
-  params: { productId: string };
-  searchParams: { product_name: string; exchangeToken: string };
+  params: Promise<{ productId: string }>;
+  searchParams: Promise<{ product_name?: string; exchangeToken?: string }>;
 }
 
 export default async function Page(props: PageProps) {
-  const { productId } = props.params;
-  const { product_name: name, exchangeToken } = props.searchParams;
+  const { productId } = await props.params;
+  const { product_name: name, exchangeToken } = await props.searchParams;
 
-  const authToken = await db.getClientTokenMaybeAndDelete(exchangeToken) || 'missing';
+  const authToken =
+    (await db.getClientTokenMaybeAndDelete(exchangeToken ?? '')) || 'missing';
 
   const authorized = authorize(authToken);
 
@@ -35,11 +37,19 @@ export default async function Page(props: PageProps) {
       ? { id, name: name || '' }
       : await fetchProductWithAttributes(id, accessToken, authorized.storeHash);
 
-  const csrfToken = headers().get('X-CSRF-Token') || 'missing';
+  const requestHeaders = await headers();
+  const cookieStore = await cookies();
+  const headerToken = requestHeaders.get('X-CSRF-Token');
+  const cookieToken = cookieStore.get('csrf-token')?.value;
+  const csrfToken = isValidSignedCsrfToken(headerToken)
+    ? headerToken
+    : isValidSignedCsrfToken(cookieToken)
+      ? cookieToken
+      : '';
 
   return (
     <Generator
-      locale={headers().get('Accept-Language')?.split(',')[0] || ''}
+      locale={requestHeaders.get('Accept-Language')?.split(',')[0] || ''}
       storeHash={authorized.storeHash}
       product={product}
       context="product_edit"
