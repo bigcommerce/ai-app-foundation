@@ -5,13 +5,13 @@ import Generator from './generator';
 import { headers } from 'next/headers';
 
 interface PageProps {
-  params: { productId: string };
-  searchParams: { product_name: string; exchangeToken: string };
+  params: Promise<{ productId: string }>;
+  searchParams: Promise<{ product_name: string; exchangeToken: string }>;
 }
 
 export default async function Page(props: PageProps) {
-  const { productId } = props.params;
-  const { product_name: name, exchangeToken } = props.searchParams;
+  const { productId } = await props.params;
+  const { product_name: name, exchangeToken } = await props.searchParams;
 
   const authToken = await db.getClientTokenMaybeAndDelete(exchangeToken) || 'missing';
 
@@ -35,15 +35,15 @@ export default async function Page(props: PageProps) {
       ? { id, name: name || '' }
       : await fetchProductWithAttributes(id, accessToken, authorized.storeHash);
 
-  const csrfToken = headers().get('X-CSRF-Token') || 'missing';
+  const locale =
+    (await headers()).get('Accept-Language')?.split(',')[0] || '';
 
   return (
     <Generator
-      locale={headers().get('Accept-Language')?.split(',')[0] || ''}
+      locale={locale}
       storeHash={authorized.storeHash}
       product={product}
       context="product_edit"
-      csrfToken={csrfToken}
       authToken={authToken}
     />
   );

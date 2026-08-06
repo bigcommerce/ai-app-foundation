@@ -16,7 +16,8 @@ export const env = createEnv({
     CLIENT_ID: z.string().min(3),
     CLIENT_SECRET: z.string().min(3),
     JWT_KEY: z.string().min(3),
-    GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: z.string().min(3)
+    GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: z.string().min(3),
+    CSRF_SECRET: z.string().min(32),
   },
 
   /**
@@ -44,6 +45,7 @@ export const env = createEnv({
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     JWT_KEY: process.env.JWT_KEY,
     GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64,
+    CSRF_SECRET: process.env.CSRF_SECRET,
     NEXT_PUBLIC_SEGMENT_WRITE_KEY: process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },

@@ -17,7 +17,9 @@ export async function POST(req: NextRequest) {
   }
 
   const clientIdentifier =
-    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.ip || 'unknown';
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-real-ip')?.trim() ||
+    'unknown';
   const rateLimit = await enforceRateLimit(
     `${RATE_LIMIT_KEY}:${clientIdentifier}`,
     { windowMs: RATE_LIMIT_WINDOW_MS, maxRequests: RATE_LIMIT_MAX_REQUESTS }

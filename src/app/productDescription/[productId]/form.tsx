@@ -11,16 +11,16 @@ import { prepareAiPromptAttributes } from '~/utils/utils';
 import Loader from '~/components/Loader';
 import { useAppContext } from '~/context/AppContext';
 import { useTracking } from '~/hooks/useTracking';
+import { useCsrf } from '@csrf-armor/nextjs/client';
 
 export default function Form({
   product,
-  csrfToken,
   authToken
 }: {
   product: Product | NewProduct;
-  csrfToken: string;
   authToken: string;
 }) {
+  const { csrfFetch } = useCsrf();
   const { descriptions, addDescriptionToHistory, updateDescriptionInHistory } =
     useDescriptionsHistory(product.id);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,13 +43,12 @@ export default function Form({
 
   const handleGenerateDescription = async () => {
     setIsLoading(true);
-    const res = await fetch(`/api/generateDescription`, {
+    const res = await csrfFetch(`/api/generateDescription`, {
       method: 'POST',
       body: JSON.stringify(
         prepareAiPromptAttributes(currentAttributes, product)
       ),
       headers: {
-        'X-CSRF-Token': csrfToken,
         'X-Auth-Token': authToken,
       },
     });
