@@ -6,6 +6,7 @@ import ThemeProvider from './theme-provider';
 import Script from 'next/script';
 import * as snippet from '@segment/snippet';
 import { env } from '~/env.mjs';
+import { CsrfProvider } from '@csrf-armor/nextjs/client';
 
 const sourceSans = Source_Sans_3({
   subsets: ['latin'],
@@ -35,11 +36,13 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <ThemeProvider>
-            <main className={sourceSans.className}>{children}</main>
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+        <CsrfProvider>
+          <StyledComponentsRegistry>
+            <ThemeProvider>
+              <main className={sourceSans.className}>{children}</main>
+            </ThemeProvider>
+          </StyledComponentsRegistry>
+        </CsrfProvider>
         <Script
           dangerouslySetInnerHTML={{ __html: loadSegment() }}
           id="segment-script"

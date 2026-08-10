@@ -1,11 +1,19 @@
-import csrf from 'edge-csrf';
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createCsrfMiddleware } from '@csrf-armor/nextjs';
+import { env } from '~/env.mjs';
 
-const csrfProtect = csrf({
-    cookie: {
-        sameSite: 'none',
-    }
+const csrfProtect = createCsrfMiddleware({
+  strategy: 'signed-double-submit',
+  secret: env.CSRF_SECRET,
+  cookie: {
+    // SameSite=None is required for the control panel iframe, and browsers only
+    // honor it alongside Secure. Keep both hardcoded: flipping Secure per
+    // environment silently drops the cookies in every browser.
+    secure: true,
+    sameSite: 'none',
+  },
 });
 
 export async function middleware(request: NextRequest) {
@@ -31,10 +39,10 @@ export async function middleware(request: NextRequest) {
         },
     });
 
-    const csrfError = await csrfProtect(request, response);
+    const result = await csrfProtect(request, response);
 
-    if (csrfError) {
-        return new NextResponse('invalid csrf token', { status: 403 });
+    if (!result.success) {
+      return new NextResponse('invalid csrf token', { status: 403 });
     }
 
     response.headers.set(

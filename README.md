@@ -31,6 +31,8 @@ To run the app locally, follow these instructions:
    (from `View Client ID` in the dev portal).
 5. Enter a JWT secret in `.env`.
    - JWT key should be at least 32 random characters (256 bits) for HS256
+   - Enter `CSRF_SECRET` as well, also at least 32 characters. Generate one with
+     `openssl rand -base64 32`. The build fails fast if it is missing or too short.
 6. [Replace FIRE_API_KEY, FIRE_DOMAIN and FIRE_PROJECT_ID in .env](https://developer.bigcommerce.com/api-docs/apps/tutorials/build-a-nextjs-sample-app/step-3-integrate#set-up-firebase-database)
 7. Replace GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 in .env
    - [Create a service account](https://cloud.google.com/iam/docs/service-accounts-create)
@@ -40,6 +42,14 @@ To run the app locally, follow these instructions:
    `ngrok` restarts, update callbacks in steps 2 and 5 with the new ngrok_id.
    - `npm run dev`
 9. [Install the app and launch.](https://developer.bigcommerce.com/docs/3ef776e175eda-big-commerce-apps-quick-start#install-the-app)
+
+> **Local development requires HTTPS.** CSRF cookies are set with `Secure` and
+> `SameSite=None` so they survive the BigCommerce control panel iframe, and
+> Safari drops `Secure` cookies over plain `http://localhost` because it does not
+> treat localhost as a secure context. Chrome and Firefox do allow it, but
+> BigCommerce cannot reach `localhost` for its auth and load callbacks either, so
+> use `ngrok` as described above. To run the app directly without a tunnel, serve
+> the dev server over HTTPS instead: `npm run dev -- --experimental-https`.
 
 ## Deploy with Vercel
 
