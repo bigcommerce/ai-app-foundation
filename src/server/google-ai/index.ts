@@ -6,7 +6,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { sanitizeForPrompt } from '~/lib/prompt-safety';
 import { getGoogleAuthCredentials } from '~/lib/google-auth';
 
-export const MODEL_NAME = 'gemini-2.5-flash-lite';
+export const MODEL_NAME = env.MODEL_NAME;
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
