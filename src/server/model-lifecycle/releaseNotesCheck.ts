@@ -5,7 +5,6 @@ import { env } from '~/env.mjs';
 import { getGoogleAuthCredentials } from '~/lib/google-auth';
 import { getModelLifecycleWatermark, setModelLifecycleWatermark } from '~/lib/db';
 import { MODEL_NAME } from '~/server/google-ai';
-import { CANDIDATE_MODEL_NAME } from './launchStageCheck';
 
 interface ReleaseNoteRow {
   product_name: string;
@@ -35,21 +34,16 @@ export async function checkReleaseNotes(): Promise<void> {
       FROM \`bigquery-public-data.google_cloud_release_notes.release_notes\`
       WHERE published_at > @watermark
         AND LOWER(product_name) LIKE '%vertex%'
-        AND (
-          LOWER(description) LIKE CONCAT('%', LOWER(@currentModel), '%')
-          OR LOWER(description) LIKE CONCAT('%', LOWER(@candidateModel), '%')
-        )
+        AND LOWER(description) LIKE CONCAT('%', LOWER(@currentModel), '%')
       ORDER BY published_at ASC
     `,
     params: {
       watermark: watermarkDate,
       currentModel: MODEL_NAME,
-      candidateModel: CANDIDATE_MODEL_NAME,
     },
     types: {
       watermark: 'DATE',
       currentModel: 'STRING',
-      candidateModel: 'STRING',
     },
   })) as unknown as [ReleaseNoteRow[], unknown];
 

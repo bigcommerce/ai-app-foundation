@@ -4,8 +4,6 @@ import { env } from '~/env.mjs';
 import { getGoogleAuthCredentials } from '~/lib/google-auth';
 import { MODEL_NAME } from '~/server/google-ai';
 
-export const CANDIDATE_MODEL_NAME = 'gemini-3.1-flash-lite';
-
 interface PublisherModel {
   launchStage?: string;
 }
@@ -59,18 +57,6 @@ export async function checkLaunchStage(): Promise<void> {
       {
         level: 'warning',
         tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
-      }
-    );
-  }
-
-  const candidate = await fetchPublisherModel(CANDIDATE_MODEL_NAME);
-
-  if (candidate.status === 200 && candidate.body?.launchStage === 'GA') {
-    Sentry.captureMessage(
-      `Candidate model "${CANDIDATE_MODEL_NAME}" reached GA. Time to re-evaluate model selection.`,
-      {
-        level: 'info',
-        tags: { component: 'model-lifecycle', check: 'launch-stage', model: CANDIDATE_MODEL_NAME },
       }
     );
   }
