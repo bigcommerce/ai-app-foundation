@@ -140,6 +140,18 @@ export async function saveClientToken(clientToken: string): Promise<string> {
   return exchangeToken;
 }
 
+export async function getModelLifecycleWatermark(): Promise<Timestamp | null> {
+  const docSnap = await getDoc(doc(getDb(), 'systemState', 'googleAiModelLifecycle'));
+
+  return (docSnap.data()?.lastCheckedPublishedAt as Timestamp | undefined) ?? null;
+}
+
+export async function setModelLifecycleWatermark(publishedAt: Timestamp): Promise<void> {
+  const ref = doc(getDb(), 'systemState', 'googleAiModelLifecycle');
+
+  await setDoc(ref, { lastCheckedPublishedAt: publishedAt });
+}
+
 export async function getClientTokenMaybeAndDelete(exchangeToken: string): Promise<string | false> {
   const ref = doc(getDb(), 'exchangeTokens', exchangeToken);
   const docSnap = await getDoc(ref);
