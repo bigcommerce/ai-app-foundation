@@ -12,6 +12,15 @@ interface ReleaseNoteRow {
   published_at: { value: string };
 }
 
+// Google's release notes write the model name in prose (e.g. "Gemini 2.5 Flash-Lite"),
+// not the API slug (e.g. "gemini-2.5-flash-lite"), so hyphens must also match spaces.
+function toModelNamePattern(modelName: string): string {
+  return modelName
+    .split('-')
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('[- ]');
+}
+
 export async function checkReleaseNotes(): Promise<void> {
   const watermark = await getModelLifecycleWatermark();
 
@@ -34,16 +43,16 @@ export async function checkReleaseNotes(): Promise<void> {
       FROM \`bigquery-public-data.google_cloud_release_notes.release_notes\`
       WHERE published_at > @watermark
         AND LOWER(product_name) LIKE '%vertex%'
-        AND LOWER(description) LIKE CONCAT('%', LOWER(@currentModel), '%')
+        AND REGEXP_CONTAINS(LOWER(description), @modelPattern)
       ORDER BY published_at ASC
     `,
     params: {
       watermark: watermarkDate,
-      currentModel: MODEL_NAME,
+      modelPattern: toModelNamePattern(MODEL_NAME),
     },
     types: {
       watermark: 'DATE',
-      currentModel: 'STRING',
+      modelPattern: 'STRING',
     },
   })) as unknown as [ReleaseNoteRow[], unknown];
 
