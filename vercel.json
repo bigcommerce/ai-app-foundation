@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/model-lifecycle-check",
-      "schedule": "0 8 1 * *"
+      "schedule": "0 8 * * 1"
     }
   ]
 }
