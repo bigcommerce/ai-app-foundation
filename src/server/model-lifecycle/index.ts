@@ -7,10 +7,7 @@ export async function runModelLifecycleChecks(): Promise<void> {
 
   for (const result of results) {
     if (result.status === 'rejected') {
-      console.error('[model-lifecycle] check rejected:', result.reason);
       Sentry.captureException(result.reason);
     }
   }
-
-  console.log('[model-lifecycle] runModelLifecycleChecks finished');
 }
