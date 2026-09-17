@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import * as Sentry from '@sentry/nextjs';
 import { env } from '~/env.mjs';
+import { sendSentryEvent } from '~/lib/sentry-raw';
 import { runModelLifecycleChecks } from '~/server/model-lifecycle';
 
 export const dynamic = 'force-dynamic';
@@ -15,12 +15,16 @@ export async function GET(req: NextRequest) {
   try {
     await runModelLifecycleChecks();
   } catch (err) {
-    Sentry.captureException(err);
-    await Sentry.flush(2000);
+    const reason = err instanceof Error ? (err.stack ?? err.message) : String(err);
+
+    await sendSentryEvent({
+      message: `Model lifecycle cron crashed: ${reason}`,
+      level: 'error',
+      tags: { component: 'model-lifecycle' },
+    });
+
     return new NextResponse('Internal Error', { status: 500 });
   }
-
-  await Sentry.flush(2000);
 
   return NextResponse.json({ ok: true });
 }

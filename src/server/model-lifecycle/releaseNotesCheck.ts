@@ -1,9 +1,9 @@
 import { BigQuery } from '@google-cloud/bigquery';
-import * as Sentry from '@sentry/nextjs';
 import { Timestamp } from 'firebase/firestore';
 import { env } from '~/env.mjs';
 import { getGoogleAuthCredentials } from '~/lib/google-auth';
 import { getModelLifecycleWatermark, setModelLifecycleWatermark } from '~/lib/db';
+import { sendSentryEvent } from '~/lib/sentry-raw';
 import { MODEL_NAME } from '~/server/google-ai';
 
 interface ReleaseNoteRow {
@@ -59,13 +59,11 @@ export async function checkReleaseNotes(): Promise<void> {
   for (const row of rows) {
     const plainTextDescription = row.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
-    Sentry.captureMessage(
-      `Google Cloud release note mentions a monitored model: ${plainTextDescription}`,
-      {
-        level: 'warning',
-        tags: { component: 'model-lifecycle', check: 'release-notes' },
-      }
-    );
+    await sendSentryEvent({
+      message: `Google Cloud release note mentions a monitored model: ${plainTextDescription}`,
+      level: 'warning',
+      tags: { component: 'model-lifecycle', check: 'release-notes' },
+    });
   }
 
   const latestRow = rows[rows.length - 1];

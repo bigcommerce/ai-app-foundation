@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/nextjs';
+import { sendSentryEvent } from '~/lib/sentry-raw';
 import { checkReleaseNotes } from './releaseNotesCheck';
 import { checkLaunchStage } from './launchStageCheck';
 
@@ -7,7 +7,13 @@ export async function runModelLifecycleChecks(): Promise<void> {
 
   for (const result of results) {
     if (result.status === 'rejected') {
-      Sentry.captureException(result.reason);
+      const reason = result.reason instanceof Error ? (result.reason.stack ?? result.reason.message) : String(result.reason);
+
+      await sendSentryEvent({
+        message: `Model lifecycle check failed: ${reason}`,
+        level: 'error',
+        tags: { component: 'model-lifecycle' },
+      });
     }
   }
 }

@@ -1,7 +1,7 @@
 import { GoogleAuth } from 'google-auth-library';
-import * as Sentry from '@sentry/nextjs';
 import { env } from '~/env.mjs';
 import { getGoogleAuthCredentials } from '~/lib/google-auth';
+import { sendSentryEvent } from '~/lib/sentry-raw';
 import { MODEL_NAME } from '~/server/google-ai';
 
 interface PublisherModel {
@@ -44,20 +44,16 @@ export async function checkLaunchStage(): Promise<void> {
   const current = await fetchPublisherModel(MODEL_NAME);
 
   if (current.status !== 200) {
-    Sentry.captureMessage(
-      `Google AI model "${MODEL_NAME}" is no longer reachable (HTTP ${current.status}). It may have been retired.`,
-      {
-        level: 'error',
-        tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
-      }
-    );
+    await sendSentryEvent({
+      message: `Google AI model "${MODEL_NAME}" is no longer reachable (HTTP ${current.status}). It may have been retired.`,
+      level: 'error',
+      tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
+    });
   } else if (current.body?.launchStage !== 'GA') {
-    Sentry.captureMessage(
-      `Google AI model "${MODEL_NAME}" launchStage changed to "${current.body?.launchStage ?? 'unknown'}".`,
-      {
-        level: 'warning',
-        tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
-      }
-    );
+    await sendSentryEvent({
+      message: `Google AI model "${MODEL_NAME}" launchStage changed to "${current.body?.launchStage ?? 'unknown'}".`,
+      level: 'warning',
+      tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
+    });
   }
 }
