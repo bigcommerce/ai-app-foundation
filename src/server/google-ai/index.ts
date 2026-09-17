@@ -3,10 +3,10 @@ import { env } from '~/env.mjs';
 import { DEFAULT_GUIDED_ATTRIBUTES, STYLE_OPTIONS } from '~/constants';
 import { type aiSchema } from '~/app/api/generateDescription/schema';
 import { VertexAI } from '@google-cloud/vertexai';
-import { type JWTInput } from 'google-auth-library';
 import { sanitizeForPrompt } from '~/lib/prompt-safety';
+import { getGoogleAuthCredentials } from '~/lib/google-auth';
 
-const MODEL_NAME = 'gemini-2.5-flash-lite';
+export const MODEL_NAME = env.MODEL_NAME;
 
 export default async function generateDescription(
   attributes: z.infer<typeof aiSchema>
@@ -116,13 +116,4 @@ const prepareProductAttributes = (
     return `Product attributes:
         "name": ${sanitizeForPrompt(attributes.product?.name || '')} `;
   }
-};
-
-const getGoogleAuthCredentials = (): JWTInput => {
-  const credentialsBuffer = Buffer.from(
-    env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64,
-    'base64'
-  );
-
-  return JSON.parse(credentialsBuffer.toString('utf-8')) as JWTInput;
 };
