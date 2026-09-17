@@ -57,10 +57,16 @@ export async function checkReleaseNotes(): Promise<void> {
   }
 
   for (const row of rows) {
+    const headline = row.description.match(/<strong>(.*?)<\/strong>/)?.[1]?.trim();
+    const link = row.description.match(/<a\s+href="([^"]+)"/)?.[1];
     const plainTextDescription = row.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
+    const title = headline ?? 'Google updated model retirement dates';
+    const message = link ? `${plainTextDescription}\n\nMore information: ${link}` : plainTextDescription;
+
     await sendSentryEvent({
-      message: `Google Cloud release note mentions a monitored model: ${plainTextDescription}`,
+      title,
+      message,
       level: 'warning',
       tags: { component: 'model-lifecycle', check: 'release-notes' },
     });

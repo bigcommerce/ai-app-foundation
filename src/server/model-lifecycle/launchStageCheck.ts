@@ -45,12 +45,14 @@ export async function checkLaunchStage(): Promise<void> {
 
   if (current.status !== 200) {
     await sendSentryEvent({
+      title: `Model "${MODEL_NAME}" may have been retired`,
       message: `Google AI model "${MODEL_NAME}" is no longer reachable (HTTP ${current.status}). It may have been retired.`,
       level: 'error',
       tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
     });
   } else if (current.body?.launchStage !== 'GA') {
     await sendSentryEvent({
+      title: `Model "${MODEL_NAME}" launch stage changed`,
       message: `Google AI model "${MODEL_NAME}" launchStage changed to "${current.body?.launchStage ?? 'unknown'}".`,
       level: 'warning',
       tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },

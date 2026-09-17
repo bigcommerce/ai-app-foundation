@@ -18,7 +18,8 @@ export async function GET(req: NextRequest) {
     const reason = err instanceof Error ? (err.stack ?? err.message) : String(err);
 
     await sendSentryEvent({
-      message: `Model lifecycle cron crashed: ${reason}`,
+      title: 'Model lifecycle cron crashed',
+      message: reason,
       level: 'error',
       tags: { component: 'model-lifecycle' },
     });

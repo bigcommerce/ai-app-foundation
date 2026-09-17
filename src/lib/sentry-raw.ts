@@ -1,12 +1,13 @@
 import { env } from '~/env.mjs';
 
 interface SentryEventInput {
+  title: string;
   message: string;
   level: 'info' | 'warning' | 'error';
   tags?: Record<string, string>;
 }
 
-export async function sendSentryEvent({ message, level, tags }: SentryEventInput): Promise<void> {
+export async function sendSentryEvent({ title, message, level, tags }: SentryEventInput): Promise<void> {
   const dsn = new URL(env.NEXT_PUBLIC_SENTRY_DSN);
   const publicKey = dsn.username;
   const projectId = dsn.pathname.replace('/', '');
@@ -15,7 +16,13 @@ export async function sendSentryEvent({ message, level, tags }: SentryEventInput
   const envelope = [
     JSON.stringify({}),
     JSON.stringify({ type: 'event' }),
-    JSON.stringify({ message, level, tags, platform: 'node' }),
+    JSON.stringify({
+      exception: { values: [{ type: title, value: message }] },
+      message,
+      level,
+      tags,
+      platform: 'node',
+    }),
   ].join('\n');
 
   await fetch(ingestUrl, {

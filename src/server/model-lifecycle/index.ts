@@ -10,7 +10,8 @@ export async function runModelLifecycleChecks(): Promise<void> {
       const reason = result.reason instanceof Error ? (result.reason.stack ?? result.reason.message) : String(result.reason);
 
       await sendSentryEvent({
-        message: `Model lifecycle check failed: ${reason}`,
+        title: 'Model lifecycle check failed',
+        message: reason,
         level: 'error',
         tags: { component: 'model-lifecycle' },
       });
