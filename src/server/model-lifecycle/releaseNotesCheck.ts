@@ -47,12 +47,8 @@ export async function checkReleaseNotes(): Promise<void> {
       ORDER BY published_at ASC
     `,
     params: {
-      watermark: watermarkDate,
+      watermark: BigQuery.date(watermarkDate),
       modelPattern: toModelNamePattern(MODEL_NAME),
-    },
-    types: {
-      watermark: 'DATE',
-      modelPattern: 'STRING',
     },
   })) as unknown as [ReleaseNoteRow[], unknown];
 
