@@ -40,20 +40,30 @@ async function fetchPublisherModel(modelName: string): Promise<PublisherModelChe
   return { status: response.status, body };
 }
 
+const MODEL_VERSIONS_DOCS_URL = 'https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions';
+const UPGRADE_INSTRUCTIONS =
+  'There might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel and redeploying.';
+
 export async function checkLaunchStage(): Promise<void> {
   const current = await fetchPublisherModel(MODEL_NAME);
 
   if (current.status !== 200) {
     await sendSentryEvent({
       title: `Model "${MODEL_NAME}" may have been retired`,
-      message: `Google AI model "${MODEL_NAME}" is no longer reachable (HTTP ${current.status}). It may have been retired.`,
+      message:
+        `Google AI model "${MODEL_NAME}" is no longer reachable (HTTP ${current.status}). It may have been retired.` +
+        `\n\nMore information: ${MODEL_VERSIONS_DOCS_URL}` +
+        `\n\n${UPGRADE_INSTRUCTIONS}`,
       level: 'error',
       tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
     });
   } else if (current.body?.launchStage !== 'GA') {
     await sendSentryEvent({
       title: `Model "${MODEL_NAME}" launch stage changed`,
-      message: `Google AI model "${MODEL_NAME}" launchStage changed to "${current.body?.launchStage ?? 'unknown'}".`,
+      message:
+        `Google AI model "${MODEL_NAME}" launchStage changed to "${current.body?.launchStage ?? 'unknown'}".` +
+        `\n\nMore information: ${MODEL_VERSIONS_DOCS_URL}` +
+        `\n\n${UPGRADE_INSTRUCTIONS}`,
       level: 'warning',
       tags: { component: 'model-lifecycle', check: 'launch-stage', model: MODEL_NAME },
     });
