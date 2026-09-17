@@ -65,7 +65,7 @@ export async function checkReleaseNotes(): Promise<void> {
     const moreInfo = link ? `\n\nMore information: ${link}` : '';
     const message =
       `There are updates in Google about model retirement dates: "${plainTextDescription}"${moreInfo}` +
-      `\n\nThere might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel.`;
+      `\n\nThere might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel and redeploying.`;
 
     await sendSentryEvent({
       title,
