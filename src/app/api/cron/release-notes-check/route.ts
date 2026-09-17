@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '~/env.mjs';
 import { sendSentryEvent } from '~/lib/sentry-raw';
-import { runModelLifecycleChecks } from '~/server/model-lifecycle';
+import { checkReleaseNotes } from '~/server/model-lifecycle/releaseNotesCheck';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,15 +13,15 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    await runModelLifecycleChecks();
+    await checkReleaseNotes();
   } catch (err) {
     const reason = err instanceof Error ? (err.stack ?? err.message) : String(err);
 
     await sendSentryEvent({
-      title: 'Model lifecycle cron crashed',
+      title: 'Release notes check failed',
       message: reason,
       level: 'error',
-      tags: { component: 'model-lifecycle' },
+      tags: { component: 'model-lifecycle', check: 'release-notes' },
     });
 
     return new NextResponse('Internal Error', { status: 500 });
