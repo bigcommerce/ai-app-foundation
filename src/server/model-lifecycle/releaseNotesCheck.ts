@@ -22,11 +22,15 @@ function toModelNamePattern(modelName: string): string {
 }
 
 export async function checkReleaseNotes(): Promise<void> {
+  console.log('[model-lifecycle] checkReleaseNotes: start');
+
   const watermark = await getModelLifecycleWatermark();
+  console.log('[model-lifecycle] watermark read:', watermark ? watermark.toDate().toISOString() : null);
 
   // First run establishes a baseline instead of alerting on years of historical notes.
   if (!watermark) {
     await setModelLifecycleWatermark(Timestamp.now());
+    console.log('[model-lifecycle] no prior watermark, baseline set, returning');
     return;
   }
 
@@ -36,30 +40,36 @@ export async function checkReleaseNotes(): Promise<void> {
   });
 
   const watermarkDate = watermark.toDate().toISOString().slice(0, 10);
+  const modelPattern = toModelNamePattern(MODEL_NAME);
+  console.log('[model-lifecycle] querying BigQuery with', { watermarkDate, modelPattern, projectId: env.FIRE_PROJECT_ID });
 
-  const [rows] = (await bigquery.query({
-    query: `
-      SELECT product_name, description, published_at
-      FROM \`bigquery-public-data.google_cloud_release_notes.release_notes\`
-      WHERE published_at > @watermark
-        AND LOWER(product_name) LIKE '%vertex%'
-        AND REGEXP_CONTAINS(LOWER(description), @modelPattern)
-      ORDER BY published_at ASC
-    `,
-    params: {
-      watermark: watermarkDate,
-      modelPattern: toModelNamePattern(MODEL_NAME),
-    },
-    types: {
-      watermark: 'DATE',
-      modelPattern: 'STRING',
-    },
-  })) as unknown as [ReleaseNoteRow[], unknown];
+  let rows: ReleaseNoteRow[];
 
-  Sentry.captureMessage(
-    `DEBUG model-lifecycle: watermark=${watermarkDate} pattern=${toModelNamePattern(MODEL_NAME)} rows=${rows.length}`,
-    { level: 'info', tags: { component: 'model-lifecycle', check: 'release-notes-debug' } }
-  );
+  try {
+    [rows] = (await bigquery.query({
+      query: `
+        SELECT product_name, description, published_at
+        FROM \`bigquery-public-data.google_cloud_release_notes.release_notes\`
+        WHERE published_at > @watermark
+          AND LOWER(product_name) LIKE '%vertex%'
+          AND REGEXP_CONTAINS(LOWER(description), @modelPattern)
+        ORDER BY published_at ASC
+      `,
+      params: {
+        watermark: watermarkDate,
+        modelPattern,
+      },
+      types: {
+        watermark: 'DATE',
+        modelPattern: 'STRING',
+      },
+    })) as unknown as [ReleaseNoteRow[], unknown];
+  } catch (err) {
+    console.error('[model-lifecycle] BigQuery query threw:', err);
+    throw err;
+  }
+
+  console.log('[model-lifecycle] query returned rows:', rows.length);
 
   if (rows.length === 0) {
     return;
