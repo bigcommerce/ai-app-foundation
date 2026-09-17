@@ -12,10 +12,14 @@ export async function GET(req: NextRequest) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  await runModelLifecycleChecks();
+  try {
+    await runModelLifecycleChecks();
+  } catch (err) {
+    Sentry.captureException(err);
+    await Sentry.flush(2000);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
 
-  // Serverless functions can freeze right after the response is sent, before
-  // Sentry's queued events reach the network. Flush explicitly to guarantee delivery.
   await Sentry.flush(2000);
 
   return NextResponse.json({ ok: true });
