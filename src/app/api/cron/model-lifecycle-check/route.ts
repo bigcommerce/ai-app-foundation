@@ -12,10 +12,6 @@ export async function GET(req: NextRequest) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  if (req.nextUrl.searchParams.get('forceError') === '1') {
-    throw new Error('DEBUG model-lifecycle: forced unhandled error to test Sentry delivery');
-  }
-
   await runModelLifecycleChecks();
 
   // Serverless functions can freeze right after the response is sent, before
