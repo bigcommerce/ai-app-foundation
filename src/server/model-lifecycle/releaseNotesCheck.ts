@@ -56,11 +56,6 @@ export async function checkReleaseNotes(): Promise<void> {
     },
   })) as unknown as [ReleaseNoteRow[], unknown];
 
-  Sentry.captureMessage(
-    `DEBUG model-lifecycle: watermark=${watermarkDate} pattern=${toModelNamePattern(MODEL_NAME)} rows=${rows.length}`,
-    { level: 'info', tags: { component: 'model-lifecycle', check: 'release-notes-debug' } }
-  );
-
   if (rows.length === 0) {
     return;
   }
