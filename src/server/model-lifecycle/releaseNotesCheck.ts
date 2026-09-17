@@ -62,7 +62,10 @@ export async function checkReleaseNotes(): Promise<void> {
     const plainTextDescription = row.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
     const title = headline ?? 'Google updated model retirement dates';
-    const message = link ? `${plainTextDescription}\n\nMore information: ${link}` : plainTextDescription;
+    const moreInfo = link ? `\n\nMore information: ${link}` : '';
+    const message =
+      `There are updates in Google about model retirement dates: "${plainTextDescription}"${moreInfo}` +
+      `\n\nThere might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel.`;
 
     await sendSentryEvent({
       title,
