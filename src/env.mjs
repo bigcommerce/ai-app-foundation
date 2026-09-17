@@ -19,7 +19,7 @@ export const env = createEnv({
     GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: z.string().min(3),
     CSRF_SECRET: z.string().min(32),
     CRON_SECRET: z.string().min(16),
-    MODEL_NAME: z.string().min(1).default('gemini-2.5-flash-lite'),
+    MODEL_NAME: z.string().min(1),
   },
 
   /**
