@@ -44,7 +44,8 @@ export async function checkReleaseNotes(): Promise<void> {
       WHERE published_at > @watermark
         AND LOWER(product_name) LIKE '%vertex%'
         AND REGEXP_CONTAINS(LOWER(description), @modelPattern)
-      ORDER BY published_at ASC
+      ORDER BY published_at DESC
+      LIMIT 1
     `,
     params: {
       watermark: BigQuery.date(watermarkDate),
@@ -52,34 +53,28 @@ export async function checkReleaseNotes(): Promise<void> {
     },
   })) as unknown as [ReleaseNoteRow[], unknown];
 
-  if (rows.length === 0) {
+  const row = rows[0];
+
+  if (!row) {
     return;
   }
 
-  for (const row of rows) {
-    const headline = row.description.match(/<strong>(.*?)<\/strong>/)?.[1]?.trim();
-    const link = row.description.match(/<a\s+href="([^"]+)"/)?.[1];
-    const plainTextDescription = row.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const headline = row.description.match(/<strong>(.*?)<\/strong>/)?.[1]?.trim();
+  const link = row.description.match(/<a\s+href="([^"]+)"/)?.[1];
+  const plainTextDescription = row.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
-    const title = headline ?? 'Google updated model retirement dates';
-    const moreInfo = link ? `\n\nMore information: ${link}` : '';
-    const message =
-      `There are updates in Google about model retirement dates: "${plainTextDescription}"${moreInfo}` +
-      `\n\nThere might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel and redeploying.`;
+  const title = headline ?? 'Google updated model retirement dates';
+  const moreInfo = link ? `\n\nMore information: ${link}` : '';
+  const message =
+    `There are updates in Google about model retirement dates: "${plainTextDescription}"${moreInfo}` +
+    `\n\nThere might be needed to upgrade the model. You can do it by changing MODEL_NAME env var in Vercel and redeploying.`;
 
-    await sendSentryEvent({
-      title,
-      message,
-      level: 'warning',
-      tags: { component: 'model-lifecycle', check: 'release-notes' },
-    });
-  }
+  await sendSentryEvent({
+    title,
+    message,
+    level: 'warning',
+    tags: { component: 'model-lifecycle', check: 'release-notes' },
+  });
 
-  const latestRow = rows[rows.length - 1];
-
-  if (!latestRow) {
-    return;
-  }
-
-  await setModelLifecycleWatermark(Timestamp.fromDate(new Date(latestRow.published_at.value)));
+  await setModelLifecycleWatermark(Timestamp.fromDate(new Date(row.published_at.value)));
 }
