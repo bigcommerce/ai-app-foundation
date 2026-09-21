@@ -34,6 +34,7 @@
     "@bigcommerce/big-design-icons": "^0.23.2",
     "@bigcommerce/big-design-theme": "^0.19.2",
     "@csrf-armor/nextjs": "^1.4.4",
+    "@google-cloud/bigquery": "^9.0.3",
     "@google-cloud/vertexai": "^1.2.0",
     "@segment/snippet": "^4.16.2",
     "@sentry/nextjs": "^8.55.2",

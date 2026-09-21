@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/release-notes-check",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/launch-stage-check",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
