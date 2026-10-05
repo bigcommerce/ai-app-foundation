@@ -22,6 +22,11 @@ INPUT PARAMETERS:\n${input}
 PRODUCT ATTRIBUTES:\n${productAttributes}`;
 
   try {
+    console.log('[generateDescription] calling Vertex AI', {
+      model: MODEL_NAME,
+      project: env.FIRE_PROJECT_ID,
+    });
+
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
       location: 'us-central1',
@@ -35,6 +40,13 @@ PRODUCT ATTRIBUTES:\n${productAttributes}`;
     const result = await model.generateContent(prompt);
     const response = result.response;
 
+    console.log('[generateDescription] Vertex AI response received', {
+      model: MODEL_NAME,
+      candidateCount: response.candidates?.length ?? 0,
+      finishReason: response.candidates?.[0]?.finishReason,
+      promptFeedback: response.promptFeedback,
+    });
+
     if (
       response.candidates &&
       response.candidates[0] &&
@@ -45,8 +57,23 @@ PRODUCT ATTRIBUTES:\n${productAttributes}`;
     ) {
       return formatResponse(response.candidates[0].content.parts[0].text);
     }
+
+    console.error(
+      '[generateDescription] Vertex AI response missing expected candidate text',
+      {
+        model: MODEL_NAME,
+        response: JSON.stringify(response),
+      }
+    );
   } catch (error) {
-    console.error(error);
+    console.error('[generateDescription] Vertex AI call threw', {
+      model: MODEL_NAME,
+      project: env.FIRE_PROJECT_ID,
+      error:
+        error instanceof Error
+          ? { name: error.name, message: error.message, stack: error.stack }
+          : String(error),
+    });
   }
 
   return 'No response from Google AI';
