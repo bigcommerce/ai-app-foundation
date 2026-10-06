@@ -24,7 +24,7 @@ PRODUCT ATTRIBUTES:\n${productAttributes}`;
   try {
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
-      location: 'global',
+      location: 'us-central1',
       googleAuthOptions: { credentials: getGoogleAuthCredentials() },
     });
 
