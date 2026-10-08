@@ -22,9 +22,12 @@ INPUT PARAMETERS:\n${input}
 PRODUCT ATTRIBUTES:\n${productAttributes}`;
 
   try {
+    const location = 'global';
+
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
-      location: 'us-central1',
+      location,
+      apiEndpoint: 'aiplatform.googleapis.com',
       googleAuthOptions: { credentials: getGoogleAuthCredentials() },
     });
 
@@ -33,6 +36,7 @@ PRODUCT ATTRIBUTES:\n${productAttributes}`;
     });
 
     const result = await model.generateContent(prompt);
+
     const response = result.response;
 
     if (
