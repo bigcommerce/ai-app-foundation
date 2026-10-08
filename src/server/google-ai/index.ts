@@ -22,15 +22,16 @@ INPUT PARAMETERS:\n${input}
 PRODUCT ATTRIBUTES:\n${productAttributes}`;
 
   try {
-    const location = 'us';
+    const location = 'global';
 
     console.log(
-      `[google-ai] Using model: ${MODEL_NAME}, location: ${location}`
+      `[google-ai] 42 Using model: ${MODEL_NAME}, location: ${location}`
     );
 
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
       location,
+      apiEndpoint: 'aiplatform.googleapis.com',
       googleAuthOptions: { credentials: getGoogleAuthCredentials() },
     });
 
