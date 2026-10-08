@@ -22,9 +22,16 @@ INPUT PARAMETERS:\n${input}
 PRODUCT ATTRIBUTES:\n${productAttributes}`;
 
   try {
+    const location = 'global';
+
+    console.log(
+      `[google-ai] 42 Using model: ${MODEL_NAME}, location: ${location}`
+    );
+
     const vertexAI = new VertexAI({
       project: env.FIRE_PROJECT_ID,
-      location: 'us-central1',
+      location,
+      apiEndpoint: 'aiplatform.googleapis.com',
       googleAuthOptions: { credentials: getGoogleAuthCredentials() },
     });
 
@@ -32,8 +39,21 @@ PRODUCT ATTRIBUTES:\n${productAttributes}`;
       model: MODEL_NAME,
     });
 
+    console.log(`[google-ai] RAW request:\n${prompt}`);
+
     const result = await model.generateContent(prompt);
+
+    console.log(
+      `[google-ai] RAW response:\n${JSON.stringify(result.response, null, 2)}`
+    );
+
     const response = result.response;
+
+    console.log(
+      `[google-ai] Response received. modelVersion: ${
+        (response as { modelVersion?: string }).modelVersion ?? 'n/a'
+      }`
+    );
 
     if (
       response.candidates &&
